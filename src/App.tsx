@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
 import CVs from './components/CVs';
@@ -8,6 +8,14 @@ import HomePage from './components/homePage';
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [token, setToken] = useState<string | null>(null);
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem("token");
+        if (storedToken) {
+            setToken(storedToken);
+            setIsLoggedIn(true);
+        }
+    }, []);
 
     const handleLogin = (token: string) => {
         setToken(token);
@@ -24,10 +32,8 @@ const App = () => {
         <Router>
             <div>
                 <HomePage />
-                {isLoggedIn ? (
-                    <CVs onLogout={handleLogout} />
-                ) : (
-                    <>
+                {isLoggedIn ? (<CVs onLogout={handleLogout} />) : (
+                <>
                         <Login onLogin={handleLogin} />
                         <Register onRegister={handleLogin} />
                     </>
