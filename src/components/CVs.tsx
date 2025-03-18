@@ -2,29 +2,25 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import CreateFileCV from "./CreateFileCV";
 import UpdateFileCV from "./UpdateCV";
-
+import { useNavigate } from "react-router-dom"; 
 const CVs = ({ onLogout }: { onLogout: () => void }) => {
     const [files, setFiles] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [showCreateCV, setShowCreateCV] = useState(false);
     const [selectedFile, setSelectedFile] = useState<any | null>(null);
-
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            onLogout();
-        } else {
-            fetchUserFiles(token);
-        }
-    }, [onLogout]);
-
+    const navigate = useNavigate();
     const handleLogout = () => {
         localStorage.removeItem("token");
         onLogout();
     };
-
-    const fetchUserFiles = async (token: string) => {
+    const fetchUserFiles = async () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            setError("לא נמצא אסימון התחברות");
+            setLoading(false);
+            return;
+        }
         try {
             const response = await axios.get("https://localhost:7020/api/FileCV/user-files", {
                 headers: {
@@ -40,7 +36,15 @@ const CVs = ({ onLogout }: { onLogout: () => void }) => {
             setLoading(false);
         }
     };
-
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            onLogout();
+        } else {
+            fetchUserFiles();
+        }
+    }, [onLogout]);
+    
     return (
         <>
             <button onClick={() => setShowCreateCV(true)}>יצירת קו"ח חדשים</button>
@@ -49,7 +53,8 @@ const CVs = ({ onLogout }: { onLogout: () => void }) => {
             {showCreateCV ? (
                 <CreateFileCV />
             ) : selectedFile ? (
-                <UpdateFileCV file={selectedFile} onClose={() => setSelectedFile(null)} />
+                <UpdateFileCV file={selectedFile} onClose={() => setSelectedFile(null)} onUpdate={fetchUserFiles} />
+                
             ) : (
                 <>
                     {loading ? (
@@ -63,8 +68,9 @@ const CVs = ({ onLogout }: { onLogout: () => void }) => {
                                 <ul>
                                     {files.map((file, index) => (
                                         <li key={index}>
-                                            {file.name}
+                                            {file.summary}
                                             <button onClick={() => setSelectedFile(file)}>עדכן</button>
+                                            <button onClick={() => navigate(`/delete-file/${file.id}`)}>מחק</button> {/* עדכון לשימוש ב-navigate */}
                                         </li>
                                     ))}
                                 </ul>

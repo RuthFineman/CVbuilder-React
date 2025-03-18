@@ -1,8 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 
-const UpdateCV = ({ file, onClose }: { file: any, onClose: () => void }) => {
-    console.log("Received file:", file);
+    const UpdateCV = ({ file, onClose, onUpdate }: { file: any, onClose: () => void, onUpdate: () => void }) => {
     const [formData, setFormData] = useState({
         name: file.name,
         firstName: file.firstName || "",
@@ -34,6 +33,7 @@ const UpdateCV = ({ file, onClose }: { file: any, onClose: () => void }) => {
             });
             alert("העדכון בוצע בהצלחה!");
             onClose();
+            onUpdate();
         } catch (error) {
             alert("שגיאה בעדכון הנתונים");
         }
