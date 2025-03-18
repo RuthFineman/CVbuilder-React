@@ -1,25 +1,29 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import CreateFileCV from "./CreateFileCV";
+import UpdateFileCV from "./UpdateCV";
 
 const CVs = ({ onLogout }: { onLogout: () => void }) => {
     const [files, setFiles] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [showCreateCV, setShowCreateCV] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<any | null>(null);
 
     useEffect(() => {
-
         const token = localStorage.getItem("token");
         if (!token) {
-            onLogout(); // אם אין טוקן, התנתק
+            onLogout();
         } else {
-            fetchUserFiles(token); // קריאה לפונקציה להביא את הקבצים
+            fetchUserFiles(token);
         }
     }, [onLogout]);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
-        onLogout(); // קריאה לפונקציה שהועברה כפרופס
+        onLogout();
     };
+
     const fetchUserFiles = async (token: string) => {
         try {
             const response = await axios.get("https://localhost:7020/api/FileCV/user-files", {
@@ -27,53 +31,52 @@ const CVs = ({ onLogout }: { onLogout: () => void }) => {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json",
                 },
-                timeout: 5000, 
+                timeout: 5000,
             });
             setFiles(response.data);
         } catch (err: any) {
-            if (axios.isAxiosError(err) && err.code === 'ECONNABORTED') {
-                setError("הבקשה לקחה יותר מדי זמן. אנא נסה שוב מאוחר יותר.");
-            } else {
-                setError(err.response?.data?.message || "שגיאה בטעינת הקבצים");
-            }
+            setError("שגיאה בטעינת הקבצים");
         } finally {
             setLoading(false);
         }
     };
 
-    if (loading) {
-        return <div>טוען קבצים...</div>;
-    }
-
-    if (error) {
-        return <div>שגיאה: {error}</div>;
-    }
-
     return (
         <>
-            <div>יצירת קו"ח חדשים</div>
+            <button onClick={() => setShowCreateCV(true)}>יצירת קו"ח חדשים</button>
             <button onClick={handleLogout}>התנתק</button>
-            {loading ? (
-                <div>טוען קבצים...</div>
-            ) : error ? (
-                <div>שגיאה: {error}</div>
+
+            {showCreateCV ? (
+                <CreateFileCV />
+            ) : selectedFile ? (
+                <UpdateFileCV file={selectedFile} onClose={() => setSelectedFile(null)} />
             ) : (
-                <div>
-                    <h3>קבצים שלך:</h3>
-                    {files.length > 0 ? (
-                        <ul>
-                            {files.map((file, index) => (
-                                <li key={index}>{file.Name}</li>
-                            ))}
-                        </ul>
+                <>
+                    {loading ? (
+                        <div>טוען קבצים...</div>
+                    ) : error ? (
+                        <div>שגיאה: {error}</div>
                     ) : (
-                        <div>אין קבצים זמינים</div>
+                        <div>
+                            <h3>קבצים שלך:</h3>
+                            {files.length > 0 ? (
+                                <ul>
+                                    {files.map((file, index) => (
+                                        <li key={index}>
+                                            {file.name}
+                                            <button onClick={() => setSelectedFile(file)}>עדכן</button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <div>אין קבצים זמינים</div>
+                            )}
+                        </div>
                     )}
-                </div>
+                </>
             )}
         </>
     );
-    
 };
 
 export default CVs;
