@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";  
 
 const DeleteFileCV = () => {
-    const { id } = useParams<{ id: string }>();  // מקבל את ה-ID של הקובץ מה-URL
+    const { id } = useParams<{ id: string }>();  
     const [error, setError] = useState<string | null>(null);
-    const navigate = useNavigate();  // עדכון לשימוש ב-useNavigate
+    const navigate = useNavigate(); 
     const [loading, setLoading] = useState(false);
 
     const deleteFile = async () => {
@@ -14,7 +14,6 @@ const DeleteFileCV = () => {
             setError("לא נמצא אסימון התחברות");
             return;
         }
-
         setLoading(true);
 
         try {
@@ -26,7 +25,7 @@ const DeleteFileCV = () => {
             });
 
             if (response.status === 200) {
-                navigate("/cvs");  // נווט חזרה לדף הקבצים לאחר מחיקה מוצלחת
+                navigate("/cvs"); 
             }
         } catch (err: any) {
             setError("שגיאה במחקה הקובץ");

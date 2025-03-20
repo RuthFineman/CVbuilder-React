@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import CreateFileCV from "./CreateFileCV";
 import UpdateFileCV from "./UpdateCV";
 import { useNavigate } from "react-router-dom"; 
+import AllTemplates from "./AllTemplates";
 const CVs = ({ onLogout }: { onLogout: () => void }) => {
     const [files, setFiles] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [showCreateCV, setShowCreateCV] = useState(false);
+    const [showChooswTemplate, setShowChooswTemplate] = useState(false);
     const [selectedFile, setSelectedFile] = useState<any | null>(null);
     const navigate = useNavigate();
     const handleLogout = () => {
@@ -47,13 +48,10 @@ const CVs = ({ onLogout }: { onLogout: () => void }) => {
     
     return (
         <>
-            <button onClick={() => setShowCreateCV(true)}>יצירת קו"ח חדשים</button>
+            <button onClick={() => setShowChooswTemplate(true)}>יצירת קו"ח חדשים</button>
             <button onClick={handleLogout}>התנתק</button>
 
-            {showCreateCV ? (
-                <CreateFileCV />
-            ) : selectedFile ? (
-                <UpdateFileCV file={selectedFile} onClose={() => setSelectedFile(null)} onUpdate={fetchUserFiles} />
+            {showChooswTemplate ? (<AllTemplates />) : selectedFile ? (<UpdateFileCV file={selectedFile} onClose={() => setSelectedFile(null)} onUpdate={fetchUserFiles} />
                 
             ) : (
                 <>
@@ -70,7 +68,7 @@ const CVs = ({ onLogout }: { onLogout: () => void }) => {
                                         <li key={index}>
                                             {file.summary}
                                             <button onClick={() => setSelectedFile(file)}>עדכן</button>
-                                            <button onClick={() => navigate(`/delete-file/${file.id}`)}>מחק</button> {/* עדכון לשימוש ב-navigate */}
+                                            <button onClick={() => navigate(`/delete-file/${file.id}`)}>מחק</button>
                                         </li>
                                     ))}
                                 </ul>
