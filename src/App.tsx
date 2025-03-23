@@ -37,7 +37,7 @@ const App = () => {
             <div>
                 <Routes>
                     <Route path="/" element={<HomePage />} />
-                    <Route path="/cvs" element={isLoggedIn ? <CVs onLogout={handleLogout} /> : <Login onLogin={handleLogin} />} />
+                    <Route path="/cvs" element={isLoggedIn ? (<CVs onLogout={handleLogout} /> ) : ( <><Login onLogin={handleLogin} /><Register onRegister={handleLogin} /> </>) } />
                     <Route path="/register" element={<Register onRegister={handleLogin} />} />
                     <Route path="/delete-file/:id" element={<DeleteFileCV />} />
                     <Route path="/create-file-cv" element={<CreateFileCV  />} />

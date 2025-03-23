@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import CreateFileCV from "./CreateFileCV";
 import UpdateFileCV from "./UpdateCV";
 import { useNavigate } from "react-router-dom"; 
 import AllTemplates from "./AllTemplates";
