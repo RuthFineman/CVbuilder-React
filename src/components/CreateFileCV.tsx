@@ -1,8 +1,9 @@
 // import { useEffect, useState } from "react";
 // import { useLocation, useNavigate } from "react-router-dom"; 
 // import axios from "axios";
-
 // const CreateFileCV = () => {
+    
+  
 //     const [firstName, setFirstName] = useState("");
 //     const [lastName, setLastName] = useState("");
 //     const [email, setEmail] = useState("");
@@ -72,6 +73,7 @@
 //     };
 
 //     return (
+    
 //         <div style={{ textAlign: "center", padding: "20px" }}>
 //             {/* הצגת הקובץ הנבחר */}
 //             {selectedFileData && (
@@ -119,60 +121,72 @@
 // };
 
 // export default CreateFileCV;
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Stage, Layer, Image, Text } from "react-konva";
+import useImage from "use-image";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
-const CreateFileCV: React.FC = () => {
-  const { state } = useLocation();
-  const selectedFileIndex = state?.selectedFileIndex;
-
-  const [selectedFile, setSelectedFile] = useState<{ url: string } | null>(null);
+// const CreateFileCV = ({ selectedFileIndex }) => {
+    const CreateFileCV = () => {
+      const location = useLocation();
+      const selectedFileIndex = location.state?.selectedFileIndex || null;
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [selectedFileUrl, setSelectedFileUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchTemplate = async () => {
+    const fetchFileData = async () => {
       if (selectedFileIndex !== undefined) {
         try {
           const token = localStorage.getItem("token");
-          const response = await axios.get(`https://localhost:7020/api/Template/${selectedFileIndex}`, {
+          const { data } = await axios.get(`https://localhost:7020/api/Template/${selectedFileIndex}`, {
             headers: { Authorization: token ? `Bearer ${token}` : "" },
           });
-          setSelectedFile({ url: response.data });
+          console.log("Received data from API:", data); 
+          if (data && typeof data === "object" && data.imageUrl) {
+            setSelectedFileUrl(data.imageUrl);
+          } else if (typeof data === "string") {
+            setSelectedFileUrl(data); 
+          } else {
+            console.error("Unexpected API response format:", data);
+          }
         } catch (error) {
-          console.error("Error fetching selected file:", error);
+          console.error("Error fetching template:", error);
         }
       }
     };
-
-    fetchTemplate();
+  
+    fetchFileData();
   }, [selectedFileIndex]);
+  const [image] = useImage(selectedFileUrl && selectedFileUrl.startsWith("http") ? selectedFileUrl : "placeholder.png");
+
+
 
   return (
-    <div>
-      <h2>יצירת קובץ קו"ח</h2>
-      <p>תבנית שנבחרה: {selectedFileIndex !== undefined ? `תבנית מספר ${selectedFileIndex + 1}` : "לא נבחרה תבנית"}</p>
+    <div style={{ display: "flex", justifyContent: "space-between", padding: "20px" }}>
+      {/* טופס להזנת הפרטים */}
+      <div style={{ width: "40%" }}>
+        <h3>הזן פרטים:</h3>
+        <input type="text" placeholder="שם פרטי" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+        <input type="text" placeholder="שם משפחה" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+        <input type="email" placeholder="אימייל" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input type="text" placeholder="טלפון" value={phone} onChange={(e) => setPhone(e.target.value)} />
+      </div>
 
-      {selectedFile ? (
-        <div>
-          <h3>תצוגת תמונה של התבנית</h3>
-          <img
-            src={selectedFile.url}
-            alt="Template"
-            style={{
-              maxWidth: "100%",
-              height: "auto",
-              borderRadius: "8px",
-              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-              display: "block",
-              margin: "0 auto",
-            }}
-          />
-        </div>
-      ) : (
-        <p>מתחיל להוריד את התבנית...</p>
-      )}
-
-      {/* טופס יצירת קובץ כאן */}
+      {/* תצוגת הקובץ עם הנתונים שהוזנו */}
+      <div style={{ width: "55%", border: "1px solid #ccc", padding: "10px" }}>
+        <Stage width={600} height={800}>
+          <Layer>
+            {image && <Image image={image} width={600} height={800} />}
+            <Text text={`שם: ${firstName} ${lastName}`} x={100} y={150} fontSize={24} fill="black" fontStyle="bold" />
+            <Text text={`אימייל: ${email}`} x={100} y={200} fontSize={20} fill="black" />
+            <Text text={`טלפון: ${phone}`} x={100} y={250} fontSize={20} fill="black" />
+          </Layer>
+        </Stage>
+      </div>
     </div>
   );
 };

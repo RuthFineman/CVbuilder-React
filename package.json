@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@mui/material": "^6.4.8",
     "@react-pdf-viewer/core": "^3.12.0",
     "@react-pdf-viewer/default-layout": "^3.12.0",
     "@react-pdf-viewer/thumbnail": "^3.12.0",
@@ -18,11 +19,14 @@
     "@types/react-dom": "^19.0.4",
     "axios": "^1.8.3",
     "jspdf": "^3.0.0",
+    "konva": "^9.3.20",
     "pdfjs-dist": "^3.11.174",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-konva": "^19.0.3",
     "react-router-dom": "^7.3.0",
     "typescript": "^4.9.5",
+    "use-image": "^1.1.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

@@ -1,101 +1,64 @@
-// import React, { useEffect, useState } from 'react';
-// import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-// import Login from './components/Login';
-// import Register from './components/Register';
-// import CVs from './components/CVs';
-// import HomePage from './components/homePage';
-// import DeleteFileCV from './components/DeleteFileCV';
-// import AllTemplates from './components/AllTemplates';
-// import CreateFileCV from './components/CreateFileCV';
+import React, { useEffect, useState, createContext, useContext } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import CVs from "./components/CVs";
+import DeleteFileCV from "./components/DeleteFileCV";
+import AllTemplates from "./components/AllTemplates";
+import CreateFileCV from "./components/CreateFileCV";
+import HomePage from "./components/HomePage";
 
-// const App = () => {
-//     const [isLoggedIn, setIsLoggedIn] = useState(false);
-//     const [token, setToken] = useState<string | null>(null);
-//     const [files, setFiles] = useState<string[]>([]);
+// יצירת AuthContext
+const AuthContext = createContext({
+  isLoggedIn: false,
+  token: null as string | null,
+  login: (token: string) => {},
+  logout: () => {},
+});
 
-//     useEffect(() => {
-//         const storedToken = localStorage.getItem("token");
-//         if (storedToken) {
-//             setToken(storedToken);
-//             setIsLoggedIn(true);
-//         }
-//     }, []);
+const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
+  const isLoggedIn = Boolean(token);
 
-//     const handleLogin = (token: string) => {
-//         setToken(token);
-//         setIsLoggedIn(true);
-//     };
+  const handleLogin = (token: string) => {
+    setToken(token);
+    localStorage.setItem("token", token);
+  };
 
-//     const handleLogout = () => {
-//         setToken(null);
-//         setIsLoggedIn(false);
-//         localStorage.removeItem("token");
-//     };
+  const handleLogout = () => {
+    setToken(null);
+    localStorage.removeItem("token");
+  };
 
-//     return (
-//         <Router>
-//             <div>
-//                 <Routes>
-//                     <Route path="/" element={<HomePage />} />
-//                     <Route path="/cvs" element={isLoggedIn ? (<CVs onLogout={handleLogout} /> ) : ( <><Login onLogin={handleLogin} /><Register onRegister={handleLogin} /> </>) } />
-//                     <Route path="/register" element={<Register onRegister={handleLogin} />} />
-//                     <Route path="/delete-file/:id" element={<DeleteFileCV />} />
-//                     <Route path="/create-file-cv" element={<CreateFileCV  />} />
-//                     <Route path="/all-templates" element={<AllTemplates  />} />
-//                 </Routes>
-//             </div>
-//         </Router>
-//     );
-// };
+  return (
+    <AuthContext.Provider value={{ isLoggedIn, token, login: handleLogin, logout: handleLogout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
-// export default App;
-import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from './components/Login';
-import Register from './components/Register';
-import CVs from './components/CVs';
-import DeleteFileCV from './components/DeleteFileCV';
-import AllTemplates from './components/AllTemplates';
-import CreateFileCV from './components/CreateFileCV';
-import HomePage from './components/homePage';
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isLoggedIn } = useContext(AuthContext);
+  return isLoggedIn ? children : <Navigate to="/login" />;
+};
 
 const App = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [token, setToken] = useState<string | null>(null);
-
-    useEffect(() => {
-        const storedToken = localStorage.getItem("token");
-        if (storedToken) {
-            setToken(storedToken);
-            setIsLoggedIn(true);
-        }
-    }, []);
-
-    const handleLogin = (token: string) => {
-        setToken(token);
-        setIsLoggedIn(true);
-    };
-
-    const handleLogout = () => {
-        setToken(null);
-        setIsLoggedIn(false);
-        localStorage.removeItem("token");
-    };
-
-    return (
-        <Router>
-            <div>
-                <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/cvs" element={isLoggedIn ? <CVs onLogout={handleLogout} /> : <><Login onLogin={handleLogin} /><Register onRegister={handleLogin} /></>} />
-                    <Route path="/register" element={<Register onRegister={handleLogin} />} />
-                    <Route path="/delete-file/:id" element={<DeleteFileCV />} />
-                    <Route path="/create-file-cv" element={<CreateFileCV />} />
-                    <Route path="/all-templates" element={<AllTemplates />} />
-                </Routes>
-            </div>
-        </Router>
-    );
+  const { login, logout, isLoggedIn } = useContext(AuthContext);
+  const [selectedFileIndex, setSelectedFileIndex] = useState<number | null>(null);
+  return (
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/register" element={<Register onRegister={login} />} />
+          <Route path="/login" element={<Login onLogin={login} />} />
+          <Route path="/cvs" element={<CVs onLogout={logout} />}/>
+          <Route path="/delete-file/:id" element={<DeleteFileCV />} />
+          {/* <Route path="/create-file-cv" element={<CreateFileCV/>}/> */}
+          <Route path="/create-file-cv" element={<CreateFileCV />} />
+          <Route path="/all-templates" element={<AllTemplates /> }/>
+        </Routes>
+      </Router>
+  );
 };
 
 export default App;

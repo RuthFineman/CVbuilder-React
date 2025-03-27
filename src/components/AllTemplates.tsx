@@ -49,7 +49,7 @@ const AllTemplates = () => {
     const handleNextClick = () => {
         if (selectedFileIndex !== null) {
             // ניווט לקומפוננטת CreateFileCV עם ה-state שכולל את ה-`selectedFileIndex`
-            // navigate(`/createFileCV`, { state: { selectedFileIndex } });
+            navigate(`/createFileCV`, { state: { selectedFileIndex } });
             navigate(`/create-file-cv`, { state: { selectedFileIndex } });
 
         }
