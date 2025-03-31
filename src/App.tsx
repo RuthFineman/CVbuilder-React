@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext, useContext } from "react";
+import React, { useState, createContext, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -8,7 +8,6 @@ import AllTemplates from "./components/AllTemplates";
 import CreateFileCV from "./components/CreateFileCV";
 import HomePage from "./components/HomePage";
 import Hh from "./components/hh";
-import { createTheme } from "@mui/material";
 import ResumeDisplay from "./ResumeDisplay";
 
 // יצירת AuthContext
@@ -52,10 +51,11 @@ const App = () => {
   const [selectedFileIndex, setSelectedFileIndex] = useState<number | null>(null);
   const [formData, setFormData] = useState(null);
 
-  // פונקציה לקבלת נתונים מהטופס
-  const handleSubmit = (data:any) => {
-    setFormData(data);  // מעדכן את ה-state בנתוני המשתמש
-  };
+
+  const handleSubmit = (data: any) => {
+    setFormData(data);  // שמור את המידע בלי לרוקן workExperiences
+};
+
   return (
       <Router>
         <Routes>

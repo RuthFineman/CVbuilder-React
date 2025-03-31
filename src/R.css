@@ -1,42 +1,143 @@
 /* עיצוב כללי לקורות החיים */
 .resume-container {
-    width: 21cm; /* רוחב A4 */
-    height: 29.7cm; /* גובה A4 */
-    margin: 20px auto; /* מרכוז העמוד ומתן שוליים */
-    border: 1px solid #ccc; /* גבול דק סביב העמוד */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* צל קל */
-    font-family: Arial, sans-serif; /* פונט בסיסי */
+    width: 21cm;
+    /* רוחב A4 */
+    height: 29.7cm;
+    /* גובה A4 */
+    margin: 20px auto;
+    /* מרכוז העמוד ומתן שוליים */
+    border: 1px solid #ccc;
+    /* גבול דק סביב העמוד */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* צל קל */
+    font-family: Arial, sans-serif;
+    /* פונט בסיסי */
 }
 
 /* עיצוב החלק העליון */
 .header {
-    background-color: #6c7fa0; /* רקע סגול */
-    color: white; /* טקסט לבן */
-    padding: 20px; /* ריפוד פנימי */
-    height: 3cm; /* שליש מגובה העמוד */
-    text-align: right; /* יישור הטקסט לצד ימין */
-    padding-right: 40px; /* רווח מהקצה הימני */
-    padding-top: 1.5cm; /* הזזת השם למטה */
+    background-color: #6c7fa0;
+    /* רקע סגול */
+    color: white;
+    /* טקסט לבן */
+    padding: 20px;
+    /* ריפוד פנימי */
+    height: 3cm;
+    /* שליש מגובה העמוד */
+    text-align: right;
+    /* יישור הטקסט לצד ימין */
+    font-size: 25px;
+    padding-right: 40px;
+    /* רווח מהקצה הימני */
+    padding-top: 1.5cm;
+    /* הזזת השם למטה */
 }
 
 .header h1 {
-    font-size: 2em; /* גודל פונט כותרת */
-    margin: 0; /* הסרת שוליים לכותרת */
-    white-space: nowrap; /* למנוע שברים של שם אם הוא ארוך */
+    font-size: 2em;
+    /* גודל פונט כותרת */
+    margin: 0;
+    /* הסרת שוליים לכותרת */
+    white-space: nowrap;
+    /* למנוע שברים של שם אם הוא ארוך */
+}
+
+.summary {
+    margin-top: 0.1cm;
+    /* רווח קטן יותר אחרי החלק הסגול */
+    padding: 10px 25px;
+    /* הוזז מעט שמאלה */
+    text-align: right;
+    line-height: 1.5;
+    font-size: 1.2em;
+    white-space: normal;
+    /* מבטיח שהתוכן יישבר לשורות לפי הצורך */
+}
+
+.summary::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: #6c7fa0;
+    margin-top: 0.3cm;
+    /* רווח זהה לרווח שמעל התקציר */
 }
 
 /* עיצוב כותרת "פרטים אישיים" */
 .personal-details h2 {
     font-size: 1.5em;
-    margin-top: 1.5cm;  
-    text-align: left;  
-    padding-left: 15px; 
+    margin-top: 1.5cm;
+    text-align: right;
+    padding-left: 25px;
+    margin-right: 545px;
+    font-weight: bold;
+     color: #6c7fa0;
+    /*border-bottom: 2px solid #6c7fa0;
+    padding-bottom: 5px;
+    margin-bottom: 10px; */
+    /* display: inline-block;  */
 }
 
 /* עיצוב המייל והטלפון */
 .contact-info p {
     font-size: 1.1em;
-    margin-top: 8px;  
-    text-align: left;  
-    padding-left: 15px;  /* הוספת רווח קטן מצד שמאל */
+    margin-top: 8px;
+    margin-right: 545px;
+    text-align: right;
+    padding-left: 15px;
+    /* הוספת רווח קטן מצד שמאל */
+}
+
+/* נסיון תעסוקתי */
+.work-experiences {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-right: 25px;
+    position: relative;
+    top: -150px;
+
+}
+.work-experiences h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #6c7fa0;
+    /* צבע כותרת מתאים */
+    text-align: right;
+    border-bottom: 2px solid #6c7fa0;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.work-experience {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    /* כל פרט בתפקיד ייושר לימין */
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+    width: 100%;
+}
+
+.company-name {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #333;
+    text-align: right;
+}
+
+.work-dates {
+    font-size: 1em;
+    color: #777;
+    text-align: right;
+}
+
+.work-description {
+    font-size: 1.1em;
+    text-align: right;
+    margin-top: 5px;
+    line-height: 1.5;
+    max-width: 60%;
+
 }
