@@ -1,0 +1,42 @@
+/* עיצוב כללי לקורות החיים */
+.resume-container {
+    width: 21cm; /* רוחב A4 */
+    height: 29.7cm; /* גובה A4 */
+    margin: 20px auto; /* מרכוז העמוד ומתן שוליים */
+    border: 1px solid #ccc; /* גבול דק סביב העמוד */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* צל קל */
+    font-family: Arial, sans-serif; /* פונט בסיסי */
+}
+
+/* עיצוב החלק העליון */
+.header {
+    background-color: #6c7fa0; /* רקע סגול */
+    color: white; /* טקסט לבן */
+    padding: 20px; /* ריפוד פנימי */
+    height: 3cm; /* שליש מגובה העמוד */
+    text-align: right; /* יישור הטקסט לצד ימין */
+    padding-right: 40px; /* רווח מהקצה הימני */
+    padding-top: 1.5cm; /* הזזת השם למטה */
+}
+
+.header h1 {
+    font-size: 2em; /* גודל פונט כותרת */
+    margin: 0; /* הסרת שוליים לכותרת */
+    white-space: nowrap; /* למנוע שברים של שם אם הוא ארוך */
+}
+
+/* עיצוב כותרת "פרטים אישיים" */
+.personal-details h2 {
+    font-size: 1.5em;
+    margin-top: 1.5cm;  
+    text-align: left;  
+    padding-left: 15px; 
+}
+
+/* עיצוב המייל והטלפון */
+.contact-info p {
+    font-size: 1.1em;
+    margin-top: 8px;  
+    text-align: left;  
+    padding-left: 15px;  /* הוספת רווח קטן מצד שמאל */
+}

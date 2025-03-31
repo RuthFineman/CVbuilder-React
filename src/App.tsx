@@ -9,6 +9,7 @@ import CreateFileCV from "./components/CreateFileCV";
 import HomePage from "./components/HomePage";
 import Hh from "./components/hh";
 import { createTheme } from "@mui/material";
+import ResumeDisplay from "./ResumeDisplay";
 
 // יצירת AuthContext
 const AuthContext = createContext({
@@ -49,6 +50,12 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 const App = () => {
   const { login, logout, isLoggedIn } = useContext(AuthContext);
   const [selectedFileIndex, setSelectedFileIndex] = useState<number | null>(null);
+  const [formData, setFormData] = useState(null);
+
+  // פונקציה לקבלת נתונים מהטופס
+  const handleSubmit = (data:any) => {
+    setFormData(data);  // מעדכן את ה-state בנתוני המשתמש
+  };
   return (
       <Router>
         <Routes>
@@ -60,7 +67,16 @@ const App = () => {
           <Route path="/create-file-cv" element={<CreateFileCV />} />
           <Route path="/all-templates" element={<AllTemplates /> }/>
   
-          <Route path="/hh" element={<Hh/> }/>
+          <Route
+          path="/hh"
+          element={
+            !formData ? (
+              <Hh onSubmit={handleSubmit} />  // מציג את הטופס
+            ) : (
+              <ResumeDisplay data={formData} />  // מציג את קורות החיים אחרי שהנתונים הוזנו
+            )
+          }
+        />
         </Routes>
       </Router>
   );
