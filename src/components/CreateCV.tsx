@@ -1,17 +1,19 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Hh = ({ onSubmit }: {
-    onSubmit: (data: { 
-        firstName: string; 
-        lastName: string; 
-        email: string; 
-        phone: string; 
-        summary: string; 
-        workExperiences: any[]; 
-        educations: { institution: string; degree: string }[]; 
-        skills: string[]; 
+const CreateCV = ({ onSubmit }: {
+    onSubmit: (data: {
+        firstName: string;
+        lastName: string;
+        email: string;
+        phone: string;
+        summary: string;
+        workExperiences: any[];
+        educations: { institution: string; degree: string }[];
+        skills: string[];
     }) => void;
 }) => {
+    const navigate = useNavigate();
     const skillOptions = [
         "כישורי ארגון",
         "פתרון בעיות",
@@ -62,10 +64,11 @@ const Hh = ({ onSubmit }: {
             { company: '', location: '', startDate: '', endDate: '', description: '' }
         ]);
     };
-
-    const handleSubmit = (e: any) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit({ firstName, lastName, email, phone, summary, workExperiences, educations, skills: selectedSkills });
+        const resumeData = { firstName, lastName, email, phone, summary, workExperiences, educations, skills: selectedSkills };
+        onSubmit(resumeData);
+        navigate("/resume-display", { state: { data: resumeData } }); // מעבר עם הנתונים
     };
 
     return (
@@ -110,8 +113,10 @@ const Hh = ({ onSubmit }: {
 
             <button type="button" onClick={addEducation}>➕ הוסף השכלה</button>
             <button type="submit">צור קורות חיים</button>
+
         </form>
+
     );
 };
 
-export default Hh;
+export default CreateCV;

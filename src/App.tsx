@@ -7,15 +7,16 @@ import DeleteFileCV from "./components/DeleteFileCV";
 import AllTemplates from "./components/AllTemplates";
 import CreateFileCV from "./components/CreateFileCV";
 import HomePage from "./components/HomePage";
-import Hh from "./components/hh";
-import ResumeDisplay from "./ResumeDisplay";
+import ResumeDisplay from "./components/ResumeDisplay";
+import CreateCV from "./components/CreateCV";
+import FileUpload from "./components/PDFUploader";
 
 // יצירת AuthContext
 const AuthContext = createContext({
   isLoggedIn: false,
   token: null as string | null,
-  login: (token: string) => {},
-  logout: () => {},
+  login: (token: string) => { },
+  logout: () => { },
 });
 
 
@@ -54,31 +55,39 @@ const App = () => {
 
   const handleSubmit = (data: any) => {
     setFormData(data);  // שמור את המידע בלי לרוקן workExperiences
-};
+  };
 
+  const handleUploadSuccess = (url: string) => {
+    // התנהגות אחרי שההעלאה הושלמה בהצלחה
+    console.log('File uploaded successfully. URL:', url);
+  };
   return (
-      <Router>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/register" element={<Register onRegister={login} />} />
-          <Route path="/login" element={<Login onLogin={login} />} />
-          <Route path="/cvs" element={<CVs onLogout={logout} />}/>
-          <Route path="/delete-file/:id" element={<DeleteFileCV />} />
-          <Route path="/create-file-cv" element={<CreateFileCV />} />
-          <Route path="/all-templates" element={<AllTemplates /> }/>
+    <Router>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/register" element={<Register onRegister={login} />} />
+      <Route path="/login" element={<Login onLogin={login} />} />
+      <Route path="/cvs" element={<CVs onLogout={logout} />} />
+      <Route path="/delete-file/:id" element={<DeleteFileCV />} />
+      <Route path="/create-file-cv" element={<CreateFileCV />} />
+      <Route path="/all-templates" element={<AllTemplates />} />
+      <Route
+        path="/resume-display"
+        element={
+          formData ? (
+            <ResumeDisplay data={formData} />  // מציג את קורות החיים אחרי שהנתונים הוזנו
+          ) : (
+            <Navigate to="/createCV" />  // אם אין נתונים, מעביר לעמוד יצירת קורות חיים
+          )
+        }
+      />
+      <Route
+        path="/createCV"
+        element={<CreateCV onSubmit={handleSubmit} />} 
+      />
+    </Routes>
+  </Router>
   
-          <Route
-          path="/hh"
-          element={
-            !formData ? (
-              <Hh onSubmit={handleSubmit} />  // מציג את הטופס
-            ) : (
-              <ResumeDisplay data={formData} />  // מציג את קורות החיים אחרי שהנתונים הוזנו
-            )
-          }
-        />
-        </Routes>
-      </Router>
   );
 };
 
