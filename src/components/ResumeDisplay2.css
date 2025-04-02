@@ -1,0 +1,207 @@
+:root {
+    --primary-color: #00675d; /* נישאר רק בשימוש במקומות המיועדים */
+    --secondary-color: #ffffff;
+    --text-color: #333;
+    --border-radius: 8px;
+}
+
+.resume-container {
+    display: flex;
+    flex-direction: column;
+    width: 210mm;
+    height: 297mm;
+    margin: auto;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* יצירת פס צבעוני בשליש הימני של הדף */
+.resume-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 33.3%; 
+    height: 100%;
+    background: var(--primary-color); 
+    border-top-right-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+}
+
+.header {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-color); 
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    position: relative;
+    z-index: 1;
+}
+.header h3{
+    position: relative;
+    right:-20px;
+}
+
+.personal-details h2{
+    position: relative;
+    color: #ffffff;
+    top:-170px;
+    left: -40px;
+    text-align: right;
+}
+.personal-details p{
+    position: relative;
+    color: #fdfcfc;
+    top:-170px;
+    left: -40px;
+    text-align: right;
+}
+
+
+.summary {
+    position: relative;
+    padding: 20px;
+    color: black;
+    right:280px;
+    margin-top: 0.1cm;
+    text-align: right;
+}
+
+/* עדכון העיצוב של השליש הימני */
+/* .left-column {
+    width: 30%;
+    background: var(--secondary-color); 
+    color: var(--text-color);
+    padding: 20px;
+    border-bottom-left-radius: var(--border-radius);
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+} */
+/* 
+.contact-info p {
+    margin: 5px 0;
+    font-size: 0.9em;
+} */
+/* הצגת פרטי המייל והטלפון אחד מתחת לשני */
+/* .contact-info p {
+    display: block;
+    margin-bottom: 10px;
+} */
+/* .middle-section {
+    width: 33.3%; 
+    background: var(--secondary-color); 
+    color: #000000; 
+    text-align: center; 
+    padding: 20px;
+    border-bottom-right-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
+    position: relative;
+    z-index: 1;
+} */
+
+
+
+/* יצירת פס צבעוני בשליש הימני של הדף */
+
+
+/* עדכון העיצוב של השליש הימני */
+/* .left-column {
+    width: 30%;
+    background: var(--secondary-color); 
+    color: var(--text-color); 
+    padding: 20px;
+    border-bottom-left-radius: var(--border-radius);
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+} */
+
+
+
+
+/* .content {
+    display: flex;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+}
+
+.left-column {
+    width: 30%;
+    background: var(--secondary-color); 
+    color: var(--text-color);
+    padding: 20px;
+    border-bottom-left-radius: var(--border-radius);
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+}
+
+.personal-details, .skills-section {
+    margin-bottom: 20px;
+}
+
+.skills-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.skill-item {
+    background: var(--secondary-color);
+    color: var(--primary-color); 
+    padding: 5px 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.right-column {
+    width: 70%;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+}
+
+
+
+.education-degree-institution {
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+button {
+    background: var(--primary-color); 
+    color: var(--secondary-color);
+    border: none;
+    padding: 10px 15px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    margin: 10px;
+}
+
+button:hover {
+    background: #00443f; 
+} */
+
+
+
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .resume-container {
+        width: 210mm;
+        height: 297mm;
+        box-shadow: none;
+    }
+
+    button {
+        display: none;
+    }
+}

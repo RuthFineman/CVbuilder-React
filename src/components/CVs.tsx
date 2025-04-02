@@ -3,32 +3,33 @@ import { useEffect, useState } from "react";
 import UpdateFileCV from "./UpdateCV";
 import { useNavigate } from "react-router-dom"; 
 import AllTemplates from "./AllTemplates";
-const CVs = ({ onLogout }: { onLogout: () => void }) => {
-    const [files, setFiles] = useState<any[]>([]);
+
+const CVs = () => {
+    const [files, setFiles] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [showChooswTemplate, setShowChooswTemplate] = useState(false);
-    const [selectedFile, setSelectedFile] = useState<any | null>(null);
+    const [showChooseTemplate, setShowChooseTemplate] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<string | null>(null);
+    const [selectedPdf, setSelectedPdf] = useState<string | null>(null);
     const navigate = useNavigate();
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        onLogout();
-    };
+
     const fetchUserFiles = async () => {
         const token = localStorage.getItem("token");
-        if (!token) {
-            setError("לא נמצא אסימון התחברות");
+        const userId = localStorage.getItem("userId"); 
+        if (!token || !userId) {
+            setError("לא נמצא אסימון התחברות או userId");
             setLoading(false);
             return;
         }
         try {
-            const response = await axios.get("https://localhost:7020/api/FileCV/user-files", {
+            const response = await axios.get(`https://localhost:7020/api/FileCV/user-files?userId=${userId}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json",
                 },
                 timeout: 5000,
             });
+            console.log("Response from server:", response.data);
             setFiles(response.data);
         } catch (err: any) {
             setError("שגיאה בטעינת הקבצים");
@@ -36,22 +37,19 @@ const CVs = ({ onLogout }: { onLogout: () => void }) => {
             setLoading(false);
         }
     };
+    
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            onLogout();
-        } else {
-            fetchUserFiles();
-        }
-    }, [onLogout]);
+        fetchUserFiles();
+    }, []);
     
     return (
         <>
-            <button onClick={() => setShowChooswTemplate(true)}>יצירת קו"ח חדשים</button>
-            <button onClick={handleLogout}>התנתק</button>
+            <button onClick={() => setShowChooseTemplate(true)}>יצירת קו"ח חדשים</button>
 
-            {showChooswTemplate ? (<AllTemplates />) : selectedFile ? (<UpdateFileCV file={selectedFile} onClose={() => setSelectedFile(null)} onUpdate={fetchUserFiles} />
-                
+            {showChooseTemplate ? (
+                <AllTemplates />
+            ) : selectedFile ? (
+                <UpdateFileCV file={selectedFile} onClose={() => setSelectedFile(null)} onUpdate={fetchUserFiles} />
             ) : (
                 <>
                     {loading ? (
@@ -65,9 +63,10 @@ const CVs = ({ onLogout }: { onLogout: () => void }) => {
                                 <ul>
                                     {files.map((file, index) => (
                                         <li key={index}>
-                                            {file.summary}
+                                            {file}
                                             <button onClick={() => setSelectedFile(file)}>עדכן</button>
-                                            <button onClick={() => navigate(`/delete-file/${file.id}`)}>מחק</button>
+                                            <button onClick={() => navigate(`/delete-file/${file}`)}>מחק</button>
+                                            <button onClick={() => setSelectedPdf(file)}>הצג PDF</button>
                                         </li>
                                     ))}
                                 </ul>
@@ -77,6 +76,19 @@ const CVs = ({ onLogout }: { onLogout: () => void }) => {
                         </div>
                     )}
                 </>
+            )}
+
+            {selectedPdf && (
+                <div>
+                    <h3>הצגת PDF:</h3>
+                    <iframe 
+                        src={`https://cvfilebuilder.s3.eu-north-1.amazonaws.com/115/%D7%92.pdf`} 
+                        width="600" 
+                        height="500" 
+                        title="PDF Viewer"
+                    />
+                    <button onClick={() => setSelectedPdf(null)}>סגור</button>
+                </div>
             )}
         </>
     );

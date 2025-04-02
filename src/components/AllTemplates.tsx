@@ -50,7 +50,7 @@ const AllTemplates = () => {
         console.log("selectedFileIndex before navigation:", selectedFileIndex);
         if (selectedFileIndex !== null) {
             // ניווט לקומפוננטת CreateFileCV עם ה-state שכולל את ה-`selectedFileIndex`
-            navigate(`/hh`, { state: { selectedFileIndex } });
+            navigate(`/create-file-cv`, { state: { selectedFileIndex } });
             // navigate(`/create-file-cv`, { state: { selectedFileIndex } });
 
         }

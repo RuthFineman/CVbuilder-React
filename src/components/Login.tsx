@@ -25,6 +25,9 @@ const Login = ({ onLogin }: { onLogin: (token: string) => void }) => {
 
             const token = response.data.token;
             localStorage.setItem("token", token);
+            const userId = response.data.id;
+            console.log(userId);
+            localStorage.setItem("userId", userId);
             onLogin(token); // קריאה לפונקציה שהועברה כפרופס
             navigate('/CVs'); // מעבר לקומפוננטת CVs
 

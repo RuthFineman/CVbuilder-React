@@ -2,30 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const CreateCV = ({ onSubmit }: {
-    onSubmit: (data: {
-        firstName: string;
-        lastName: string;
-        email: string;
-        phone: string;
-        summary: string;
-        workExperiences: any[];
-        educations: { institution: string; degree: string }[];
-        skills: string[];
-    }) => void;
-}) => {
+    onSubmit: (data: {firstName: string;lastName: string;email: string;phone: string;summary: string; workExperiences: any[]; educations: { institution: string; degree: string }[];skills: string[];}) => void;}) => {
     const navigate = useNavigate();
-    const skillOptions = [
-        "כישורי ארגון",
-        "פתרון בעיות",
-        "עבודה בצוות",
-        "יצירתיות",
-        "אחריות",
-        "תפקוד במצבי לחץ",
-        "מוסר עבודה גבוה",
-        "ניהול זמן יעיל",
-        "חשיבה אנליטית",
-        "יחסי אנוש מעולים"
-    ];
+    const skillOptions = ["כישורי ארגון", "פתרון בעיות","עבודה בצוות", "יצירתיות","אחריות", "תפקוד במצבי לחץ", "מוסר עבודה גבוה","ניהול זמן יעיל", "חשיבה אנליטית",  "יחסי אנוש מעולים" ];
 
     const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
     const toggleSkill = (skill: string) => {

@@ -1,3 +1,4 @@
+
 import React, { useState, createContext, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/Login";
@@ -12,14 +13,16 @@ import CreateCV from "./components/CreateCV";
 import FileUpload from "./components/PDFUploader";
 
 // יצירת AuthContext
-const AuthContext = createContext({
+
+// הוסף את השורה הבאה לייצוא AuthContext
+export const AuthContext = createContext({
   isLoggedIn: false,
   token: null as string | null,
   login: (token: string) => { },
   logout: () => { },
 });
 
-
+// שאר הקוד נשאר כפי שהוא
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
@@ -48,47 +51,43 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 const App = () => {
-  const { login, logout, isLoggedIn } = useContext(AuthContext);
   const [selectedFileIndex, setSelectedFileIndex] = useState<number | null>(null);
-  const [formData, setFormData] = useState(null);
-
+  const [formData, setFormData] = useState<any>(null); // הוספת סוג כללי
 
   const handleSubmit = (data: any) => {
     setFormData(data);  // שמור את המידע בלי לרוקן workExperiences
   };
 
-  const handleUploadSuccess = (url: string) => {
-    // התנהגות אחרי שההעלאה הושלמה בהצלחה
-    console.log('File uploaded successfully. URL:', url);
-  };
+  const { login} = useContext(AuthContext);
+
   return (
-    <Router>
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/register" element={<Register onRegister={login} />} />
-      <Route path="/login" element={<Login onLogin={login} />} />
-      <Route path="/cvs" element={<CVs onLogout={logout} />} />
-      <Route path="/delete-file/:id" element={<DeleteFileCV />} />
-      <Route path="/create-file-cv" element={<CreateFileCV />} />
-      <Route path="/all-templates" element={<AllTemplates />} />
-      <Route
-        path="/resume-display"
-        element={
-          formData ? (
-            <ResumeDisplay data={formData} />  // מציג את קורות החיים אחרי שהנתונים הוזנו
-          ) : (
-            <Navigate to="/createCV" />  // אם אין נתונים, מעביר לעמוד יצירת קורות חיים
-          )
-        }
-      />
-      <Route
-        path="/createCV"
-        element={<CreateCV onSubmit={handleSubmit} />} 
-      />
-    </Routes>
-  </Router>
-  
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/register" element={<Register onRegister={login} />} />
+          <Route path="/login" element={<Login onLogin={login} />} />
+          <Route path="/cvs" element={<CVs/>} />
+          <Route path="/delete-file/:id" element={<DeleteFileCV />} />
+          <Route path="/create-file-cv" element={<CreateFileCV />} />
+          <Route path="/all-templates" element={<AllTemplates />} />
+          <Route
+            path="/resume-display"
+            element={
+              formData ? (
+                <ResumeDisplay data={formData} />  // מציג את קורות החיים אחרי שהנתונים הוזנו
+              ) : (
+                <Navigate to="/createCV" />  // אם אין נתונים, מעביר לעמוד יצירת קורות חיים
+              )
+            }
+          />
+          <Route
+            path="/createCV"
+            element={<CreateCV onSubmit={handleSubmit} />} 
+          />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 };
-
 export default App;

@@ -35,6 +35,9 @@ const Register = ({ onRegister }: { onRegister: (token: string) => void }) => {
             });
             const token = response.data.token; // קבלת הטוקן מהשרת
             localStorage.setItem("token", token);
+            const userId = response.data.id;
+            
+            localStorage.setItem("userId", userId);
             onRegister(token); // קריאה לפונקציה שהועברה כפרופס
             navigate('/CVs'); // מעבר לקומפוננטת CVs
         } catch (error) {
