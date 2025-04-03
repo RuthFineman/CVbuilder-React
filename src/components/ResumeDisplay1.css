@@ -1,18 +1,19 @@
 :root {
-    --primary-color: #6c7fa0; /* צבע ברירת המחדל */
+    --primary-color: #6c7fa0;
+    /* צבע ברירת המחדל */
 }
-
 /* עיצוב כללי לקורות החיים */
 .resume-container {
     width: 21cm;
-    height: 29.7cm;
-    margin: 20px auto;
+    height: 29.6cm;
+    /* margin: 20px auto; */
+    margin: 0 auto;
     border: 1px solid #ccc;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
-    position: relative; /* הוספנו מיקום יחסי למיקום המיומנויות */
+    position: relative;
+    overflow: hidden;
 }
-
 /* עיצוב החלק העליון */
 .header {
     background-color: var(--primary-color);
@@ -24,13 +25,11 @@
     padding-right: 40px;
     padding-top: 1.5cm;
 }
-
 .header h1 {
     font-size: 2em;
     margin: 0;
     white-space: nowrap;
 }
-
 .summary {
     margin-top: 0.1cm;
     padding: 10px 25px;
@@ -39,7 +38,6 @@
     font-size: 1.2em;
     white-space: normal;
 }
-
 .summary::after {
     content: "";
     display: block;
@@ -48,7 +46,6 @@
     background-color: var(--primary-color);
     margin-top: 0.3cm;
 }
-
 /* עיצוב כותרת "פרטים אישיים" */
 .personal-details h2 {
     font-size: 1.5em;
@@ -59,7 +56,6 @@
     font-weight: bold;
     color: var(--primary-color);
 }
-
 /* עיצוב המייל והטלפון */
 .contact-info p {
     font-size: 1.1em;
@@ -68,7 +64,6 @@
     text-align: right;
     padding-left: 15px;
 }
-
 /* נסיון תעסוקתי */
 .work-experiences {
     display: flex;
@@ -78,7 +73,6 @@
     position: relative;
     top: -150px;
 }
-
 .work-experiences h2 {
     font-size: 1.5em;
     font-weight: bold;
@@ -88,7 +82,6 @@
     padding-bottom: 5px;
     margin-bottom: 10px;
 }
-
 .work-experience {
     display: flex;
     flex-direction: column;
@@ -97,20 +90,18 @@
     padding: 10px 0;
     width: 400px;
 }
-
 .company-name {
     font-size: 1.3em;
     font-weight: bold;
     color: #333;
     text-align: right;
 }
-
 .work-dates {
     font-size: 1em;
     color: #777;
     text-align: right;
+    margin-bottom: 10px;
 }
-
 .work-description {
     font-size: 1.1em;
     text-align: right;
@@ -118,14 +109,12 @@
     line-height: 1.5;
     max-width: 60%;
 }
-
 .education-section {
     position: relative;
     margin-top: -150px;
     margin-right: 30px;
     text-align: right;
 }
-
 .education-section h2 {
     top: -10px;
     font-size: 1.5em;
@@ -137,35 +126,33 @@
     margin-bottom: 10px;
     display: inline-block;
 }
-
 .education-degree-institution {
     font-size: 1.1em;
     margin-right: -250px;
     padding-right: 250px;
+    margin-bottom: 10px;
 }
-
 .skills-section {
     position: absolute;
     left: 130px;
     text-align: right;
     width: auto;
-    top: 50%; /* מיקום אנכי באמצע הדף */
-    transform: translateY(-50%); /* תיקון מיקום אנכי */
+    top: 50%;
+    /* מיקום אנכי באמצע הדף */
+    transform: translateY(-50%);
+    /* תיקון מיקום אנכי */
 }
-
 .skills-section h2 {
     font-size: 1.5em;
     font-weight: bold;
     color: var(--primary-color);
     margin-bottom: 10px;
 }
-
 .skills-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
-
 .skills-list li {
     font-size: 1.1em;
     margin-bottom: 5px;
@@ -174,7 +161,6 @@
     display: flex;
     gap: 10px;
 }
-
 .color {
     width: 30px;
     height: 30px;
@@ -183,7 +169,17 @@
     border: 2px solid #ccc;
     transition: transform 0.2s;
 }
-
 .color:hover {
     transform: scale(1.2);
+}
+.fas.fa-graduation-cap {
+    display: none;
+}
+
+.fas.fa-briefcase {
+    display: none;
+}
+
+.fas.fa-user {
+    display: none;
 }

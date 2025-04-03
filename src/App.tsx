@@ -11,7 +11,7 @@ import HomePage from "./components/HomePage";
 import ResumeDisplay from "./components/ResumeDisplay";
 import CreateCV from "./components/CreateCV";
 import FileUpload from "./components/PDFUploader";
-
+import '@fortawesome/fontawesome-free/css/all.min.css';
 // יצירת AuthContext
 
 // הוסף את השורה הבאה לייצוא AuthContext
