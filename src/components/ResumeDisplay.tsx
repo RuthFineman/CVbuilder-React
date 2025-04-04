@@ -3,20 +3,26 @@ import PDFUploader from "./PDFUploader";
 import { useState } from 'react';
 import html2pdf from 'html2pdf.js';
 
-const ResumeDisplay = ({ data }: {
-    data: {
-        firstName: string;
-        lastName: string;
-        role: string;
-        email: string;
-        phone: string;
-        summary: string;
-        workExperiences?: any[];
-        educations?: { institution: string; degree: string; }[];
-        skills?: string[];
-        languages?: { languageName: string; proficiency: string }[];
-    }
-}) => {
+const ResumeDisplay = ({ data }: { data: { 
+    firstName: string; 
+    lastName: string; 
+    role: string; 
+    email: string; 
+    phone: string; 
+    summary: string; 
+    workExperiences?: any[]; 
+    educations?: { institution: string; degree: string }[]; 
+    skills?: string[]; 
+    languages?: { language: string; level: string }[]; 
+  } }) => {
+      const defaultData = {
+          workExperiences: [],
+          educations: [],
+          skills: [],
+          languages: [],
+          ...data,
+      };
+
     const [colorPickerVisible, setColorPickerVisible] = useState(false);
     const [customColor, setCustomColor] = useState('#000000');
 
@@ -39,11 +45,14 @@ const ResumeDisplay = ({ data }: {
         };
         html2pdf().set(options).from(resumeElement).save();
     };
-    console.log("Languages Data:", data.languages);
+
+    const formattedLanguages = (data.languages ?? []).map(lang => ({
+        languageName: lang.language,
+        proficiency: lang.level
+    }));
 
     return (
         <>
-
             <button onClick={() => setColorPickerVisible(!colorPickerVisible)}>שנה צבע</button>
             <button onClick={downloadPDF} style={{ marginTop: "20px", padding: "10px", background: "#008080", color: "white", border: "none", cursor: "pointer" }}>
                 הורד PDF
@@ -67,17 +76,19 @@ const ResumeDisplay = ({ data }: {
                 </div>
             )}
 
-            <PDFUploader firstName={data.firstName} lastName={data.lastName} />
+            <PDFUploader data={defaultData} />
 
             <div id="resume" className="resume-container">
                 <div className="header">
                     <h1>{data.firstName} {data.lastName}</h1>
                     <h3>{data.role}</h3>
                 </div>
+
                 <div className="summary">
                     <p className="fas fa-user"></p>
                     <p className="summary1">{data.summary}</p>
                 </div>
+
                 <div className="left-column">
                     <div className="personal-details">
                         <h2>פרטים אישיים</h2>
@@ -130,12 +141,13 @@ const ResumeDisplay = ({ data }: {
                         <p>אין מידע על השכלה</p>
                     )}
                 </div>
-                <div className="languages">
+
+                <div className="languages-section">
                     <h2>שפות</h2>
-                    {Array.isArray(data.languages) && data.languages.length > 0 ? (
-                        <ul className="languages-list">
-                            {data.languages.map((lang, index) => (
-                                <li key={index} className="language-item">
+                    {formattedLanguages.length > 0 ? (
+                        <ul className="language-item">
+                            {formattedLanguages.map(lang => (
+                                <li key={lang.languageName}>
                                     {lang.languageName} - {lang.proficiency}
                                 </li>
                             ))}
@@ -144,7 +156,6 @@ const ResumeDisplay = ({ data }: {
                         <p>אין שפות שנבחרו</p>
                     )}
                 </div>
-
             </div>
         </>
     );
