@@ -68,7 +68,7 @@ const App = () => {
           <Route path="/register" element={<Register onRegister={login} />} />
           <Route path="/login" element={<Login onLogin={login} />} />
           <Route path="/cvs" element={<CVs/>} />
-          <Route path="/delete-file/:id" element={<DeleteFileCV />} />
+          <Route path="/delete-file/:fileId" element={<DeleteFileCV />} />
           <Route path="/create-file-cv" element={<CreateFileCV />} />
           <Route path="/all-templates" element={<AllTemplates />} />
           <Route

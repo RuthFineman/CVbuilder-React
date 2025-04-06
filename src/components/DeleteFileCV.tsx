@@ -1,57 +1,41 @@
+import { useParams, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";  
 
 const DeleteFileCV = () => {
-    const { id } = useParams<{ id: string }>();  
-    const [error, setError] = useState<string | null>(null);
-    const navigate = useNavigate(); 
+    const { fileId } = useParams(); // שולפים את ה-ID מה-URL
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const deleteFile = async () => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            setError("לא נמצא אסימון התחברות");
-            return;
-        }
         setLoading(true);
-
         try {
-            const response = await axios.delete(`https://localhost:7020/api/FileCV/remove/${id}`, {
+            const token = localStorage.getItem("token");
+            await axios.delete(`https://localhost:7020/upload/remove/${fileId}`, {
                 headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
                 },
             });
 
-            if (response.status === 200) {
-                navigate("/cvs"); 
-            }
-        } catch (err: any) {
-            setError("שגיאה במחקה הקובץ");
+            alert("✅ הקובץ נמחק בהצלחה");
+            navigate("/cvs"); // חזרה לעמוד קבצים לאחר המחיקה
+        } catch (error) {
+            console.error("❌ שגיאה במחיקת הקובץ", error);
+            alert("אירעה שגיאה. נסי שוב.");
         } finally {
             setLoading(false);
         }
     };
 
-    useEffect(() => {
-        if (!id) {
-            setError("לא נמצא מזהה הקובץ");
-        }
-    }, [id]);
-
     return (
-        <div>
-            {loading ? (
-                <div>מתבצע מחיקה...</div>
-            ) : (
-                <div>
-                    <h3>האם אתה בטוח שברצונך למחוק את הקובץ?</h3>
-                    <button onClick={deleteFile}>מחק קובץ</button>
-                    <button onClick={() => navigate("/cvs")}>חזור לדף הקבצים</button> {/* עדכון לשימוש ב-navigate */}
-                    {error && <div>שגיאה: {error}</div>}
-                </div>
-            )}
+        <div style={{ direction: "rtl" }}>
+            <h2>מחיקת קובץ</h2>
+            <button onClick={deleteFile} disabled={loading}>
+                {loading ? "מוחק..." : "מחק"}
+            </button>
+            <button onClick={() => navigate("/cvs")} style={{ marginRight: "10px" }}>
+                בטלי
+            </button>
         </div>
     );
 };

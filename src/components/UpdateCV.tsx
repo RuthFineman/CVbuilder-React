@@ -1,71 +1,164 @@
-import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-    const UpdateCV = ({ file, onClose, onUpdate }: { file: any, onClose: () => void, onUpdate: () => void }) => {
-    const [formData, setFormData] = useState({
-        name: file.name,
-        firstName: file.firstName || "",
-        lastName: file.lastName || "",
-        email: file.email || "",
-        phone: file.phone || "",
-        summary: file.summary || "",
-    });
+type ResumeData = {
+  firstName: string;
+  lastName: string;
+  role: string;
+  email: string;
+  phone: string;
+  summary: string;
+  workExperiences: any[];
+  educations: { institution: string; degree: string }[];
+  skills: string[];
+  languages: { languageName: string; proficiency: string }[];
+};
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
+type UpdateFileCVProps = {
+  file: ResumeData;
+  onClose: () => void;
+  onUpdate: () => Promise<void>;
+};
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const token = localStorage.getItem("token");
-        if (!token) return;
-        if (!file || !file.id) {
-            alert("שגיאה: לא נמצא מזהה לקובץ.");
-            return;
-        }
-        try {
-            await axios.put(`https://localhost:7020/api/FileCV/modify/${file.id}`, formData, {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
-            });
-            alert("העדכון בוצע בהצלחה!");
-            onClose();
-            onUpdate();
-        } catch (error) {
-            alert("שגיאה בעדכון הנתונים");
-        }
-    };
+const skillOptions = [
+  "כישורי ארגון",
+  "פתרון בעיות",
+  "עבודה בצוות",
+  "יצירתיות",
+  "אחריות",
+  "תפקוד במצבי לחץ",
+  "מוסר עבודה גבוה",
+  "ניהול זמן יעיל",
+  "חשיבה אנליטית",
+  "יחסי אנוש מעולים"
+];
 
-    return (
-        <div>
-            <h2>עדכון קורות חיים</h2>
-            <form onSubmit={handleSubmit}>
-                <label>שם:</label>
-                <input type="text" name="name" value={formData.name} onChange={handleChange} />
+const UpdateCV = ({ file, onClose, onUpdate }: UpdateFileCVProps) => {
+  console.log("המידע שהתקבל ב-UpdateFileCV:", file);
 
-                <label>שם פרטי:</label>
-                <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} />
+  const [firstName, setFirstName] = useState(file.firstName);
+  const [lastName, setLastName] = useState(file.lastName);
+  const [role, setRole] = useState(file.role);
+  const [email, setEmail] = useState(file.email);
+  const [phone, setPhone] = useState(file.phone);
+  const [summary, setSummary] = useState(file.summary);
+  const [workExperiences, setWorkExperiences] = useState(file.workExperiences);
+  const [educations, setEducations] = useState(file.educations);
+  const [languages, setLanguages] = useState(file.languages);
+  const [selectedSkills, setSelectedSkills] = useState<string[]>(file.skills);
 
-                <label>שם משפחה:</label>
-                <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} />
+  const location = useLocation();
+  const navigate = useNavigate();
 
-                <label>אימייל:</label>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} />
-
-                <label>טלפון:</label>
-                <input type="text" name="phone" value={formData.phone} onChange={handleChange} />
-
-                <label>תקציר:</label>
-                <textarea name="summary" value={formData.summary} onChange={handleChange}></textarea>
-
-                <button type="submit">עדכן</button>
-                <button type="button" onClick={onClose}>ביטול</button>
-            </form>
-        </div>
+  const toggleSkill = (skill: string) => {
+    setSelectedSkills(prev =>
+      prev.includes(skill) ? prev.filter(s => s !== skill) : [...prev, skill]
     );
+  };
+
+  const addWorkExperience = () => {
+    setWorkExperiences([...workExperiences, { company: '', location: '', startDate: '', endDate: '', description: '' }]);
+  };
+
+  const handleWorkExperienceChange = (index: number, key: string, value: string) => {
+    const updated = [...workExperiences];
+    updated[index] = { ...updated[index], [key]: value };
+    setWorkExperiences(updated);
+  };
+
+  const addEducation = () => {
+    setEducations([...educations, { institution: '', degree: '' }]);
+  };
+
+  const handleEducationChange = (index: number, key: string, value: string) => {
+    const updated = [...educations];
+    updated[index] = { ...updated[index], [key]: value };
+    setEducations(updated);
+  };
+
+  const addLanguage = () => {
+    setLanguages([...languages, { languageName: '', proficiency: '' }]);
+  };
+
+  const handleLanguageChange = (index: number, key: string, value: string) => {
+    const updated = [...languages];
+    updated[index] = { ...updated[index], [key]: value };
+    setLanguages(updated);
+  };
+
+  const handleSubmit = async () => {
+    const updatedData: ResumeData = {
+      firstName,
+      lastName,
+      role,
+      email,
+      phone,
+      summary,
+      workExperiences,
+      educations,
+      languages,
+      skills: selectedSkills,
+    };
+
+    // פה אפשר לשלוח לשרת את הנתונים המעודכנים
+    await onUpdate(); // הפונקציה שקיבלת כ-prop
+    navigate("/my-files");
+  };
+
+  return (
+    <div>
+      <h2>עדכון קורות חיים</h2>
+      <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+        <input value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="שם פרטי" />
+        <input value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="שם משפחה" />
+        <input value={role} onChange={(e) => setRole(e.target.value)} placeholder="תפקיד נוכחי" />
+        <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="מייל" />
+        <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="טלפון" />
+        <textarea value={summary} onChange={(e) => setSummary(e.target.value)} placeholder="תקציר" />
+
+        <h3>ניסיון תעסוקתי</h3>
+        {workExperiences.map((exp, i) => (
+          <div key={i}>
+            <input value={exp.company} onChange={(e) => handleWorkExperienceChange(i, 'company', e.target.value)} placeholder="חברה" />
+            <input value={exp.location} onChange={(e) => handleWorkExperienceChange(i, 'location', e.target.value)} placeholder="מיקום" />
+            <input value={exp.startDate} onChange={(e) => handleWorkExperienceChange(i, 'startDate', e.target.value)} placeholder="שנת התחלה" />
+            <input value={exp.endDate} onChange={(e) => handleWorkExperienceChange(i, 'endDate', e.target.value)} placeholder="שנת סיום" />
+            <textarea value={exp.description} onChange={(e) => handleWorkExperienceChange(i, 'description', e.target.value)} placeholder="תיאור" />
+          </div>
+        ))}
+        <button type="button" onClick={addWorkExperience}>הוסף ניסיון תעסוקתי</button>
+
+        <h3>השכלה</h3>
+        {educations.map((edu, i) => (
+          <div key={i}>
+            <input value={edu.institution} onChange={(e) => handleEducationChange(i, 'institution', e.target.value)} placeholder="מוסד לימודים" />
+            <input value={edu.degree} onChange={(e) => handleEducationChange(i, 'degree', e.target.value)} placeholder="תואר" />
+          </div>
+        ))}
+        <button type="button" onClick={addEducation}>הוסף השכלה</button>
+
+        <h3>שפות</h3>
+        {languages.map((lang, i) => (
+          <div key={i}>
+            <input value={lang.languageName} onChange={(e) => handleLanguageChange(i, 'languageName', e.target.value)} placeholder="שפה" />
+            <input value={lang.proficiency} onChange={(e) => handleLanguageChange(i, 'proficiency', e.target.value)} placeholder="רמה" />
+          </div>
+        ))}
+        <button type="button" onClick={addLanguage}>הוסף שפה</button>
+
+        <h3>כישורים</h3>
+        {skillOptions.map((skill) => (
+          <div key={skill}>
+            <input type="checkbox" checked={selectedSkills.includes(skill)} onChange={() => toggleSkill(skill)} />
+            {skill}
+          </div>
+        ))}
+
+        <button type="submit">עדכן קורות חיים</button>
+      </form>
+      <button onClick={onClose}>סגור</button>
+    </div>
+  );
 };
 
 export default UpdateCV;
