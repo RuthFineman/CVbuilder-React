@@ -1,162 +1,186 @@
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-type ResumeData = {
-  firstName: string;
-  lastName: string;
-  role: string;
-  email: string;
-  phone: string;
-  summary: string;
-  workExperiences: any[];
-  educations: { institution: string; degree: string }[];
-  skills: string[];
-  languages: { languageName: string; proficiency: string }[];
-};
+interface WorkExperience {
+  company: string;
+  location: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+}
 
-type UpdateFileCVProps = {
-  file: ResumeData;
+interface Education {
+  institution: string;
+  degree: string;
+}
+
+interface Language {
+  languageName: string;
+  proficiency: string;
+}
+
+interface CVFile {
+  id: string;
+  path: string;
+}
+
+interface UpdateCVProps {
+  file: CVFile;
   onClose: () => void;
   onUpdate: () => Promise<void>;
-};
+}
 
-const skillOptions = [
-  "כישורי ארגון",
-  "פתרון בעיות",
-  "עבודה בצוות",
-  "יצירתיות",
-  "אחריות",
-  "תפקוד במצבי לחץ",
-  "מוסר עבודה גבוה",
-  "ניהול זמן יעיל",
-  "חשיבה אנליטית",
-  "יחסי אנוש מעולים"
-];
+const UpdateCV: React.FC<UpdateCVProps> = ({ file, onClose, onUpdate }) => {
+  const [fileCV, setFileCV] = useState({
+    firstName: '',
+    lastName: '',
+    role: '',
+    email: '',
+    phone: '',
+    summary: '',
+    workExperiences: [] as WorkExperience[],
+    educations: [] as Education[],
+    languages: [] as Language[],
+    skills: [] as string[],
+  });
 
-const UpdateCV = ({ file, onClose, onUpdate }: UpdateFileCVProps) => {
-  console.log("המידע שהתקבל ב-UpdateFileCV:", file);
+  const skillOptions = [
+    "כישורי ארגון", "פתרון בעיות", "עבודה בצוות", "יצירתיות", "אחריות",
+    "תפקוד במצבי לחץ", "מוסר עבודה גבוה", "ניהול זמן יעיל", "חשיבה אנליטית", "יחסי אנוש מעולים"
+  ];
 
-  const [firstName, setFirstName] = useState(file.firstName);
-  const [lastName, setLastName] = useState(file.lastName);
-  const [role, setRole] = useState(file.role);
-  const [email, setEmail] = useState(file.email);
-  const [phone, setPhone] = useState(file.phone);
-  const [summary, setSummary] = useState(file.summary);
-  const [workExperiences, setWorkExperiences] = useState(file.workExperiences);
-  const [educations, setEducations] = useState(file.educations);
-  const [languages, setLanguages] = useState(file.languages);
-  const [selectedSkills, setSelectedSkills] = useState<string[]>(file.skills);
+  useEffect(() => {
+    const fetchCVData = async () => {
+      try {
+        const response = await axios.get(`https://localhost:7020/upload/fileCV/${file.id}`);
+        setFileCV(response.data);
+      } catch (error) {
+        console.error('שגיאה בהבאת נתוני הקובץ:', error);
+      }
+    };
 
-  const location = useLocation();
-  const navigate = useNavigate();
+    if (file?.id) {
+      fetchCVData();
+    }
+  }, [file]);
 
-  const toggleSkill = (skill: string) => {
-    setSelectedSkills(prev =>
-      prev.includes(skill) ? prev.filter(s => s !== skill) : [...prev, skill]
-    );
+  const handleChange = (field: string, value: string) => {
+    setFileCV({ ...fileCV, [field]: value });
+  };
+
+  const handleArrayChange = (
+    index: number,
+    field: string,
+    value: string,
+    type: 'workExperiences' | 'educations' | 'languages'
+  ) => {
+    const updated = [...(fileCV[type] as any[])];
+    updated[index][field] = value;
+    setFileCV({ ...fileCV, [type]: updated });
   };
 
   const addWorkExperience = () => {
-    setWorkExperiences([...workExperiences, { company: '', location: '', startDate: '', endDate: '', description: '' }]);
-  };
-
-  const handleWorkExperienceChange = (index: number, key: string, value: string) => {
-    const updated = [...workExperiences];
-    updated[index] = { ...updated[index], [key]: value };
-    setWorkExperiences(updated);
+    setFileCV({
+      ...fileCV,
+      workExperiences: [
+        ...fileCV.workExperiences,
+        { company: '', location: '', startDate: '', endDate: '', description: '' }
+      ]
+    });
   };
 
   const addEducation = () => {
-    setEducations([...educations, { institution: '', degree: '' }]);
-  };
-
-  const handleEducationChange = (index: number, key: string, value: string) => {
-    const updated = [...educations];
-    updated[index] = { ...updated[index], [key]: value };
-    setEducations(updated);
+    setFileCV({
+      ...fileCV,
+      educations: [...fileCV.educations, { institution: '', degree: '' }]
+    });
   };
 
   const addLanguage = () => {
-    setLanguages([...languages, { languageName: '', proficiency: '' }]);
+    setFileCV({
+      ...fileCV,
+      languages: [...fileCV.languages, { languageName: '', proficiency: '' }]
+    });
   };
 
-  const handleLanguageChange = (index: number, key: string, value: string) => {
-    const updated = [...languages];
-    updated[index] = { ...updated[index], [key]: value };
-    setLanguages(updated);
+  const toggleSkill = (skill: string) => {
+    const updatedSkills = fileCV.skills.includes(skill)
+      ? fileCV.skills.filter(s => s !== skill)
+      : [...fileCV.skills, skill];
+    setFileCV({ ...fileCV, skills: updatedSkills });
   };
 
-  const handleSubmit = async () => {
-    const updatedData: ResumeData = {
-      firstName,
-      lastName,
-      role,
-      email,
-      phone,
-      summary,
-      workExperiences,
-      educations,
-      languages,
-      skills: selectedSkills,
-    };
-
-    // פה אפשר לשלוח לשרת את הנתונים המעודכנים
-    await onUpdate(); // הפונקציה שקיבלת כ-prop
-    navigate("/my-files");
+  const handleSave = async () => {
+    try {
+      await axios.put(`https://localhost:7020/upload/update/${file.id}`, fileCV);
+      await onUpdate();
+      onClose();
+    } catch (error) {
+      console.error('שגיאה בעדכון הקובץ:', error);
+    }
   };
 
   return (
     <div>
       <h2>עדכון קורות חיים</h2>
-      <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-        <input value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="שם פרטי" />
-        <input value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="שם משפחה" />
-        <input value={role} onChange={(e) => setRole(e.target.value)} placeholder="תפקיד נוכחי" />
-        <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="מייל" />
-        <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="טלפון" />
-        <textarea value={summary} onChange={(e) => setSummary(e.target.value)} placeholder="תקציר" />
 
-        <h3>ניסיון תעסוקתי</h3>
-        {workExperiences.map((exp, i) => (
-          <div key={i}>
-            <input value={exp.company} onChange={(e) => handleWorkExperienceChange(i, 'company', e.target.value)} placeholder="חברה" />
-            <input value={exp.location} onChange={(e) => handleWorkExperienceChange(i, 'location', e.target.value)} placeholder="מיקום" />
-            <input value={exp.startDate} onChange={(e) => handleWorkExperienceChange(i, 'startDate', e.target.value)} placeholder="שנת התחלה" />
-            <input value={exp.endDate} onChange={(e) => handleWorkExperienceChange(i, 'endDate', e.target.value)} placeholder="שנת סיום" />
-            <textarea value={exp.description} onChange={(e) => handleWorkExperienceChange(i, 'description', e.target.value)} placeholder="תיאור" />
-          </div>
-        ))}
-        <button type="button" onClick={addWorkExperience}>הוסף ניסיון תעסוקתי</button>
+      <input placeholder="שם פרטי" value={fileCV.firstName} onChange={e => handleChange('firstName', e.target.value)} />
+      <input placeholder="שם משפחה" value={fileCV.lastName} onChange={e => handleChange('lastName', e.target.value)} />
+      <input placeholder="תפקיד" value={fileCV.role} onChange={e => handleChange('role', e.target.value)} />
+      <input placeholder="מייל" value={fileCV.email} onChange={e => handleChange('email', e.target.value)} />
+      <input placeholder="טלפון" value={fileCV.phone} onChange={e => handleChange('phone', e.target.value)} />
+      <textarea placeholder="תקציר" value={fileCV.summary} onChange={e => handleChange('summary', e.target.value)} />
 
-        <h3>השכלה</h3>
-        {educations.map((edu, i) => (
-          <div key={i}>
-            <input value={edu.institution} onChange={(e) => handleEducationChange(i, 'institution', e.target.value)} placeholder="מוסד לימודים" />
-            <input value={edu.degree} onChange={(e) => handleEducationChange(i, 'degree', e.target.value)} placeholder="תואר" />
-          </div>
-        ))}
-        <button type="button" onClick={addEducation}>הוסף השכלה</button>
+      <h3>ניסיון תעסוקתי</h3>
+      {fileCV.workExperiences.map((exp, i) => (
+        <div key={i}>
+          <input placeholder="חברה" value={exp.company} onChange={e => handleArrayChange(i, 'company', e.target.value, 'workExperiences')} />
+          <input placeholder="מיקום" value={exp.location} onChange={e => handleArrayChange(i, 'location', e.target.value, 'workExperiences')} />
+          <input placeholder="תחילת עבודה" value={exp.startDate} onChange={e => handleArrayChange(i, 'startDate', e.target.value, 'workExperiences')} />
+          <input placeholder="סיום עבודה" value={exp.endDate} onChange={e => handleArrayChange(i, 'endDate', e.target.value, 'workExperiences')} />
+          <textarea placeholder="תיאור" value={exp.description} onChange={e => handleArrayChange(i, 'description', e.target.value, 'workExperiences')} />
+        </div>
+      ))}
+      <button onClick={addWorkExperience}>הוסף ניסיון</button>
 
-        <h3>שפות</h3>
-        {languages.map((lang, i) => (
-          <div key={i}>
-            <input value={lang.languageName} onChange={(e) => handleLanguageChange(i, 'languageName', e.target.value)} placeholder="שפה" />
-            <input value={lang.proficiency} onChange={(e) => handleLanguageChange(i, 'proficiency', e.target.value)} placeholder="רמה" />
-          </div>
-        ))}
-        <button type="button" onClick={addLanguage}>הוסף שפה</button>
+      <h3>השכלה</h3>
+      {fileCV.educations.map((edu, i) => (
+        <div key={i}>
+          <input placeholder="מוסד" value={edu.institution} onChange={e => handleArrayChange(i, 'institution', e.target.value, 'educations')} />
+          <input placeholder="תואר" value={edu.degree} onChange={e => handleArrayChange(i, 'degree', e.target.value, 'educations')} />
+        </div>
+      ))}
+      <button onClick={addEducation}>הוסף השכלה</button>
 
-        <h3>כישורים</h3>
+      <h3>שפות</h3>
+      {fileCV.languages.map((lang, i) => (
+        <div key={i}>
+          <input placeholder="שפה" value={lang.languageName} onChange={e => handleArrayChange(i, 'languageName', e.target.value, 'languages')} />
+          <input placeholder="רמה" value={lang.proficiency} onChange={e => handleArrayChange(i, 'proficiency', e.target.value, 'languages')} />
+        </div>
+      ))}
+      <button onClick={addLanguage}>הוסף שפה</button>
+
+      <h3>כישורים</h3>
+      <div>
         {skillOptions.map((skill) => (
-          <div key={skill}>
-            <input type="checkbox" checked={selectedSkills.includes(skill)} onChange={() => toggleSkill(skill)} />
+          <button
+            key={skill}
+            onClick={() => toggleSkill(skill)}
+            style={{
+              backgroundColor: fileCV.skills.includes(skill) ? '#ccc' : '',
+              margin: '5px'
+            }}
+          >
             {skill}
-          </div>
+          </button>
         ))}
+      </div>
 
-        <button type="submit">עדכן קורות חיים</button>
-      </form>
-      <button onClick={onClose}>סגור</button>
+      <div style={{ marginTop: '20px' }}>
+        <button onClick={handleSave}>שמור</button>
+        <button onClick={onClose}>סגור</button>
+      </div>
     </div>
   );
 };

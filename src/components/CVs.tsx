@@ -1,9 +1,8 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import UpdateFileCV from "./UpdateCV";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AllTemplates from "./AllTemplates";
-
+import axios from "axios";
 const CVs = () => {
     const [files, setFiles] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -40,21 +39,7 @@ const CVs = () => {
     };
     // בדוק את זה
     // הקוד שלך עם שינוי בניתוב
-    const handleDelete = async (filePath: string) => {
-        try {
-            const response = await axios.get("https://localhost:7020/upload/get-file-id-by-url", {
-                params: { fileUrl: filePath }
-            });
-            const fileId = response.data.id;
-            console.log("🔍 מזהה שנשלף:", fileId);
-
-            // ניווט לדף מחיקת הקובץ עם ה-ID (ה-URL כולל את ה-ID)
-            navigate(`/delete-file/${fileId}`);
-        } catch (err) {
-            console.error("❌ שגיאה באחזור מזהה הקובץ", err);
-            alert("לא ניתן למצוא מזהה לקובץ. נסי שוב.");
-        }
-    };
+ 
     useEffect(() => {
         fetchUserFiles();
     }, []);
@@ -66,35 +51,40 @@ const CVs = () => {
                 <AllTemplates />
             ) : selectedFileData ? (
                 <UpdateFileCV file={selectedFileData} onClose={() => setSelectedFileData(null)} onUpdate={fetchUserFiles} />
-              )
-               : (
-                <div>
-                    {loading ? (
-                        <div>טוען קבצים...</div>
-                    ) : error ? (
-                        <div>שגיאה: {error}</div>
-                    ) : (
-                        <div>
-                            <h3>קבצים שלך:</h3>
-                            {files.length > 0 ? (
-                                <ul>
-                                    {files.map(file => (
-                                        <li key={file.id ?? file.path}>
-                                            <p>Path: {file.path}</p>
-                                            {/* <button onClick={() => setSelectedFileData(file)}>עדכן</button> */}
-                                            <button onClick={() => { console.log(file); setSelectedFileData(file); }}>עדכן</button>
-                                            <button onClick={() => handleDelete(file.path)}>מחק</button>
-                                            <button onClick={() => setSelectedPdf(file.path)}>הצג PDF</button>
-                                        </li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <div>אין קבצים זמינים</div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            )}
+            )
+                : (
+                    <div>
+                        {loading ? (
+                            <div>טוען קבצים...</div>
+                        ) : error ? (
+                            <div>שגיאה: {error}</div>
+                        ) : (
+                            <div>
+                                <h3>קבצים שלך:</h3>
+                                {files.length > 0 ? (
+                                    <ul>
+                                        {files.map(file => (
+                                            <li key={file.id ?? file.path}>
+                                                <p>Path: {file.path}</p>
+                                                {/* <button onClick={() => setSelectedFileData(file)}>עדכן</button> */}
+                                                <button onClick={() => { console.log(file); setSelectedFileData(file); }}>עדכן</button>
+                                                <Link to={`/delete/${file.id}`}>
+                                                    <button style={{ }}>
+                                                        🗑 מחק
+                                                    </button>
+                                                </Link>
+
+                                                <button onClick={() => setSelectedPdf(file.path)}>הצג PDF</button>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <div>אין קבצים זמינים</div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                )}
 
             {selectedPdf && (
                 <div>
