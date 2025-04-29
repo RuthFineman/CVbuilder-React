@@ -9,7 +9,7 @@ const CreateCV = ({ onSubmit }: {
         email: string;
         phone: string;
         summary: string;
-        workExperiences: any[];
+        workExperiences: {company:string,position:string,startDate:string,endDate:string,description:string}[];
         educations: { institution: string; degree: string }[];
         skills: string[];
         languages: { languageName: string; proficiency: string }[];
@@ -31,7 +31,7 @@ const CreateCV = ({ onSubmit }: {
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [summary, setSummary] = useState('');
-    const [workExperiences, setWorkExperiences] = useState<any[]>([]);
+    const [workExperiences, setWorkExperiences] = useState<{company: string; position: string; startDate: string; endDate: string; description: string;}[]>([]);
     const [educations, setEducations] = useState<{ institution: string; degree: string }[]>([]);
     const [languages, setLanguages] = useState<{ languageName: string; proficiency: string }[]>([]);
 
@@ -46,7 +46,7 @@ const CreateCV = ({ onSubmit }: {
     };
 
     const addWorkExperience = () => {
-        setWorkExperiences([...workExperiences, { company: '', location: '', startDate: '', endDate: '', description: '' }]);
+        setWorkExperiences([...workExperiences, { company:"", position: "", startDate:"", endDate:"", description: ""}]);
     };
 
     const handleWorkExperienceChange = (index: number, key: string, value: string) => {
@@ -66,6 +66,7 @@ const CreateCV = ({ onSubmit }: {
     };
 
     const handleSubmit = (e: React.FormEvent) => {
+        console.log("Form submitted");
         e.preventDefault();
         const resumeData = { firstName, lastName, role, email, phone, summary, workExperiences, educations, skills: selectedSkills, languages };
         onSubmit(resumeData);
@@ -84,7 +85,7 @@ const CreateCV = ({ onSubmit }: {
             {workExperiences.map((exp, index) => (
                 <div key={index}>
                     <input type="text" placeholder="חברה" value={exp.company || ''} onChange={(e) => handleWorkExperienceChange(index, 'company', e.target.value)} />
-                    <input type="text" placeholder="מיקום" value={exp.location || ''} onChange={(e) => handleWorkExperienceChange(index, 'location', e.target.value)} />
+                    <input type="text" placeholder="מיקום" value={exp.position || ''} onChange={(e) => handleWorkExperienceChange(index, 'position', e.target.value)} />
                     <input type="text" placeholder="שנת התחלה" value={exp.startDate || ''} onChange={(e) => handleWorkExperienceChange(index, 'startDate', e.target.value)} />
                     <input type="text" placeholder="שנת סיום" value={exp.endDate || ''} onChange={(e) => handleWorkExperienceChange(index, 'endDate', e.target.value)} />
                     <textarea placeholder="תיאור" value={exp.description || ''} onChange={(e) => handleWorkExperienceChange(index, 'description', e.target.value)} />

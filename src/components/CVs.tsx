@@ -39,7 +39,7 @@ const CVs = () => {
     };
     // בדוק את זה
     // הקוד שלך עם שינוי בניתוב
- 
+
     useEffect(() => {
         fetchUserFiles();
     }, []);
@@ -66,10 +66,13 @@ const CVs = () => {
                                         {files.map(file => (
                                             <li key={file.id ?? file.path}>
                                                 <p>Path: {file.path}</p>
-                                                {/* <button onClick={() => setSelectedFileData(file)}>עדכן</button> */}
-                                                <button onClick={() => { console.log(file); setSelectedFileData(file); }}>עדכן</button>
+                                                <button onClick={() => {
+                                                    console.log("נבחר קובץ לעדכון:", file);
+                                                    setSelectedFileData(file);
+                                                }}>עדכן</button>
+
                                                 <Link to={`/delete/${file.id}`}>
-                                                    <button style={{ }}>
+                                                    <button style={{}}>
                                                         🗑 מחק
                                                     </button>
                                                 </Link>

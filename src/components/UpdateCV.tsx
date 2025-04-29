@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
+import { useNavigate } from 'react-router-dom';
 interface WorkExperience {
   company: string;
   location: string;
@@ -43,17 +44,46 @@ const UpdateCV: React.FC<UpdateCVProps> = ({ file, onClose, onUpdate }) => {
     languages: [] as Language[],
     skills: [] as string[],
   });
-
+  const navigate = useNavigate();
   const skillOptions = [
     "כישורי ארגון", "פתרון בעיות", "עבודה בצוות", "יצירתיות", "אחריות",
     "תפקוד במצבי לחץ", "מוסר עבודה גבוה", "ניהול זמן יעיל", "חשיבה אנליטית", "יחסי אנוש מעולים"
   ];
-
   useEffect(() => {
     const fetchCVData = async () => {
       try {
-        const response = await axios.get(`https://localhost:7020/upload/fileCV/${file.id}`);
-        setFileCV(response.data);
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`https://localhost:7020/upload/fileCV/${file.id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        });
+        await onUpdate();
+
+        // רק אם יש נתונים, נערוך את ה-state
+        if (response.data) {
+          setFileCV({
+            firstName: response.data.firstName || '',
+            lastName: response.data.lastName || '',
+            role: response.data.role || '',
+            email: response.data.email || '',
+            phone: response.data.phone || response.data.Phone || '',
+            summary: response.data.summary || '',
+            workExperiences: response.data.workExperiences?.length > 0 ? response.data.workExperiences : [{
+              company: '', location: '', startDate: '', endDate: '', description: ''
+            }],
+            educations: response.data.educations?.length > 0 ? response.data.educations : [{
+              institution: '', degree: ''
+            }],
+            languages: response.data.languages?.length > 0 ? response.data.languages : [{
+              languageName: '', proficiency: ''
+            }],
+            skills: Array.isArray(response.data.skills)
+              ? response.data.skills
+              : JSON.parse(response.data.skills || '[]'),
+          });
+        }
       } catch (error) {
         console.error('שגיאה בהבאת נתוני הקובץ:', error);
       }
@@ -62,12 +92,11 @@ const UpdateCV: React.FC<UpdateCVProps> = ({ file, onClose, onUpdate }) => {
     if (file?.id) {
       fetchCVData();
     }
-  }, [file]);
+  }, [file.id]);
 
   const handleChange = (field: string, value: string) => {
     setFileCV({ ...fileCV, [field]: value });
   };
-
   const handleArrayChange = (
     index: number,
     field: string,
@@ -78,7 +107,6 @@ const UpdateCV: React.FC<UpdateCVProps> = ({ file, onClose, onUpdate }) => {
     updated[index][field] = value;
     setFileCV({ ...fileCV, [type]: updated });
   };
-
   const addWorkExperience = () => {
     setFileCV({
       ...fileCV,
@@ -88,36 +116,35 @@ const UpdateCV: React.FC<UpdateCVProps> = ({ file, onClose, onUpdate }) => {
       ]
     });
   };
-
   const addEducation = () => {
     setFileCV({
       ...fileCV,
       educations: [...fileCV.educations, { institution: '', degree: '' }]
     });
   };
-
   const addLanguage = () => {
     setFileCV({
       ...fileCV,
       languages: [...fileCV.languages, { languageName: '', proficiency: '' }]
     });
   };
-
   const toggleSkill = (skill: string) => {
     const updatedSkills = fileCV.skills.includes(skill)
       ? fileCV.skills.filter(s => s !== skill)
       : [...fileCV.skills, skill];
     setFileCV({ ...fileCV, skills: updatedSkills });
   };
+  // useEffect(() => {
+  //   console.log("נתונים אחרי עדכון:", fileCV);
+  // }, [fileCV]); // זה יתעדכן ויתפוס את הערכים אחרי שהם השתנו
 
   const handleSave = async () => {
-    try {
-      await axios.put(`https://localhost:7020/upload/update/${file.id}`, fileCV);
-      await onUpdate();
-      onClose();
-    } catch (error) {
-      console.error('שגיאה בעדכון הקובץ:', error);
-    }
+    // try {
+      console.log(fileCV); 
+      navigate('/resume-display-update',{ state: fileCV });
+    // } catch (error) {
+    //   console.error('שגיאה בעדכון קובץ:', error);
+    // }
   };
 
   return (
@@ -153,7 +180,7 @@ const UpdateCV: React.FC<UpdateCVProps> = ({ file, onClose, onUpdate }) => {
       <button onClick={addEducation}>הוסף השכלה</button>
 
       <h3>שפות</h3>
-      {fileCV.languages.map((lang, i) => (
+      {fileCV.languages?.map((lang, i) => (
         <div key={i}>
           <input placeholder="שפה" value={lang.languageName} onChange={e => handleArrayChange(i, 'languageName', e.target.value, 'languages')} />
           <input placeholder="רמה" value={lang.proficiency} onChange={e => handleArrayChange(i, 'proficiency', e.target.value, 'languages')} />
@@ -176,7 +203,6 @@ const UpdateCV: React.FC<UpdateCVProps> = ({ file, onClose, onUpdate }) => {
           </button>
         ))}
       </div>
-
       <div style={{ marginTop: '20px' }}>
         <button onClick={handleSave}>שמור</button>
         <button onClick={onClose}>סגור</button>

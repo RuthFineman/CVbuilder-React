@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import html2pdf from "html2pdf.js";
 
-const PDFUploader = ({ data }: {
+const PDFUploaderPDFUploaderUpdate = ({ data }: {
     data: {
         firstName: string;
         lastName: string;
@@ -42,18 +42,18 @@ const PDFUploader = ({ data }: {
         formData.append("skills", JSON.stringify(data.skills));
 
         try {
-            const response = await axios.post(`https://localhost:7020/upload?userId=${id}`, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            });
-            console.log("File uploaded successfully", response.data);
+       const response = await axios.put(`https://localhost:7020/update/${id}`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        });
+        console.log("עדכון קובץ הצליח", response.data);
             // setHasUploaded(true);  // לאחר שהקובץ הועלה, נעדכן את ה-state
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                console.error("Error uploading the file to S3", error.response?.data || error);
+                console.error("Error uploading the file to S3 עדכוןןן נכשל", error.response?.data || error);
             } else {
-                console.error("Unexpected error", error);
+                console.error("Unexpected error עדכון נכשלל ", error);
             }
         }
     };
@@ -88,4 +88,4 @@ const PDFUploader = ({ data }: {
     return null;
 };
 
-export default PDFUploader;
+export default PDFUploaderPDFUploaderUpdate;

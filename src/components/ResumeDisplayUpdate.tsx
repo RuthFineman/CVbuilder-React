@@ -1,10 +1,12 @@
 import './ResumeDisplay2.css';
-import PDFUploader from "./PDFUploader";
 import { useState } from 'react';
 import html2pdf from 'html2pdf.js';
-import UpdateCV from './UpdateCV';
+import PDFUploaderUpdate from './PDFUploaderUpdate';
+import { useLocation } from 'react-router-dom';
 
-const ResumeDisplay = ({ data }: {
+
+// const ResumeDisplayUpdate = ()=>{
+const ResumeDisplayUpdate = ({ data }: {
   data: {
     firstName: string;
     lastName: string;
@@ -18,6 +20,9 @@ const ResumeDisplay = ({ data }: {
     languages?: { language: string; level: string }[];
   }
 }) => {
+  const location = useLocation();
+  const fileCV = location.state;
+  console.log(fileCV.firstName);
   const defaultData = {
     WorkExperiences: [],
     educations: [],
@@ -49,10 +54,10 @@ const ResumeDisplay = ({ data }: {
     html2pdf().set(options).from(resumeElement).save();
   };
 
-  const formattedLanguages = (data.languages ?? []).map(lang => ({
-    languageName: lang.language,
-    proficiency: lang.level
-  }));
+  // const formattedLanguages = (data.languages ?? []).map(lang => ({
+  //   languageName: lang.language,
+  //   proficiency: lang.level
+  // }));
 
   return (
     <>
@@ -80,13 +85,13 @@ const ResumeDisplay = ({ data }: {
         </div>
       )}
 
-      <PDFUploader data={defaultData} />
-   
+      <PDFUploaderUpdate data={defaultData} />
+
 
       <div id="resume" className="resume-container">
         <div className="header">
-          <h1>{data.firstName} {data.lastName}</h1>
-          <h3>{data.role}</h3>
+          <h1>{defaultData.firstName} {defaultData.lastName}</h1>
+          <h3>{defaultData.role}</h3>
         </div>
 
         <div className="summary">
@@ -146,14 +151,13 @@ const ResumeDisplay = ({ data }: {
             <p>אין מידע על השכלה</p>
           )}
         </div>
-
         <div className="languages-section">
           <h2>שפות</h2>
-          {formattedLanguages.length > 0 ? (
+          {data.languages?.length ? (
             <ul className="language-item">
-              {formattedLanguages.map((lang, index) => (
-                <li key={`lang-${lang.languageName}-${index}`}>
-                  {lang.languageName} - {lang.proficiency}
+              {data.languages.map((lang, index) => (
+                <li key={`lang-${lang.language}-${index}`}>
+                  {lang.language} - {lang.level}
                 </li>
               ))}
             </ul>
@@ -161,9 +165,11 @@ const ResumeDisplay = ({ data }: {
             <p>אין שפות שנבחרו</p>
           )}
         </div>
+
+
       </div>
     </>
   );
 };
 
-export default ResumeDisplay;
+export default ResumeDisplayUpdate;
