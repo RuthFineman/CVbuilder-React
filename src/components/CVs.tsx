@@ -3,6 +3,7 @@ import UpdateFileCV from "./UpdateCV";
 import { Link, useNavigate } from "react-router-dom";
 import AllTemplates from "./AllTemplates";
 import axios from "axios";
+import UpdateCV from "./UpdateCV";
 const CVs = () => {
     const [files, setFiles] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -43,51 +44,74 @@ const CVs = () => {
     useEffect(() => {
         fetchUserFiles();
     }, []);
+    console.log("====================")
+    console.log(files)
+    console.log("====================")
     return (
         <>
             <button onClick={() => setShowChooseTemplate(true)}>יצירת קו"ח חדשים</button>
-
+            
             {showChooseTemplate ? (
                 <AllTemplates />
             ) : selectedFileData ? (
-                <UpdateFileCV file={selectedFileData} onClose={() => setSelectedFileData(null)} onUpdate={fetchUserFiles} />
+                <UpdateCV  />
             )
                 : (
+            <div>
+                {loading ? (
+                    <div>טוען קבצים...</div>
+                ) : error ? (
+                    <div>שגיאה: {error}</div>
+                ) : (
                     <div>
-                        {loading ? (
-                            <div>טוען קבצים...</div>
-                        ) : error ? (
-                            <div>שגיאה: {error}</div>
-                        ) : (
-                            <div>
-                                <h3>קבצים שלך:</h3>
-                                {files.length > 0 ? (
-                                    <ul>
-                                        {files.map(file => (
-                                            <li key={file.id ?? file.path}>
-                                                <p>Path: {file.path}</p>
-                                                <button onClick={() => {
-                                                    console.log("נבחר קובץ לעדכון:", file);
-                                                    setSelectedFileData(file);
-                                                }}>עדכן</button>
+                        <h3>קבצים שלך:</h3>
+                        {files.length > 0 ? (
+                            <ul>
+                                {files.map(file => (
+                                    <li key={file.id ?? file.path}>
+                                        <p>Path: {file.path}</p>
+                                        <button onClick={() => {
+                                            console.log("נבחר קובץ לעדכון:", file);
+                                            setSelectedFileData(file);
+                                            // navigate('/update', { state: { file } }); 
+                                            navigate(`/update/${file.id}`, { state: { file } });
 
-                                                <Link to={`/delete/${file.id}`}>
+                                            // אם file הוא אובייקט פשוט ללא פונקציות
+                                            // navigate(`/update/${file.id}`);
+                                            // navigate(`/update/${file.id}`, {
+                                            //     state: {
+                                            //         file,
+                                            //         //   onClose: () => setShowModal(false),
+                                            //           onUpdate:{fetchUserFiles} ,
+                                            //           onClose:{ setSelectedFileData}
+                                            //     },
+                                            // });
+                                        }}>עדכן</button>
+
+                                        {/* <Link to={`/update/${file.id}`}>
                                                     <button style={{}}>
-                                                        🗑 מחק
+                                                        עדכן
                                                     </button>
-                                                </Link>
+                                                </Link> */}
 
-                                                <button onClick={() => setSelectedPdf(file.path)}>הצג PDF</button>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    <div>אין קבצים זמינים</div>
-                                )}
-                            </div>
+                                        <Link to={`/delete/${file.id}`}>
+                                            <button style={{}}>
+                                                🗑 מחק
+                                            </button>
+                                        </Link>
+
+                                        <button onClick={() => setSelectedPdf(file.path)}>הצג PDF</button>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <div>אין קבצים זמינים</div>
                         )}
                     </div>
                 )}
+            </div>
+             )
+                } 
 
             {selectedPdf && (
                 <div>

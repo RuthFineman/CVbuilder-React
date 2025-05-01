@@ -19,13 +19,15 @@ const ResumeDisplay = ({ data }: {
   }
 }) => {
   const defaultData = {
-    WorkExperiences: [],
+    workExperiences: [],
     educations: [],
     skills: [],
     languages: [],
     ...data,
   };
-
+  console.log("ResumeDisplay")
+  console.log(data.workExperiences)
+  console.log("ResumeDisplay")
   const [colorPickerVisible, setColorPickerVisible] = useState(false);
   const [customColor, setCustomColor] = useState('#000000');
 
@@ -33,7 +35,7 @@ const ResumeDisplay = ({ data }: {
     document.documentElement.style.setProperty('--primary-color', color);
     setCustomColor(color);
   };
-
+  const v = "00000"////////////////////////////////////////////////
   const colors = ['#ab9b87', '#96858f', '#a5aaab', '#000000', '#6c7fa0', '#00675d'];
 
   const downloadPDF = () => {
@@ -48,12 +50,7 @@ const ResumeDisplay = ({ data }: {
     };
     html2pdf().set(options).from(resumeElement).save();
   };
-
-  const formattedLanguages = (data.languages ?? []).map(lang => ({
-    languageName: lang.language,
-    proficiency: lang.level
-  }));
-
+  console.log(data.languages)
   return (
     <>
       <button onClick={() => setColorPickerVisible(!colorPickerVisible)}>שנה צבע</button>
@@ -81,7 +78,7 @@ const ResumeDisplay = ({ data }: {
       )}
 
       <PDFUploader data={defaultData} />
-   
+
 
       <div id="resume" className="resume-container">
         <div className="header">
@@ -146,14 +143,30 @@ const ResumeDisplay = ({ data }: {
             <p>אין מידע על השכלה</p>
           )}
         </div>
-
+        {/* <div className="languages-section">
+          <h2>שפות</h2>
+          {data.languages?.length ? (
+            <ul className="language-item">
+              {data.languages.map((lang: { language: string; level: string }, index: number) => (
+                <li key={`lang-${lang.language}-${index}`}>
+                  {lang.language} - {lang.level}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>אין שפות שנבחרו</p>
+          )}
+        </div> */}
         <div className="languages-section">
           <h2>שפות</h2>
-          {formattedLanguages.length > 0 ? (
+          {Array.isArray(data.languages) && data.languages.length > 0 ? (
             <ul className="language-item">
-              {formattedLanguages.map((lang, index) => (
-                <li key={`lang-${lang.languageName}-${index}`}>
-                  {lang.languageName} - {lang.proficiency}
+              {data.languages.map((lang, index) => (
+                <li key={`lang-${index}`}>
+                  {lang?.language?.trim() && lang?.level?.trim()
+                    ? `${lang.language} - ${lang.level}`
+                    : 'מידע לא זמין'}
+
                 </li>
               ))}
             </ul>
@@ -161,6 +174,7 @@ const ResumeDisplay = ({ data }: {
             <p>אין שפות שנבחרו</p>
           )}
         </div>
+
       </div>
     </>
   );

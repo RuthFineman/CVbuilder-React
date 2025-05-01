@@ -4,8 +4,10 @@ import html2pdf from "html2pdf.js";
 
 const PDFUploaderPDFUploaderUpdate = ({ data }: {
     data: {
+        id:string,
         firstName: string;
         lastName: string;
+        fileName:string,
         role: string;
         email: string;
         phone: string;
@@ -18,6 +20,12 @@ const PDFUploaderPDFUploaderUpdate = ({ data }: {
 }) => {
     // const [hasUploaded, setHasUploaded] = useState(false);  
 
+
+    const element = document.getElementById("resume");
+    console.log("=======")
+    console.log(data.id)
+    console.log("===========")
+
     const uploadToS3 = async (file: File) => {
         console.log("uploadToS3 called");
         if (!file || file.size === 0) {
@@ -26,6 +34,7 @@ const PDFUploaderPDFUploaderUpdate = ({ data }: {
         }
 
         const id = localStorage.getItem("userId")!;
+        const token = localStorage.getItem("token")!;
         const formData = new FormData();
         formData.append("file", file);
         formData.append("userId", id);
@@ -42,12 +51,13 @@ const PDFUploaderPDFUploaderUpdate = ({ data }: {
         formData.append("skills", JSON.stringify(data.skills));
 
         try {
-       const response = await axios.put(`https://localhost:7020/update/${id}`, formData, {
-            headers: {
-                "Content-Type": "multipart/form-data"
-            }
-        });
-        console.log("עדכון קובץ הצליח", response.data);
+            const response = await axios.put(`https://localhost:7020/upload/update/${data.id}`, formData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data"
+                }
+            });
+            console.log("עדכון קובץ הצליח", response.data);
             // setHasUploaded(true);  // לאחר שהקובץ הועלה, נעדכן את ה-state
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -73,8 +83,8 @@ const PDFUploaderPDFUploaderUpdate = ({ data }: {
         try {
             const pdfBlob = await html2pdf().from(element).output('blob');
             const timestamp = new Date().toISOString().replace(/[:.-]/g, "_");
-            const uniqueId = Math.floor(1000 + Math.random() * 9000);
-            const fileName = `קורות_חיים_${data.firstName}_${data.lastName}_${uniqueId}.pdf`;
+             const uniqueId = Math.floor(1000 + Math.random() * 9000);
+             const fileName = `קורות_חיים_${data.firstName}_${data.lastName}_${uniqueId}.pdf`;
 
             const pdfFile = new File([pdfBlob], fileName, { type: "application/pdf" });
             await uploadToS3(pdfFile);
@@ -82,6 +92,7 @@ const PDFUploaderPDFUploaderUpdate = ({ data }: {
             console.error("שגיאה ביצירת pdf:", error);
         }
     };
+
     useEffect(() => {
         createAndUploadPDF();
     }, [data]);

@@ -10,7 +10,7 @@ const PDFUploader = ({ data }: {
         email: string;
         phone: string;
         summary: string;
-        WorkExperiences: any[];
+        workExperiences: any[];
         educations: { institution: string; degree: string }[];
         skills: string[];
         languages: { language: string; level: string }[];
@@ -36,10 +36,13 @@ const PDFUploader = ({ data }: {
         formData.append("Phone", data.phone);
         formData.append("email", data.email);
         formData.append("summary", data.summary);
-        formData.append("WorkExperiences", JSON.stringify(data.WorkExperiences));
+        formData.append("WorkExperiences", JSON.stringify(data.workExperiences));
         formData.append("languages", JSON.stringify(data.languages));
         formData.append("educations", JSON.stringify(data.educations));
         formData.append("skills", JSON.stringify(data.skills));
+        console.log("PDFUploader")
+        console.log(data.workExperiences)
+        console.log("PDFUploader")
 
         try {
             const response = await axios.post(`https://localhost:7020/upload?userId=${id}`, formData, {

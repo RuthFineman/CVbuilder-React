@@ -1,5 +1,5 @@
 import React, { useState, createContext, useContext } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import CVs from "./components/CVs";
@@ -11,6 +11,7 @@ import CreateCV from "./components/CreateCV";
 import FileUpload from "./components/PDFUploader";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ResumeDisplayUpdate from "./components/ResumeDisplayUpdate";
+import UpdateCV from "./components/UpdateCV";
 // יצירת AuthContext
 
 // הוסף את השורה הבאה לייצוא AuthContext
@@ -37,7 +38,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setToken(null);
     localStorage.removeItem("token");
   };
-
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, token, login: handleLogin, logout: handleLogout }}>
@@ -76,12 +76,13 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return isLoggedIn ? children : <Navigate to="/login" />;
 };
 
+
 const App = () => {
   const [selectedFileIndex, setSelectedFileIndex] = useState<number | null>(null);
   const [formData, setFormData] = useState<any>(null); // הוספת סוג כללי
 
   const handleSubmit = (data: any) => {
-    setFormData(data);  
+    setFormData(data);
   };
 
   const { login } = useContext(AuthContext);
@@ -89,7 +90,6 @@ const App = () => {
   return (
 
     <AuthProvider>
-        {/* <CVProvider> */}
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -98,6 +98,10 @@ const App = () => {
           <Route path="/cvs" element={<CVs />} />
           <Route path="/delete/:fileId" element={<DeleteFileCV />} />
           <Route path="/all-templates" element={<AllTemplates />} />
+          {/* <Route path="/update/:id" /> */} 
+          <Route path="/update/:id" element={<UpdateCV />} />
+
+
           <Route path="/resume-display-update" element={<ResumeDisplayUpdate />} />
           <Route
             path="/resume-display"
@@ -115,7 +119,6 @@ const App = () => {
           />
         </Routes>
       </Router>
-      {/* </CVProvider> */}
     </AuthProvider>
   );
 };

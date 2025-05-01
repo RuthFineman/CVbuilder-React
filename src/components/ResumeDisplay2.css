@@ -161,9 +161,10 @@
 .languages-section .language-item
 {
     position: relative;
-    color: #ffffff;
+    color: #000000;
     top:-560px;
     left: -40px;
+   
     text-align: right;
     right:50px;
     /* margin-bottom: 20px; */

@@ -33,7 +33,7 @@ const Login = ({ onLogin }: { onLogin: (token: string) => void }) => {
 
         } catch (error: any) {
             console.error('Login error', error);
-            alert("שגיאה בהתחברות: " + error.response?.data || "נסה שוב מאוחר יותר.");
+            alert("מייל או סיסמה לא תקינים " + error.response?.data || "נסה שוב מאוחר יותר.");
         }
     };
 
