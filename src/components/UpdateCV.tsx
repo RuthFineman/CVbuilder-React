@@ -31,11 +31,13 @@ interface UpdateCVProps {
   onUpdate: () => Promise<void>;
 }
 
-  const UpdateCV = () => {
-    const location = useLocation();
+ const UpdateCV: React.FC<UpdateCVProps> = ({ file, onClose, onUpdate }) => {
+    // const UpdateCV = () => {
+    // const location = useLocation();
+    // const file = location.state?.file;
     const navigate = useNavigate();
-    const { file,onUpdate,onClose} = location.state || {};
-    const { id } = useParams();
+    // const { file,onUpdate,onClose} = location.state || {};
+    // const { id } = useParams();
 
   const [fileCV, setFileCV] = useState({
     id: '',

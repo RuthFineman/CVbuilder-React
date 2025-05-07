@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const CreateCV = ({ onSubmit }: {
     onSubmit: (data: {
@@ -16,6 +16,10 @@ const CreateCV = ({ onSubmit }: {
     }) => void;
 }) => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const selectedFileIndex = location.state?.selectedFileIndex;
+  
+    // console.log("selectedFileIndex:", selectedFileIndex);
     const skillOptions = ["כישורי ארגון", "פתרון בעיות", "עבודה בצוות", "יצירתיות", "אחריות", "תפקוד במצבי לחץ", "מוסר עבודה גבוה", "ניהול זמן יעיל", "חשיבה אנליטית", "יחסי אנוש מעולים"];
 
     const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
@@ -70,7 +74,7 @@ const CreateCV = ({ onSubmit }: {
         e.preventDefault();
         const resumeData = { firstName, lastName, role, email, phone, summary, workExperiences, educations, skills: selectedSkills, languages };
         onSubmit(resumeData);
-        navigate("/resume-display", { state: { data: resumeData } });
+        navigate("/resume-display", { state: { selectedFileIndex: selectedFileIndex }});
     };
 
     return (

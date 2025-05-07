@@ -1,13 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCss } from "../contexts/CssContext";
 
 const AllTemplates = () => {
     const [files, setFiles] = useState<{ url: string }[]>([]);
     const [selectedFileIndex, setSelectedFileIndex] = useState<number | null>(null);
     const [selectedFile, setSelectedFile] = useState<{ url: string } | null>(null);
     const navigate = useNavigate();
-
+  
     useEffect(() => {
         const fetchFiles = async () => {
             try {
@@ -50,8 +51,7 @@ const AllTemplates = () => {
         console.log("selectedFileIndex before navigation:", selectedFileIndex);
         if (selectedFileIndex !== null) {
             // ניווט לקומפוננטת CreateFileCV עם ה-state שכולל את ה-`selectedFileIndex`
-            navigate(`/create-file-cv`, { state: { selectedFileIndex } });
-            // navigate(`/create-file-cv`, { state: { selectedFileIndex } });
+            navigate(`/createCV`, { state: { selectedFileIndex } });
 
         }
     };

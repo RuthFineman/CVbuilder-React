@@ -1,0 +1,146 @@
+/* עיצוב 1: מינימליסטי מודרני */
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap');
+
+.resume-container {
+  width: 210mm;
+  height: 296mm;
+  margin: 0 auto;
+  padding: 20mm;
+  box-sizing: border-box;
+  font-family: 'Heebo', sans-serif;
+  color: #333;
+  background-color: #fff;
+  direction: rtl;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 10mm;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 5mm;
+}
+
+.header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  color: #2c3e50;
+}
+
+.header h3 {
+  font-size: 18px;
+  font-weight: 400;
+  margin: 5px 0 0;
+  color: #7f8c8d;
+}
+
+.summary {
+  margin-bottom: 10mm;
+  display: flex;
+  align-items: flex-start;
+}
+
+.summary p.fas {
+  margin-left: 10px;
+  color: #3498db;
+}
+
+.summary1 {
+  margin: 0;
+  line-height: 1.5;
+  text-align: justify;
+}
+
+.left-column {
+  float: right;
+  width: 30%;
+  padding-left: 5mm;
+}
+
+.personal-details, .skills-section {
+  margin-bottom: 10mm;
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: 500;
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 2mm;
+  margin-bottom: 5mm;
+}
+
+.contact-info p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.skills-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.skill-item {
+  background-color: #f8f9fa;
+  padding: 5px 10px;
+  margin-bottom: 5px;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+.work-experiences, .education-section, .languages-section {
+  margin-right: 35%;
+  margin-bottom: 10mm;
+}
+
+.work-experience, .education-item {
+  margin-bottom: 5mm;
+}
+
+.company-name, .education-degree-institution {
+  font-weight: 500;
+  font-size: 16px;
+  color: #2c3e50;
+}
+
+.work-dates {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin: 2px 0;
+}
+
+.work-description {
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: justify;
+}
+
+.language-item {
+  list-style-type: none;
+  padding: 0;
+}
+
+.language-item li {
+  margin-bottom: 3px;
+  font-size: 14px;
+}
+.fas.fa-graduation-cap {
+  display: none;
+}
+
+.fas.fa-briefcase {
+  display: none;
+}
+
+.fas.fa-user {
+  display: none;
+}
+@media print {
+  .resume-container {
+    width: 210mm;
+    height: 296mm;
+    margin: 0;
+    padding: 10mm;
+  }
+}

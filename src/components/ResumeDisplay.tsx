@@ -1,8 +1,11 @@
-import './ResumeDisplay2.css';
 import PDFUploader from "./PDFUploader";
-import { useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import html2pdf from 'html2pdf.js';
-import UpdateCV from './UpdateCV';
+// import UpdateCV from './UpdateCV';
+import { useLocation } from 'react-router-dom';
+// import "../styles/CVStyle1.css"
+
+
 
 const ResumeDisplay = ({ data }: {
   data: {
@@ -18,25 +21,40 @@ const ResumeDisplay = ({ data }: {
     languages?: { language: string; level: string }[];
   }
 }) => {
+  const location = useLocation();
+  const [colorPickerVisible, setColorPickerVisible] = useState(false);
+  const [customColor, setCustomColor] = useState('#000000');
+  const colors = ['#ab9b87', '#96858f', '#a5aaab', '#000000', '#6c7fa0', '#00675d'];
+  const selectedFileIndex = location.state?.selectedFileIndex ;
+  const selectedCssUrl = `https://cvfilebuilder.s3.eu-north-1.amazonaws.com/cv-styles/${selectedFileIndex}.css`;
+  const [cssLoaded, setCssLoaded] = useState(false);
+
+  useLayoutEffect(() => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = selectedCssUrl;  link.onload = () => setCssLoaded(true); // כשנטען – מציגים
+    document.head.appendChild(link);
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, [selectedCssUrl]);
+  
+  if (!cssLoaded) return null;
+
   const defaultData = {
     workExperiences: [],
     educations: [],
     skills: [],
     languages: [],
     ...data,
+    template: selectedCssUrl,
   };
-  console.log("ResumeDisplay")
-  console.log(data.workExperiences)
-  console.log("ResumeDisplay")
-  const [colorPickerVisible, setColorPickerVisible] = useState(false);
-  const [customColor, setCustomColor] = useState('#000000');
 
+  
   const changeColor = (color: string) => {
     document.documentElement.style.setProperty('--primary-color', color);
     setCustomColor(color);
   };
-  const v = "00000"////////////////////////////////////////////////
-  const colors = ['#ab9b87', '#96858f', '#a5aaab', '#000000', '#6c7fa0', '#00675d'];
 
   const downloadPDF = () => {
     const resumeElement = document.getElementById("resume");
@@ -78,7 +96,6 @@ const ResumeDisplay = ({ data }: {
       )}
 
       <PDFUploader data={defaultData} />
-
 
       <div id="resume" className="resume-container">
         <div className="header">
@@ -129,7 +146,6 @@ const ResumeDisplay = ({ data }: {
             <p>אין חוויות עבודה זמינות</p>
           )}
         </div>
-
         <div className="education-section">
           <h2>השכלה</h2>
           <i className="fas fa-graduation-cap"></i>
@@ -143,20 +159,7 @@ const ResumeDisplay = ({ data }: {
             <p>אין מידע על השכלה</p>
           )}
         </div>
-        {/* <div className="languages-section">
-          <h2>שפות</h2>
-          {data.languages?.length ? (
-            <ul className="language-item">
-              {data.languages.map((lang: { language: string; level: string }, index: number) => (
-                <li key={`lang-${lang.language}-${index}`}>
-                  {lang.language} - {lang.level}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>אין שפות שנבחרו</p>
-          )}
-        </div> */}
+
         <div className="languages-section">
           <h2>שפות</h2>
           {Array.isArray(data.languages) && data.languages.length > 0 ? (
@@ -166,7 +169,6 @@ const ResumeDisplay = ({ data }: {
                   {lang?.language?.trim() && lang?.level?.trim()
                     ? `${lang.language} - ${lang.level}`
                     : 'מידע לא זמין'}
-
                 </li>
               ))}
             </ul>
@@ -181,3 +183,28 @@ const ResumeDisplay = ({ data }: {
 };
 
 export default ResumeDisplay;
+
+
+  // console.log(`https://cvfilebuilder.s3.eu-north-1.amazonaws.com/cv-styles/${selectedFileIndex}.css`)
+  // const loadCSSFromS3 = (url: string) => {
+  //   const link = document.createElement("link");
+  //   link.rel = "stylesheet";
+  //   link.href = url;
+  //   link.type = "text/css";
+  //   link.crossOrigin = "anonymous";
+  //   document.head.appendChild(link);
+  // };
+  // useEffect(() => {
+  //   loadCSSFromS3(`https://cvfilebuilder.s3.eu-north-1.amazonaws.com/cv-styles/${selectedFileIndex}.css`);
+  // }, []);
+
+    // const { loadCSSFromS3, setCssUrl } = useCss(); // קודם כל זה
+
+  // useEffect(() => {
+  //   const selectedFileIndex = location.state?.selectedFileIndex + 1;
+  //   if (selectedFileIndex !== undefined) {
+  //     const cssUrl = `https://cvfilebuilder.s3.eu-north-1.amazonaws.com/cv-styles/${selectedFileIndex}.css`;
+  //     console.log("cssUrl:", cssUrl);
+  //     loadCSSFromS3(cssUrl);
+  //   }
+  // }, [location.state?.selectedFileIndex]);

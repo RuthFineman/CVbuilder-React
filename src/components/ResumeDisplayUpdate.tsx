@@ -1,46 +1,33 @@
-import './ResumeDisplay2.css';
-import { useState } from 'react';
+// import './ResumeDisplay2.css';
+import { useEffect, useState } from 'react';
 import html2pdf from 'html2pdf.js';
 import PDFUploaderUpdate from './PDFUploaderUpdate';
 import { useLocation } from 'react-router-dom';
+import { useCss } from '../contexts/CssContext';
 
 
 const ResumeDisplayUpdate = ()=>{
-// const ResumeDisplayUpdate = ({ data }: {
-//   data: {
-//     firstName: string;
-//     lastName: string;
-//     role: string;
-//     email: string;
-//     phone: string;
-//     summary: string;
-//     workExperiences?: any[];
-//     educations?: { institution: string; degree: string }[];
-//     skills?: string[];
-//     languages?: { language: string; level: string }[];
-//   }
-// }) => 
-// {
   const location = useLocation();
   const fileCV = location.state;
   console.log(fileCV.firstName);
-  // const defaultData = {
-  //   WorkExperiences: [],
-  //   educations: [],
-  //   skills: [],
-  //   languages: [],
-  //    ...data,
-  // };
-
   const [colorPickerVisible, setColorPickerVisible] = useState(false);
   const [customColor, setCustomColor] = useState('#000000');
 
+  const { cssUrl, setCssUrl, loadCSSFromS3 } = useCss();
+
+  useEffect(() => {
+    console.log("קיבלתי את כתובת ה-CSS:", cssUrl);
+    // אפשר לטעון שוב CSS אם צריך
+     loadCSSFromS3(cssUrl);
+  }, [cssUrl]);
   const changeColor = (color: string) => {
     document.documentElement.style.setProperty('--primary-color', color);
     setCustomColor(color);
   };
 
   const colors = ['#ab9b87', '#96858f', '#a5aaab', '#000000', '#6c7fa0', '#00675d'];
+  
+  
 
   const downloadPDF = () => {
     const resumeElement = document.getElementById("resume");
@@ -55,10 +42,7 @@ const ResumeDisplayUpdate = ()=>{
     html2pdf().set(options).from(resumeElement).save();
   };
 
-  // const formattedLanguages = (data.languages ?? []).map(lang => ({
-  //   languageName: lang.language,
-  //   proficiency: lang.level
-  // }));
+ 
 console.log("===========resumedisplyupdate")
 console.log(fileCV.id)
 console.log("========resumedisplyupdate")
@@ -170,10 +154,30 @@ console.log("========resumedisplyupdate")
           )}
         </div>
 
-
       </div>
     </>
   );
 };
 
 export default ResumeDisplayUpdate;
+
+{/* 
+        <div style={{ marginTop: '20px' }}>
+          <label>בחר פונט: </label>
+          {fonts.map((font, index) => (
+            <button
+              key={index}
+              onClick={() => changeFont(font)}
+              style={{ margin: '5px', fontFamily: font }}
+            >
+              {font}
+            </button>
+          ))}
+        </div> */}
+// const [selectedFont, setSelectedFont] = useState('Arial');
+  // const fonts = ['Arial', 'David', 'FrankRuehl', 'Rubik', 'Heebo'];
+
+  // const changeFont = (font: string) => {
+  //   setSelectedFont(font);
+  //   document.documentElement.style.setProperty('--resume-font', font);
+  // };

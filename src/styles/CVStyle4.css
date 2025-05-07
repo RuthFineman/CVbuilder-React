@@ -1,0 +1,181 @@
+/* עיצוב 3: מקצועי ואלגנטי */
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&display=swap');
+
+.resume-container {
+  width: 210mm;
+  height: 296mm;
+  margin: 0 auto;
+  padding: 15mm;
+  box-sizing: border-box;
+  font-family: 'Assistant', sans-serif;
+  color: #333;
+  background-color: #fff;
+  direction: rtl;
+  position: relative;
+}
+
+.header {
+  text-align: right;
+  margin-bottom: 10mm;
+  border-bottom: 3px solid #2c3e50;
+  padding-bottom: 5mm;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+  color: #2c3e50;
+}
+
+.header h3 {
+  font-size: 18px;
+  font-weight: 400;
+  margin: 5px 0 0;
+  color: #7f8c8d;
+}
+
+.summary {
+  margin-bottom: 10mm;
+  background-color: #f8f9fa;
+  padding: 5mm;
+  border-right: 5px solid #2c3e50;
+}
+
+.summary p.fas {
+  display: none;
+}
+
+.summary1 {
+  margin: 0;
+  line-height: 1.6;
+  text-align: justify;
+  font-size: 15px;
+}
+
+.left-column {
+  float: right;
+  width: 30%;
+  padding-left: 5mm;
+}
+
+.personal-details, .skills-section {
+  margin-bottom: 10mm;
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 5mm;
+  position: relative;
+  padding-bottom: 2mm;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 50px;
+  height: 3px;
+  background-color: #e74c3c;
+}
+
+.contact-info p {
+  margin: 8px 0;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.skills-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.skill-item {
+  margin-bottom: 8px;
+  font-size: 15px;
+  position: relative;
+  padding-right: 15px;
+}
+
+.skill-item::before {
+  content: '•';
+  position: absolute;
+  right: 0;
+  color: #e74c3c;
+}
+
+.work-experiences, .education-section, .languages-section {
+  margin-right: 35%;
+  margin-bottom: 10mm;
+}
+
+.work-experience, .education-item {
+  margin-bottom: 8mm;
+  position: relative;
+}
+
+.company-name, .education-degree-institution {
+  font-weight: 600;
+  font-size: 17px;
+  color: #2c3e50;
+}
+
+.work-dates {
+  font-size: 14px;
+  color: #e74c3c;
+  margin: 3px 0;
+  font-weight: 600;
+}
+
+.work-description {
+  font-size: 15px;
+  line-height: 1.5;
+  text-align: justify;
+}
+
+.language-item {
+  list-style-type: none;
+  padding: 0;
+}
+
+.language-item li {
+  margin-bottom: 5px;
+  font-size: 15px;
+  position: relative;
+  padding-right: 15px;
+}
+
+.language-item li::before {
+  content: '•';
+  position: absolute;
+  right: 0;
+  color: #e74c3c;
+}
+
+@media print {
+  .resume-container {
+    width: 210mm;
+    height: 296mm;
+    margin: 0;
+    padding: 10mm;
+  }
+}
+.fas.fa-graduation-cap {
+  display: none;
+}
+
+.fas.fa-briefcase {
+  display: none;
+}
+
+.fas.fa-user {
+  display: none;
+}

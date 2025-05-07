@@ -43,11 +43,13 @@ const PDFUploader = ({ data }: {
         console.log("PDFUploader")
         console.log(data.workExperiences)
         console.log("PDFUploader")
+        const token = localStorage.getItem("token");
 
         try {
             const response = await axios.post(`https://localhost:7020/upload?userId=${id}`, formData, {
                 headers: {
-                    "Content-Type": "multipart/form-data"
+                    "Content-Type": "multipart/form-data",
+                    "Authorization": `Bearer ${token}`
                 }
             });
             console.log("File uploaded successfully", response.data);

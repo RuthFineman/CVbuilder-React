@@ -12,6 +12,7 @@ import FileUpload from "./components/PDFUploader";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ResumeDisplayUpdate from "./components/ResumeDisplayUpdate";
 import UpdateCV from "./components/UpdateCV";
+import { CssProvider } from "./contexts/CssContext";
 // יצירת AuthContext
 
 // הוסף את השורה הבאה לייצוא AuthContext
@@ -90,6 +91,7 @@ const App = () => {
   return (
 
     <AuthProvider>
+      <CssProvider>
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -99,13 +101,11 @@ const App = () => {
           <Route path="/delete/:fileId" element={<DeleteFileCV />} />
           <Route path="/all-templates" element={<AllTemplates />} />
           {/* <Route path="/update/:id" /> */} 
-          <Route path="/update/:id" element={<UpdateCV />} />
+          {/* <Route path="/update" element={<UpdateCV />} /> */}
 
 
           <Route path="/resume-display-update" element={<ResumeDisplayUpdate />} />
-          <Route
-            path="/resume-display"
-            element={
+          <Route path="/resume-display" element={
               formData ? (
                 <ResumeDisplay data={formData} />  // מציג את קורות החיים אחרי שהנתונים הוזנו
               ) : (
@@ -119,6 +119,7 @@ const App = () => {
           />
         </Routes>
       </Router>
+      </CssProvider>
     </AuthProvider>
   );
 };
