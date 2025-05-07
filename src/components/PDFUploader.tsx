@@ -6,6 +6,7 @@ const PDFUploader = ({ data }: {
     data: {
         firstName: string;
         lastName: string;
+        templateUrl:string;
         role: string;
         email: string;
         phone: string;
@@ -13,23 +14,24 @@ const PDFUploader = ({ data }: {
         workExperiences: any[];
         educations: { institution: string; degree: string }[];
         skills: string[];
-        languages: { language: string; level: string }[];
+        languages: { languageName: string; level: string }[];
     }
 }) => {
-    // const [hasUploaded, setHasUploaded] = useState(false);  
-
     const uploadToS3 = async (file: File) => {
         console.log("uploadToS3 called");
         if (!file || file.size === 0) {
             console.error("No file selected or file is empty.");
             return;
         }
-
         const id = localStorage.getItem("userId")!;
         const formData = new FormData();
         formData.append("file", file);
         formData.append("userId", id);
         formData.append("fileName", file.name);
+        formData.append("Template", data.templateUrl);
+        console.log("שניה לפני העלה לשרת")
+        console.log(data.templateUrl)
+        console.log("שניה לפני העלה לשרת")
         formData.append("firstName", data.firstName);
         formData.append("lastName", data.lastName);
         formData.append("role", data.role);
@@ -53,7 +55,6 @@ const PDFUploader = ({ data }: {
                 }
             });
             console.log("File uploaded successfully", response.data);
-            // setHasUploaded(true);  // לאחר שהקובץ הועלה, נעדכן את ה-state
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.error("Error uploading the file to S3", error.response?.data || error);
@@ -64,17 +65,12 @@ const PDFUploader = ({ data }: {
     };
 
     const createAndUploadPDF = async () => {
-        // אם כבר הועלה, אל תיצור קובץ נוסף
-        // if (hasUploaded) return;  
-
         console.log("createAndUploadPDF called");
-
         const element = document.getElementById("resume");
         if (!element) {
             console.error("האלמנט עם ה-ID 'resume' לא נמצא");
             return;
         }
-
         try {
             const pdfBlob = await html2pdf().from(element).output('blob');
             const timestamp = new Date().toISOString().replace(/[:.-]/g, "_");
@@ -92,5 +88,4 @@ const PDFUploader = ({ data }: {
     }, [data]);
     return null;
 };
-
 export default PDFUploader;

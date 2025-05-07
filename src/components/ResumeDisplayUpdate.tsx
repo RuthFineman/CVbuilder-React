@@ -1,34 +1,30 @@
-// import './ResumeDisplay2.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import html2pdf from 'html2pdf.js';
 import PDFUploaderUpdate from './PDFUploaderUpdate';
 import { useLocation } from 'react-router-dom';
-import { useCss } from '../contexts/CssContext';
 
-
-const ResumeDisplayUpdate = ()=>{
+const ResumeDisplayUpdate = () => {
   const location = useLocation();
   const fileCV = location.state;
-  console.log(fileCV.firstName);
   const [colorPickerVisible, setColorPickerVisible] = useState(false);
   const [customColor, setCustomColor] = useState('#000000');
-
-  const { cssUrl, setCssUrl, loadCSSFromS3 } = useCss();
-
-  useEffect(() => {
-    console.log("קיבלתי את כתובת ה-CSS:", cssUrl);
-    // אפשר לטעון שוב CSS אם צריך
-     loadCSSFromS3(cssUrl);
-  }, [cssUrl]);
+  const colors = ['#ab9b87', '#96858f', '#a5aaab', '#000000', '#6c7fa0', '#00675d'];
   const changeColor = (color: string) => {
     document.documentElement.style.setProperty('--primary-color', color);
     setCustomColor(color);
   };
-
-  const colors = ['#ab9b87', '#96858f', '#a5aaab', '#000000', '#6c7fa0', '#00675d'];
+  const [cssLoaded, setCssLoaded] = useState(false);
+  useLayoutEffect(() => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = fileCV.template;
+    link.onload = () => setCssLoaded(true);
+    document.head.appendChild(link);
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, [fileCV.template]);
   
-  
-
   const downloadPDF = () => {
     const resumeElement = document.getElementById("resume");
     if (!resumeElement) return;
@@ -41,11 +37,6 @@ const ResumeDisplayUpdate = ()=>{
     };
     html2pdf().set(options).from(resumeElement).save();
   };
-
- 
-console.log("===========resumedisplyupdate")
-console.log(fileCV.id)
-console.log("========resumedisplyupdate")
   return (
     <>
       <button onClick={() => setColorPickerVisible(!colorPickerVisible)}>שנה צבע</button>
@@ -71,9 +62,8 @@ console.log("========resumedisplyupdate")
           />
         </div>
       )}
-
+      
       <PDFUploaderUpdate data={fileCV} />
-
 
       <div id="resume" className="resume-container">
         <div className="header">
@@ -99,7 +89,7 @@ console.log("========resumedisplyupdate")
             <h2>מיומנויות</h2>
             {fileCV.skills?.length ? (
               <ul className="skills-list">
-                {fileCV.skills.map((skill:string, index:number) => (
+                {fileCV.skills.map((skill: string, index: number) => (
                   <li key={`skill-${index}`} className="skill-item">{skill}</li>
                 ))
                 }
@@ -114,7 +104,7 @@ console.log("========resumedisplyupdate")
           <h2>ניסיון תעסוקתי</h2>
           <p className="fas fa-briefcase"></p>
           {fileCV.workExperiences?.length ? (
-            fileCV.workExperiences.map((exp:{ company: string; Position:string,startDate: string; endDate: string; description: string }, index:number) => (
+            fileCV.workExperiences.map((exp: { company: string; Position: string, startDate: string; endDate: string; description: string }, index: number) => (
               <div key={`work-${exp.company}-${index}`} className="work-experience">
                 <div className="company-name">{exp.company}</div>
                 <div className="work-dates">{exp.startDate} - {exp.endDate}</div>
@@ -143,7 +133,7 @@ console.log("========resumedisplyupdate")
           <h2>שפות</h2>
           {fileCV.languages?.length ? (
             <ul className="language-item">
-              {fileCV.languages.map((lang:{ language: string; level: string }, index: number) => (
+              {fileCV.languages.map((lang: { language: string; level: string }, index: number) => (
                 <li key={`lang-${lang.language}-${index}`}>
                   {lang.language} - {lang.level}
                 </li>
@@ -160,24 +150,3 @@ console.log("========resumedisplyupdate")
 };
 
 export default ResumeDisplayUpdate;
-
-{/* 
-        <div style={{ marginTop: '20px' }}>
-          <label>בחר פונט: </label>
-          {fonts.map((font, index) => (
-            <button
-              key={index}
-              onClick={() => changeFont(font)}
-              style={{ margin: '5px', fontFamily: font }}
-            >
-              {font}
-            </button>
-          ))}
-        </div> */}
-// const [selectedFont, setSelectedFont] = useState('Arial');
-  // const fonts = ['Arial', 'David', 'FrankRuehl', 'Rubik', 'Heebo'];
-
-  // const changeFont = (font: string) => {
-  //   setSelectedFont(font);
-  //   document.documentElement.style.setProperty('--resume-font', font);
-  // };

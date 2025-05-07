@@ -10,7 +10,7 @@ const Login = ({ onLogin }: { onLogin: (token: string) => void }) => {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
-            navigate("/CVs"); 
+            navigate("/CVs");
         }
     }, [navigate]);
 
@@ -39,17 +39,21 @@ const Login = ({ onLogin }: { onLogin: (token: string) => void }) => {
 
     return (
         <>
+          <button type="button" onClick={() => navigate("/CVs")}> 
+        ⬅️
+    </button>
             <h2>התחברות</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>דוא"ל:</label>
                     <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>
-                <div>
+                    <div>
                     <label>סיסמה:</label>
                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                   
                 </div>
-                <button type="submit">התחבר</button>
+                    <button type="submit">התחבר</button>
             </form>
         </>
     );

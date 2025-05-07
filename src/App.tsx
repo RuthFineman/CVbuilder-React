@@ -8,11 +8,8 @@ import AllTemplates from "./components/AllTemplates";
 import HomePage from "./components/HomePage";
 import ResumeDisplay from "./components/ResumeDisplay";
 import CreateCV from "./components/CreateCV";
-import FileUpload from "./components/PDFUploader";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ResumeDisplayUpdate from "./components/ResumeDisplayUpdate";
-import UpdateCV from "./components/UpdateCV";
-import { CssProvider } from "./contexts/CssContext";
 // יצירת AuthContext
 
 // הוסף את השורה הבאה לייצוא AuthContext
@@ -91,7 +88,7 @@ const App = () => {
   return (
 
     <AuthProvider>
-      <CssProvider>
+      {/* <CssProvider> */}
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -119,7 +116,7 @@ const App = () => {
           />
         </Routes>
       </Router>
-      </CssProvider>
+      {/* </CssProvider> */}
     </AuthProvider>
   );
 };

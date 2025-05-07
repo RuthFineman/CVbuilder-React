@@ -5,6 +5,7 @@ import html2pdf from "html2pdf.js";
 const PDFUploaderPDFUploaderUpdate = ({ data }: {
     data: {
         id:string,
+        template:string,
         firstName: string;
         lastName: string;
         fileName:string,
@@ -19,12 +20,10 @@ const PDFUploaderPDFUploaderUpdate = ({ data }: {
     }
 }) => {
     // const [hasUploaded, setHasUploaded] = useState(false);  
-
-
     const element = document.getElementById("resume");
-    console.log("=======")
-    console.log(data.id)
-    console.log("===========")
+    console.log("=====מתוך עדכוןןןןןןןן==")
+    console.log(data.template)
+    console.log("=====מתוךךך  עדכוןןןןןן======")
 
     const uploadToS3 = async (file: File) => {
         console.log("uploadToS3 called");
@@ -32,13 +31,25 @@ const PDFUploaderPDFUploaderUpdate = ({ data }: {
             console.error("No file selected or file is empty.");
             return;
         }
-
+        // useEffect(() => {
+        //     if (selectedResume.templateName) {
+        //       const link = document.createElement("link");
+        //       link.rel = "stylesheet";
+        //       link.href = `/styles/${selectedResume.templateName}.css`;
+        //       document.head.appendChild(link);
+        //       return () => {
+        //         document.head.removeChild(link);
+        //       };
+        //     }
+        //   }, [selectedResume]);
+          
         const id = localStorage.getItem("userId")!;
         const token = localStorage.getItem("token")!;
         const formData = new FormData();
         formData.append("file", file);
         formData.append("userId", id);
         formData.append("fileName", file.name);
+        formData.append("Template", data.template);
         formData.append("firstName", data.firstName);
         formData.append("lastName", data.lastName);
         formData.append("role", data.role);
@@ -79,7 +90,6 @@ const PDFUploaderPDFUploaderUpdate = ({ data }: {
             console.error("האלמנט עם ה-ID 'resume' לא נמצא");
             return;
         }
-
         try {
             const pdfBlob = await html2pdf().from(element).output('blob');
             const timestamp = new Date().toISOString().replace(/[:.-]/g, "_");

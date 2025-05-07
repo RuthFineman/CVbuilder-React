@@ -3,17 +3,15 @@ import UpdateFileCV from "./UpdateCV";
 import { Link, useNavigate } from "react-router-dom";
 import AllTemplates from "./AllTemplates";
 import axios from "axios";
-import UpdateCV from "./UpdateCV";
 
 const CVs = () => {
+    const navigate = useNavigate();
     const [files, setFiles] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [showChooseTemplate, setShowChooseTemplate] = useState(false);
     const [selectedFileData, setSelectedFileData] = useState<any | null>(null);
-
     const [selectedPdf, setSelectedPdf] = useState<string | null>(null);
-    const navigate = useNavigate();
 
     const fetchUserFiles = async () => {
         const token = localStorage.getItem("token");
@@ -21,6 +19,7 @@ const CVs = () => {
         if (!token || !userId) {
             setError("לא נמצא אסימון התחברות או userId");
             setLoading(false);
+            navigate("/")
             return;
         }
         try {
@@ -43,11 +42,6 @@ const CVs = () => {
     useEffect(() => {
         fetchUserFiles();
     }, []);
-
-    console.log("====================")
-    console.log(files)
-    console.log("====================")
-
     return (
         <>
             <button onClick={() => setShowChooseTemplate(true)}>יצירת קו"ח חדשים</button>

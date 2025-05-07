@@ -26,7 +26,7 @@ const Register = ({ onRegister }: { onRegister: (token: string) => void }) => {
             setErrors(formErrors);
             return;
         }
-    
+
         try {
             const response = await axios.post('https://localhost:7020/api/Users/register', {
                 fullName,
@@ -36,7 +36,7 @@ const Register = ({ onRegister }: { onRegister: (token: string) => void }) => {
             const token = response.data.token; // קבלת הטוקן מהשרת
             localStorage.setItem("token", token);
             const userId = response.data.id;
-            
+
             localStorage.setItem("userId", userId);
             onRegister(token); // קריאה לפונקציה שהועברה כפרופס
             navigate('/CVs'); // מעבר לקומפוננטת CVs
@@ -49,26 +49,29 @@ const Register = ({ onRegister }: { onRegister: (token: string) => void }) => {
     return (
         <>
             <div>
+                <button type="button" onClick={() => navigate("/cvs")}>
+                    ⬅️
+                </button>
                 <h2>הרשמה</h2>
                 <form onSubmit={handleSubmit}>
                     <div>
                         <label>שם מלא:</label>
-                        <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} required/>
+                        <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
                         {errors.fullName && <span style={{ color: "red" }}>{errors.fullName}</span>}
                     </div>
                     <div>
                         <label>דוא"ל:</label>
-                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                         {errors.email && <span style={{ color: "red" }}>{errors.email}</span>}
                     </div>
                     <div>
                         <label>סיסמה:</label>
-                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
+                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                         {errors.password && <span style={{ color: "red" }}>{errors.password}</span>}
                     </div>
                     <div>
                         <label>אימות סיסמה:</label>
-                        <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required/>
+                        <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
                         {errors.confirmPassword && <span style={{ color: "red" }}>{errors.confirmPassword}</span>}
                     </div>
                     <button type="submit">הרשמה</button>

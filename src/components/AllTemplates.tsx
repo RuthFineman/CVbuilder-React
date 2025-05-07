@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCss } from "../contexts/CssContext";
 
 const AllTemplates = () => {
     const [files, setFiles] = useState<{ url: string }[]>([]);
@@ -16,15 +15,12 @@ const AllTemplates = () => {
                 const response = await axios.get<string[]>("https://localhost:7020/api/Template/files", {
                     headers: { Authorization: token ? `Bearer ${token}` : "" },
                 });
-
                 console.log("Response data:", response.data);
-
                 setFiles(Array.isArray(response.data) ? response.data.map(url => ({ url })) : []);
             } catch (error) {
                 console.error("Error fetching files:", error);
             }
         };
-
         fetchFiles();
     }, []);
 
@@ -32,9 +28,7 @@ const AllTemplates = () => {
         if (selectedFileIndex === index) {
             return;
         }
-
         setSelectedFileIndex(index);
-
         try {
             const token = localStorage.getItem("token");
             const { data } = await axios.get(`https://localhost:7020/api/Template/${index}`, {

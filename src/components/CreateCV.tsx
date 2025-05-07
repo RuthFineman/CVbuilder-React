@@ -9,36 +9,32 @@ const CreateCV = ({ onSubmit }: {
         email: string;
         phone: string;
         summary: string;
-        workExperiences: {company:string,position:string,startDate:string,endDate:string,description:string}[];
+        workExperiences: { company: string, position: string, startDate: string, endDate: string, description: string }[];
         educations: { institution: string; degree: string }[];
         skills: string[];
-        languages: { languageName: string; proficiency: string }[];
+        languages: { languageName: string; level: string }[];
     }) => void;
 }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const selectedFileIndex = location.state?.selectedFileIndex;
-  
-    // console.log("selectedFileIndex:", selectedFileIndex);
     const skillOptions = ["כישורי ארגון", "פתרון בעיות", "עבודה בצוות", "יצירתיות", "אחריות", "תפקוד במצבי לחץ", "מוסר עבודה גבוה", "ניהול זמן יעיל", "חשיבה אנליטית", "יחסי אנוש מעולים"];
-
     const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-    const toggleSkill = (skill: string) => {
-        setSelectedSkills(prevSkills =>
-            prevSkills.includes(skill) ? prevSkills.filter(s => s !== skill) : [...prevSkills, skill]
-        );
-    };
-
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [role, setRole] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [summary, setSummary] = useState('');
-    const [workExperiences, setWorkExperiences] = useState<{company: string; position: string; startDate: string; endDate: string; description: string;}[]>([]);
+    const [workExperiences, setWorkExperiences] = useState<{ company: string; position: string; startDate: string; endDate: string; description: string; }[]>([]);
     const [educations, setEducations] = useState<{ institution: string; degree: string }[]>([]);
-    const [languages, setLanguages] = useState<{ languageName: string; proficiency: string }[]>([]);
+    const [languages, setLanguages] = useState<{ languageName: string; level: string }[]>([]);
 
+    const toggleSkill = (skill: string) => {
+        setSelectedSkills(prevSkills =>
+            prevSkills.includes(skill) ? prevSkills.filter(s => s !== skill) : [...prevSkills, skill]
+        );
+    };
     const addEducation = () => {
         setEducations([...educations, { institution: "", degree: "" }]);
     };
@@ -50,7 +46,7 @@ const CreateCV = ({ onSubmit }: {
     };
 
     const addWorkExperience = () => {
-        setWorkExperiences([...workExperiences, { company:"", position: "", startDate:"", endDate:"", description: ""}]);
+        setWorkExperiences([...workExperiences, { company: "", position: "", startDate: "", endDate: "", description: "" }]);
     };
 
     const handleWorkExperienceChange = (index: number, key: string, value: string) => {
@@ -60,7 +56,7 @@ const CreateCV = ({ onSubmit }: {
     };
 
     const addLanguage = () => {
-        setLanguages([...languages, { languageName: "", proficiency: "" }]);
+        setLanguages([...languages, { languageName: "", level: "" }]);
     };
 
     const handleLanguageChange = (index: number, key: string, value: string) => {
@@ -72,12 +68,22 @@ const CreateCV = ({ onSubmit }: {
     const handleSubmit = (e: React.FormEvent) => {
         console.log("Form submitted");
         e.preventDefault();
+        if (!firstName.trim() || !lastName.trim() || !role.trim() || !email.trim() || !phone.trim()) {
+            alert("אנא מלא/י פרטים אישיים");
+            return;
+        }
         const resumeData = { firstName, lastName, role, email, phone, summary, workExperiences, educations, skills: selectedSkills, languages };
+        // const resumeData = { firstName, lastName,templateUrl ,role, email, phone, summary, workExperiences, educations, skills: selectedSkills, languages };
         onSubmit(resumeData);
-        navigate("/resume-display", { state: { selectedFileIndex: selectedFileIndex }});
+        navigate("/resume-display", { state: { selectedFileIndex: selectedFileIndex } });
     };
 
     return (
+        <div>
+            <button type="button" onClick={() => navigate("/CVs")}> 
+        ⬅️
+    </button>
+   
         <form onSubmit={handleSubmit}>
             <input type="text" placeholder="שם פרטי" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
             <input type="text" placeholder="שם משפחה" value={lastName} onChange={(e) => setLastName(e.target.value)} />
@@ -112,7 +118,7 @@ const CreateCV = ({ onSubmit }: {
             {languages.map((lang, index) => (
                 <div key={index}>
                     <input type="text" placeholder="שפה" value={lang.languageName} onChange={(e) => handleLanguageChange(index, "languageName", e.target.value)} />
-                    <input type="text" placeholder="רמה (למשל: שפת אם,טובה מאד, בסיסית)" value={lang.proficiency} onChange={(e) => handleLanguageChange(index, "proficiency", e.target.value)} />
+                    <input type="text" placeholder="רמה (למשל: שפת אם,טובה מאד, בסיסית)" value={lang.level} onChange={(e) => handleLanguageChange(index, "level", e.target.value)} />
                     <button type="button" onClick={() => setLanguages(languages.filter((_, i) => i !== index))}>🗑️</button>
                 </div>
             ))}
@@ -130,6 +136,7 @@ const CreateCV = ({ onSubmit }: {
 
             <button type="submit">צור קורות חיים</button>
         </form>
+        </div>
     );
 };
 

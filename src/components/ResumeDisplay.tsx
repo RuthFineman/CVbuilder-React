@@ -1,16 +1,13 @@
-import PDFUploader from "./PDFUploader";
 import { useEffect, useLayoutEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import html2pdf from 'html2pdf.js';
-// import UpdateCV from './UpdateCV';
-import { useLocation } from 'react-router-dom';
-// import "../styles/CVStyle1.css"
-
-
+import PDFUploader from "./PDFUploader";
 
 const ResumeDisplay = ({ data }: {
   data: {
     firstName: string;
     lastName: string;
+    templateUrl: string;
     role: string;
     email: string;
     phone: string;
@@ -18,47 +15,58 @@ const ResumeDisplay = ({ data }: {
     workExperiences?: any[];
     educations?: { institution: string; degree: string }[];
     skills?: string[];
-    languages?: { language: string; level: string }[];
+    languages?: { languageName: string; level: string }[];
   }
 }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const selectedFileIndex = location.state?.selectedFileIndex;
   const [colorPickerVisible, setColorPickerVisible] = useState(false);
   const [customColor, setCustomColor] = useState('#000000');
-  const colors = ['#ab9b87', '#96858f', '#a5aaab', '#000000', '#6c7fa0', '#00675d'];
-  const selectedFileIndex = location.state?.selectedFileIndex ;
-  const selectedCssUrl = `https://cvfilebuilder.s3.eu-north-1.amazonaws.com/cv-styles/${selectedFileIndex}.css`;
   const [cssLoaded, setCssLoaded] = useState(false);
+  // const colors = ['#ab9b87', '#96858f', '#a5aaab', '#000000', '#6c7fa0', '#00675d'];
+  useEffect(() => {
+    if (selectedFileIndex !== undefined) {
+      const fetchTemplate = async () => {
+        try {
+          const cssUrl = `https://cvfilebuilder.s3.eu-north-1.amazonaws.com/cv-styles/${selectedFileIndex}.css`;
+          data.templateUrl=cssUrl;
+        } catch (err) {
+          console.error("שגיאה בשליפת תבנית", err);
+        }
+      };
+      fetchTemplate();
+    }
+  }, [selectedFileIndex]);
 
   useLayoutEffect(() => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = selectedCssUrl;  link.onload = () => setCssLoaded(true); // כשנטען – מציגים
+    link.href = data.templateUrl;
+    link.onload = () => setCssLoaded(true);
     document.head.appendChild(link);
     return () => {
       document.head.removeChild(link);
     };
-  }, [selectedCssUrl]);
-  
-  if (!cssLoaded) return null;
+  }, [data.templateUrl]);
 
+
+  if (!cssLoaded) return null;
   const defaultData = {
     workExperiences: [],
     educations: [],
     skills: [],
     languages: [],
     ...data,
-    template: selectedCssUrl,
   };
-
-  
   const changeColor = (color: string) => {
     document.documentElement.style.setProperty('--primary-color', color);
     setCustomColor(color);
   };
-
   const downloadPDF = () => {
     const resumeElement = document.getElementById("resume");
     if (!resumeElement) return;
+
     const options = {
       margin: 0,
       filename: `Resume_${data.firstName}_${data.lastName}.pdf`,
@@ -66,26 +74,41 @@ const ResumeDisplay = ({ data }: {
       html2canvas: { scale: 3, dpi: 300, letterRendering: true, useCORS: true },
       jsPDF: { unit: 'mm', format: [210, 297], orientation: 'portrait' }
     };
+
     html2pdf().set(options).from(resumeElement).save();
   };
-  console.log(data.languages)
   return (
     <>
-      <button onClick={() => setColorPickerVisible(!colorPickerVisible)}>שנה צבע</button>
-      <button onClick={downloadPDF} style={{ marginTop: "20px", padding: "10px", background: "#008080", color: "white", border: "none", cursor: "pointer" }}>
+      <button onClick={() => setColorPickerVisible(!colorPickerVisible)}>
+        שנה צבע
+      </button>
+      <button
+        onClick={downloadPDF}
+        style={{
+          marginTop: "20px",
+          padding: "10px",
+          background: "#008080",
+          color: "white",
+          border: "none",
+          cursor: "pointer"
+        }}
+      >
         הורד PDF
       </button>
-
       {colorPickerVisible && (
         <div id="colorPicker" style={{ display: 'flex', marginTop: '10px', gap: '10px' }}>
-          {colors.map((color, index) => (
+          {/* {colors.map((color, index) => (
             <div
               key={`color-${index}`}
-              className="color"
-              style={{ backgroundColor: color, width: '30px', height: '30px', cursor: 'pointer' }}
+              style={{
+                backgroundColor: color,
+                width: '30px',
+                height: '30px',
+                cursor: 'pointer'
+              }}
               onClick={() => changeColor(color)}
             />
-          ))}
+          ))} */}
           <input
             type="color"
             value={customColor}
@@ -96,6 +119,9 @@ const ResumeDisplay = ({ data }: {
       )}
 
       <PDFUploader data={defaultData} />
+      <button type="button" onClick={() => navigate("/CVs")}> 
+        ⬅️
+    </button>
 
       <div id="resume" className="resume-container">
         <div className="header">
@@ -152,7 +178,7 @@ const ResumeDisplay = ({ data }: {
           {data.educations?.length ? (
             data.educations.map((edu, index) => (
               <div key={`edu-${edu.institution}-${index}`} className="education-item">
-                <div className="education-degree-institution">{edu.degree}-{edu.institution}</div>
+                <div className="education-degree-institution">{edu.degree} - {edu.institution}</div>
               </div>
             ))
           ) : (
@@ -166,8 +192,8 @@ const ResumeDisplay = ({ data }: {
             <ul className="language-item">
               {data.languages.map((lang, index) => (
                 <li key={`lang-${index}`}>
-                  {lang?.language?.trim() && lang?.level?.trim()
-                    ? `${lang.language} - ${lang.level}`
+                  {lang?.languageName?.trim() && lang?.level?.trim()
+                    ? `${lang.languageName} - ${lang.level}`
                     : 'מידע לא זמין'}
                 </li>
               ))}
@@ -176,35 +202,9 @@ const ResumeDisplay = ({ data }: {
             <p>אין שפות שנבחרו</p>
           )}
         </div>
-
       </div>
     </>
   );
 };
 
 export default ResumeDisplay;
-
-
-  // console.log(`https://cvfilebuilder.s3.eu-north-1.amazonaws.com/cv-styles/${selectedFileIndex}.css`)
-  // const loadCSSFromS3 = (url: string) => {
-  //   const link = document.createElement("link");
-  //   link.rel = "stylesheet";
-  //   link.href = url;
-  //   link.type = "text/css";
-  //   link.crossOrigin = "anonymous";
-  //   document.head.appendChild(link);
-  // };
-  // useEffect(() => {
-  //   loadCSSFromS3(`https://cvfilebuilder.s3.eu-north-1.amazonaws.com/cv-styles/${selectedFileIndex}.css`);
-  // }, []);
-
-    // const { loadCSSFromS3, setCssUrl } = useCss(); // קודם כל זה
-
-  // useEffect(() => {
-  //   const selectedFileIndex = location.state?.selectedFileIndex + 1;
-  //   if (selectedFileIndex !== undefined) {
-  //     const cssUrl = `https://cvfilebuilder.s3.eu-north-1.amazonaws.com/cv-styles/${selectedFileIndex}.css`;
-  //     console.log("cssUrl:", cssUrl);
-  //     loadCSSFromS3(cssUrl);
-  //   }
-  // }, [location.state?.selectedFileIndex]);
