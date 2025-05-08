@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface WorkExperience {
   company: string;
@@ -49,7 +49,7 @@ interface UpdateCVProps {
     languages: [] as Language[],
     skills: [] as string[],
   });
-  
+
   const skillOptions = [
     "כישורי ארגון", "פתרון בעיות", "עבודה בצוות", "יצירתיות", "אחריות",
     "תפקוד במצבי לחץ", "מוסר עבודה גבוה", "ניהול זמן יעיל", "חשיבה אנליטית", "יחסי אנוש מעולים"
@@ -60,13 +60,14 @@ interface UpdateCVProps {
     const fetchCVData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`https://localhost:7020/upload/fileCV/${file.id}`, {
+        const response = await axios.get(`https://localhost:7020/file-cv/fileCV/${file.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         });
         console.log("response.data", response.data);
+        console.log("PHONE:", response.data.Phone);
         const data = response.data;
         if (data) {
           setFileCV({
@@ -76,7 +77,7 @@ interface UpdateCVProps {
             template: data.template || '',
             role: data.role || '',
             email: data.email || '',
-            phone: data.phone || '',
+            phone: data.Phone || '',
             summary: data.summary || '',
             workExperiences: Array.isArray(data.workExperiences) && data.workExperiences.length > 0
               ? data.workExperiences
@@ -94,7 +95,6 @@ interface UpdateCVProps {
         console.error('שגיאה בהבאת נתוני הקובץ:', err);
       }
     };
-  
     fetchCVData();
   }, [file.id]);
   
@@ -140,14 +140,12 @@ interface UpdateCVProps {
   };
 
   const handleSave = async () => {
-    console.log("@@@@@@@@fileCV")
-    console.log(fileCV)
-    console.log("@@@@@@@@@@fileCV")
+    console.log("fileCV שנשלח לניווט:", fileCV);
      navigate('/resume-display-update', { state: fileCV });
   };
   return (
     <div>
-      <button onClick={()=>console.log(fileCV)}></button>
+      {/* <button onClick={()=>console.log(fileCV)}></button> */}
       <h2>עדכון קורות חיים</h2>
 
       <input placeholder="שם פרטי" value={fileCV.firstName} onChange={e => handleChange('firstName', e.target.value)} />
@@ -182,7 +180,7 @@ interface UpdateCVProps {
       {fileCV.languages?.map((lang, i) => (
         <div key={i}>
           <input placeholder="שפה" value={lang.languageName} onChange={e => handleArrayChange(i, 'languageName', e.target.value, 'languages')} />
-          <input placeholder="רמה" value={lang.level} onChange={e => handleArrayChange(i, 'level', e.target.value, 'languages')} />
+          <input placeholder="רמה" value={lang.level||''} onChange={e => handleArrayChange(i, 'level', e.target.value, 'languages')} />
         </div>
       ))}
       <button onClick={addLanguage}>הוסף שפה</button>
@@ -246,7 +244,7 @@ export default UpdateCV;
   //             institution: '', degree: ''
   //           }],
   //           languages: response.data.languages?.length > 0 ? response.data.languages : [{
-  //             languageName: '', proficiency: ''
+  //             languageName: '', level: ''
   //           }],
   //           skills: Array.isArray(response.data.skills)
   //             ? response.data.skills

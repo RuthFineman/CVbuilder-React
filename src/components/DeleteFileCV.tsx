@@ -14,7 +14,7 @@ const DeleteFileCV = () => {
         setLoading(true);
         try {
             const token = localStorage.getItem("token");
-            await axios.delete(`https://localhost:7020/upload/remove/${fileId}`, {
+            await axios.delete(`https://localhost:7020/file-cv/delete/${fileId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

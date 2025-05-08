@@ -64,7 +64,7 @@ const CreateCV = ({ onSubmit }: {
         newLanguages[index] = { ...newLanguages[index], [key]: value };
         setLanguages(newLanguages);
     };
-
+    
     const handleSubmit = (e: React.FormEvent) => {
         console.log("Form submitted");
         e.preventDefault();

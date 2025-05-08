@@ -7,7 +7,7 @@ const AllTemplates = () => {
     const [selectedFileIndex, setSelectedFileIndex] = useState<number | null>(null);
     const [selectedFile, setSelectedFile] = useState<{ url: string } | null>(null);
     const navigate = useNavigate();
-  
+
     useEffect(() => {
         const fetchFiles = async () => {
             try {
@@ -50,82 +50,87 @@ const AllTemplates = () => {
         }
     };
     return (
-        <div style={{ display: "flex", justifyContent: "space-between", padding: "20px" }}>
-            {/* תצוגת תמונה בצד שמאל */}
-            <div style={{ flex: 2, paddingRight: "20px", height: "auto", maxWidth: "20%", overflow: "hidden" }}>
-                {selectedFile ? (
-                    <>
-                        <h3>תצוגת תמונה</h3>
-                        <img
-                            src={selectedFile.url}
-                            alt="Template"
+        <div >
+            <button type="button" onClick={() => navigate("/CVs")}>
+                ⬅️
+            </button>
+            <div style={{ display: "flex", justifyContent: "space-between", padding: "20px" }}>
+                {/* תצוגת תמונה בצד שמאל */}
+                <div style={{ flex: 2, paddingRight: "20px", height: "auto", maxWidth: "20%", overflow: "hidden" }}>
+                    {selectedFile ? (
+                        <>
+                            <h3>תצוגת תמונה</h3>
+                            <img
+                                src={selectedFile.url}
+                                alt="Template"
+                                style={{
+                                    maxWidth: "100%",
+                                    height: "auto",
+                                    borderRadius: "8px",
+                                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+                                    display: "block",
+                                    margin: "0 auto",
+                                }}
+                            />
+                        </>
+                    ) : (
+                        <h3>בחר תבנית להצגת תמונה</h3>
+                    )}
+                </div>
+
+                {/* רשימת תמונות בצד ימין */}
+                <ul
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(2, 1fr)",
+                        gap: "15px",
+                        listStyle: "none",
+                        padding: 0,
+                        flex: 1,
+                        textAlign: "center",
+                    }}
+                >
+                    {files.map(({ url }, index) => (
+                        <li
+                            key={index}
                             style={{
-                                maxWidth: "100%",
-                                height: "auto",
+                                cursor: "pointer",
+                                border: selectedFileIndex === index ? "2px solid #4CAF50" : "none",
                                 borderRadius: "8px",
-                                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                                display: "block",
-                                margin: "0 auto",
+                                padding: "10px",
                             }}
-                        />
-                    </>
-                ) : (
-                    <h3>בחר תבנית להצגת תמונה</h3>
+                            onClick={() => handleFileClick(index)}
+                        >
+                            <img
+                                src={url.startsWith("http") ? url : `https://cvfilebuilder.s3.amazonaws.com/exampleCV/${url.replace(".pdf", ".jpg")}`}
+                                alt="Template"
+                                width="100"
+                                height="100"
+                                style={{ objectFit: "contain", borderRadius: "8px" }}
+                            />
+                        </li>
+                    ))}
+                </ul>
+
+                {/* כפתור Next */}
+                {selectedFileIndex !== null && (
+                    <div style={{ marginTop: "20px" }}>
+                        <button
+                            onClick={handleNextClick}
+                            style={{
+                                padding: "10px 20px",
+                                backgroundColor: "#4CAF50",
+                                color: "#fff",
+                                border: "none",
+                                borderRadius: "8px",
+                                cursor: "pointer",
+                            }}
+                        >
+                            Next
+                        </button>
+                    </div>
                 )}
             </div>
-
-            {/* רשימת תמונות בצד ימין */}
-            <ul
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(2, 1fr)",
-                    gap: "15px",
-                    listStyle: "none",
-                    padding: 0,
-                    flex: 1,
-                    textAlign: "center",
-                }}
-            >
-                {files.map(({ url }, index) => (
-                    <li
-                        key={index}
-                        style={{
-                            cursor: "pointer",
-                            border: selectedFileIndex === index ? "2px solid #4CAF50" : "none",
-                            borderRadius: "8px",
-                            padding: "10px",
-                        }}
-                        onClick={() => handleFileClick(index)}
-                    >
-                        <img
-                            src={url.startsWith("http") ? url : `https://cvfilebuilder.s3.amazonaws.com/exampleCV/${url.replace(".pdf", ".jpg")}`}
-                            alt="Template"
-                            width="100"
-                            height="100"
-                            style={{ objectFit: "contain", borderRadius: "8px" }}
-                        />
-                    </li>
-                ))}
-            </ul>
-
-            {/* כפתור Next */}
-            {selectedFileIndex !== null && (
-                <div style={{ marginTop: "20px" }}>
-                    <button
-                        onClick={handleNextClick}
-                        style={{
-                            padding: "10px 20px",
-                            backgroundColor: "#4CAF50",
-                            color: "#fff",
-                            border: "none",
-                            borderRadius: "8px",
-                            cursor: "pointer",
-                        }}
-                    >
-                        Next
-                    </button>
-                </div>
-            )}
         </div>
     );
 };

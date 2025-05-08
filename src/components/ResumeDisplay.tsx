@@ -30,7 +30,7 @@ const ResumeDisplay = ({ data }: {
       const fetchTemplate = async () => {
         try {
           const cssUrl = `https://cvfilebuilder.s3.eu-north-1.amazonaws.com/cv-styles/${selectedFileIndex}.css`;
-          data.templateUrl=cssUrl;
+          data.templateUrl = cssUrl;
         } catch (err) {
           console.error("שגיאה בשליפת תבנית", err);
         }
@@ -79,6 +79,9 @@ const ResumeDisplay = ({ data }: {
   };
   return (
     <>
+      <button type="button" onClick={() => navigate("/CVs")}>
+        ⬅️
+      </button>
       <button onClick={() => setColorPickerVisible(!colorPickerVisible)}>
         שנה צבע
       </button>
@@ -119,10 +122,6 @@ const ResumeDisplay = ({ data }: {
       )}
 
       <PDFUploader data={defaultData} />
-      <button type="button" onClick={() => navigate("/CVs")}> 
-        ⬅️
-    </button>
-
       <div id="resume" className="resume-container">
         <div className="header">
           <h1>{data.firstName} {data.lastName}</h1>

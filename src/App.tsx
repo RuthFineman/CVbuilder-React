@@ -97,10 +97,6 @@ const App = () => {
           <Route path="/cvs" element={<CVs />} />
           <Route path="/delete/:fileId" element={<DeleteFileCV />} />
           <Route path="/all-templates" element={<AllTemplates />} />
-          {/* <Route path="/update/:id" /> */} 
-          {/* <Route path="/update" element={<UpdateCV />} /> */}
-
-
           <Route path="/resume-display-update" element={<ResumeDisplayUpdate />} />
           <Route path="/resume-display" element={
               formData ? (

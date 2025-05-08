@@ -15,7 +15,7 @@ export interface Education {
 
 export interface Language {
   languageName: string;
-  proficiency: string;
+  level: string;
 }
 
 export interface CVBaseData {

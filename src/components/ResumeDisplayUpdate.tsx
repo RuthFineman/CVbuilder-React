@@ -1,11 +1,13 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 import html2pdf from 'html2pdf.js';
 import PDFUploaderUpdate from './PDFUploaderUpdate';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const ResumeDisplayUpdate = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const fileCV = location.state;
+  console.log("המידע שהגיע מהניווטטטטטטטט",fileCV)
   const [colorPickerVisible, setColorPickerVisible] = useState(false);
   const [customColor, setCustomColor] = useState('#000000');
   const colors = ['#ab9b87', '#96858f', '#a5aaab', '#000000', '#6c7fa0', '#00675d'];
@@ -39,6 +41,9 @@ const ResumeDisplayUpdate = () => {
   };
   return (
     <>
+               <button type="button" onClick={() => navigate("/CVs")}> 
+        ⬅️
+    </button>
       <button onClick={() => setColorPickerVisible(!colorPickerVisible)}>שנה צבע</button>
       <button onClick={downloadPDF} style={{ marginTop: "20px", padding: "10px", background: "#008080", color: "white", border: "none", cursor: "pointer" }}>
         הורד PDF
@@ -62,7 +67,7 @@ const ResumeDisplayUpdate = () => {
           />
         </div>
       )}
-      
+
       <PDFUploaderUpdate data={fileCV} />
 
       <div id="resume" className="resume-container">
@@ -84,8 +89,24 @@ const ResumeDisplayUpdate = () => {
               <p>{fileCV.phone}</p>
             </div>
           </div>
+          <div className="skills-section">
+          </div>
 
           <div className="skills-section">
+            <h2>מיומנויות</h2>
+            {fileCV.skills?.length > 0 && (
+              <div className="skills-section">
+                <h2>מיומנויות</h2>
+                <ul>
+                  {fileCV.skills.map((skill:string, idx:string) => (
+                    <li key={idx}>{skill}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+           </div>
+          {/* <div className="skills-section">
             <h2>מיומנויות</h2>
             {fileCV.skills?.length ? (
               <ul className="skills-list">
@@ -97,8 +118,8 @@ const ResumeDisplayUpdate = () => {
             ) : (
               <p>אין מיומנויות שנבחרו</p>
             )}
-          </div>
-        </div>
+          </div> */}
+       
 
         <div className="work-experiences">
           <h2>ניסיון תעסוקתי</h2>
@@ -133,9 +154,9 @@ const ResumeDisplayUpdate = () => {
           <h2>שפות</h2>
           {fileCV.languages?.length ? (
             <ul className="language-item">
-              {fileCV.languages.map((lang: { language: string; level: string }, index: number) => (
-                <li key={`lang-${lang.language}-${index}`}>
-                  {lang.language} - {lang.level}
+              {fileCV.languages.map((lang: { languageName: string; level: string }, index: number) => (
+                <li key={`lang-${lang.languageName}-${index}`}>
+                  {lang.languageName} - {lang.level}
                 </li>
               ))}
             </ul>

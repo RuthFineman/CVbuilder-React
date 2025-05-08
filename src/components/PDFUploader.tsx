@@ -30,7 +30,7 @@ const PDFUploader = ({ data }: {
         formData.append("fileName", file.name);
         formData.append("Template", data.templateUrl);
         console.log("שניה לפני העלה לשרת")
-        console.log(data.templateUrl)
+        console.log(data)
         console.log("שניה לפני העלה לשרת")
         formData.append("firstName", data.firstName);
         formData.append("lastName", data.lastName);
@@ -39,16 +39,17 @@ const PDFUploader = ({ data }: {
         formData.append("email", data.email);
         formData.append("summary", data.summary);
         formData.append("WorkExperiences", JSON.stringify(data.workExperiences));
-        formData.append("languages", JSON.stringify(data.languages));
-        formData.append("educations", JSON.stringify(data.educations));
-        formData.append("skills", JSON.stringify(data.skills));
+        ///////////////////////////////
+        formData.append("Languages", JSON.stringify(data.languages));
+        formData.append("Educations", JSON.stringify(data.educations));
+        formData.append("Skills", JSON.stringify(data.skills));
         console.log("PDFUploader")
         console.log(data.workExperiences)
         console.log("PDFUploader")
         const token = localStorage.getItem("token");
 
         try {
-            const response = await axios.post(`https://localhost:7020/upload?userId=${id}`, formData, {
+            const response = await axios.post("https://localhost:7020/file-cv", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     "Authorization": `Bearer ${token}`

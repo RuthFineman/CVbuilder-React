@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import UpdateFileCV from "./UpdateCV";
 import { Link, useNavigate } from "react-router-dom";
-import AllTemplates from "./AllTemplates";
 import axios from "axios";
 
 const CVs = () => {
@@ -9,7 +8,6 @@ const CVs = () => {
     const [files, setFiles] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [showChooseTemplate, setShowChooseTemplate] = useState(false);
     const [selectedFileData, setSelectedFileData] = useState<any | null>(null);
     const [selectedPdf, setSelectedPdf] = useState<string | null>(null);
 
@@ -19,11 +17,11 @@ const CVs = () => {
         if (!token || !userId) {
             setError("לא נמצא אסימון התחברות או userId");
             setLoading(false);
-            navigate("/")
+            navigate("/");
             return;
         }
         try {
-            const response = await axios.get(`https://localhost:7020/upload/user-files?userId=${userId}`, {
+            const response = await axios.get("https://localhost:7020/file-cv/user-files", {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json",
@@ -42,13 +40,32 @@ const CVs = () => {
     useEffect(() => {
         fetchUserFiles();
     }, []);
+
+    const handleCreateNewCV = () => {
+        if (files.length >= 5) {
+            alert("ניתן ליצור עד 5 קבצי קורות חיים בלבד.");
+            return;
+        }
+        navigate('/all-templates');
+    };
+    const handleLogout = () => {
+        // מחיקת token ו-userId
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+
+        // הפניית המשתמש לדף הבית
+        navigate("/"); 
+    };
     return (
         <>
-            <button onClick={() => setShowChooseTemplate(true)}>יצירת קו"ח חדשים</button>
-            {showChooseTemplate ? (
-                <AllTemplates />
-            ) : selectedFileData ? (
-                <UpdateFileCV file={selectedFileData} onClose={() => setSelectedFileData(null)} onUpdate={fetchUserFiles} />
+            <button onClick={handleCreateNewCV}>יצירת קו"ח חדשים</button>
+
+            {selectedFileData ? (
+                <UpdateFileCV
+                    file={selectedFileData}
+                    onClose={() => setSelectedFileData(null)}
+                    onUpdate={fetchUserFiles}
+                />
             ) : (
                 <div>
                     {loading ? (
@@ -69,9 +86,7 @@ const CVs = () => {
                                             }}>עדכן</button>
 
                                             <Link to={`/delete/${file.id}`}>
-                                                <button style={{}}>
-                                                    🗑 מחק
-                                                </button>
+                                                <button>🗑 מחק</button>
                                             </Link>
 
                                             <button onClick={() => setSelectedPdf(file.path)}>הצג PDF</button>
@@ -85,6 +100,7 @@ const CVs = () => {
                     )}
                 </div>
             )}
+
             {selectedPdf && (
                 <div>
                     <h3>הצגת PDF:</h3>
@@ -97,6 +113,7 @@ const CVs = () => {
                     <button onClick={() => setSelectedPdf(null)}>סגור</button>
                 </div>
             )}
+               <button onClick={handleLogout}>התנתקות</button>
         </>
     );
 };
