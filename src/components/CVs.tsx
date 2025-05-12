@@ -48,14 +48,14 @@ const CVs = () => {
         }
         navigate('/all-templates');
     };
-    const handleLogout = () => {
-        // מחיקת token ו-userId
-        localStorage.removeItem("token");
-        localStorage.removeItem("userId");
+    // const handleLogout = () => {
+    //     // מחיקת token ו-userId
+    //     localStorage.removeItem("token");
+    //     localStorage.removeItem("userId");
 
-        // הפניית המשתמש לדף הבית
-        navigate("/"); 
-    };
+    //     // הפניית המשתמש לדף הבית
+    //     navigate("/"); 
+    // };
     return (
         <>
             <button onClick={handleCreateNewCV}>יצירת קו"ח חדשים</button>
@@ -113,7 +113,7 @@ const CVs = () => {
                     <button onClick={() => setSelectedPdf(null)}>סגור</button>
                 </div>
             )}
-               <button onClick={handleLogout}>התנתקות</button>
+               {/* <button onClick={handleLogout}>התנתקות</button> */}
         </>
     );
 };

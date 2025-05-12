@@ -102,7 +102,11 @@ const AllTemplates = () => {
                             onClick={() => handleFileClick(index)}
                         >
                             <img
-                                src={url.startsWith("http") ? url : `https://cvfilebuilder.s3.amazonaws.com/exampleCV/${url.replace(".pdf", ".jpg")}`}
+                                src={
+                                    url.startsWith("http")
+                                      ? `${url}?v=${Date.now()}`
+                                      : `https://cvfilebuilder.s3.eu-north-1.amazonaws.com/exampleCV/${url.replace(".pdf", ".png")}?v=${Date.now()}`
+                                  }
                                 alt="Template"
                                 width="100"
                                 height="100"

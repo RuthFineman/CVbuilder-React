@@ -8,8 +8,7 @@ const DeleteFileCV = () => {
     const navigate = useNavigate();
 
     const deleteFile = async () => {
-        // const confirmDelete = window.confirm("האם את בטוחה שברצונך למחוק את הקובץ?");
-        // if (!confirmDelete) return;
+    
 
         setLoading(true);
         try {

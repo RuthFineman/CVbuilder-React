@@ -17,7 +17,7 @@ const PDFUploader = ({ data }: {
         languages: { languageName: string; level: string }[];
     }
 }) => {
-    const uploadToS3 = async (file: File) => {
+    const uploadCVData = async (file: File) => {
         console.log("uploadToS3 called");
         if (!file || file.size === 0) {
             console.error("No file selected or file is empty.");
@@ -29,9 +29,9 @@ const PDFUploader = ({ data }: {
         formData.append("userId", id);
         formData.append("fileName", file.name);
         formData.append("Template", data.templateUrl);
-        console.log("שניה לפני העלה לשרת")
-        console.log(data)
-        console.log("שניה לפני העלה לשרת")
+        // console.log("שניה לפני העלה לשרת")
+        // console.log(data)
+        // console.log("שניה לפני העלה לשרת")
         formData.append("firstName", data.firstName);
         formData.append("lastName", data.lastName);
         formData.append("role", data.role);
@@ -39,7 +39,6 @@ const PDFUploader = ({ data }: {
         formData.append("email", data.email);
         formData.append("summary", data.summary);
         formData.append("WorkExperiences", JSON.stringify(data.workExperiences));
-        ///////////////////////////////
         formData.append("Languages", JSON.stringify(data.languages));
         formData.append("Educations", JSON.stringify(data.educations));
         formData.append("Skills", JSON.stringify(data.skills));
@@ -79,7 +78,7 @@ const PDFUploader = ({ data }: {
             const fileName = `קורות_חיים_${data.firstName}_${data.lastName}_${uniqueId}.pdf`;
 
             const pdfFile = new File([pdfBlob], fileName, { type: "application/pdf" });
-            await uploadToS3(pdfFile);
+            await uploadCVData(pdfFile);
         } catch (error) {
             console.error("שגיאה ביצירת pdf:", error);
         }
