@@ -49,7 +49,7 @@ interface UpdateCVProps {
     languages: [] as Language[],
     skills: [] as string[],
   });
-
+  const baseUrl = process.env.REACT_APP_API_BASE_URL;
   const skillOptions = [
     "כישורי ארגון", "פתרון בעיות", "עבודה בצוות", "יצירתיות", "אחריות",
     "תפקוד במצבי לחץ", "מוסר עבודה גבוה", "ניהול זמן יעיל", "חשיבה אנליטית", "יחסי אנוש מעולים"
@@ -60,7 +60,7 @@ interface UpdateCVProps {
     const fetchCVData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`https://localhost:7020/file-cv/fileCV/${file.id}`, {
+        const response = await axios.get(`${baseUrl}/file-cv/fileCV/${file.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -210,56 +210,3 @@ interface UpdateCVProps {
 export default UpdateCV;
 
 
-// useEffect(() => {
-  //   const fetchCVData = async () => {
-  //     try {
-  //       const token = localStorage.getItem('token');
-  //       const response = await axios.get(`https://localhost:7020/upload/fileCV/${file.id}`, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           'Content-Type': 'application/json'
-  //         }, 
-  //       });
-  //       console.log("קיבלתי מהשרת:", response.data);
-  //       console.log("קיבלתי מהשרת:", response.data);
-  //       console.log("קיבלתי מהשרת:", response.data);
-  //       console.log("קיבלתי מהשרת:", response.data);
-  //       await onUpdate();
-
-  //       // רק אם יש נתונים, נערוך את ה-state
-  //       if (response.data) {
-  //         setFileCV({
-  //           id: response.data.id || '',
-  //           firstName: response.data.firstName || '',
-  //           lastName: response.data.lastName || '',
-  //           template: response.data.template || '',
-  //           role: response.data.role || '',
-  //           email: response.data.email || '',
-  //           phone: response.data.phone || response.data.Phone || '',
-  //           summary: response.data.summary || '',
-  //           workExperiences: response.data.workExperiences?.length > 0 ? response.data.workExperiences : [{
-  //             company: '', Position: '', startDate: '', endDate: '', description: ''
-  //           }],
-  //           educations: response.data.educations?.length > 0 ? response.data.educations : [{
-  //             institution: '', degree: ''
-  //           }],
-  //           languages: response.data.languages?.length > 0 ? response.data.languages : [{
-  //             languageName: '', level: ''
-  //           }],
-  //           skills: Array.isArray(response.data.skills)
-  //             ? response.data.skills
-  //             : JSON.parse(response.data.skills || '[]'),
-  //         });
-  //       }
-  //     } catch (error) {
-  //       console.error('שגיאה בהבאת נתוני הקובץ:', error);
-  //     }
-  //   };
-
-  //   if (file?.id) {
-  //     fetchCVData();
-  //     console.log("zipiiiiiiiiiiiiiii")
-  //     console.log(fileCV)
-  //     console.log("zipiiiiiiiiiiiiiii")
-  //   }
-  // }, [file.id]);

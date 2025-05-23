@@ -3,6 +3,8 @@ import { useState } from "react";
 import axios from "axios";
 
 const DeleteFileCV = () => {
+    
+    const baseUrl = process.env.REACT_APP_API_BASE_URL;
     const { fileId } = useParams(); // ID מה-URL
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -13,7 +15,7 @@ const DeleteFileCV = () => {
         setLoading(true);
         try {
             const token = localStorage.getItem("token");
-            await axios.delete(`https://localhost:7020/file-cv/delete/${fileId}`, {
+            await axios.delete(`${baseUrl}/file-cv/delete/${fileId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

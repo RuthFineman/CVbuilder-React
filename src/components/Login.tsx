@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+// import '../styles/Login.css';
 const Login = ({ onLogin }: { onLogin: (token: string) => void }) => {
+ 
+    const baseUrl = process.env.REACT_APP_API_BASE_URL;
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -18,7 +20,7 @@ const Login = ({ onLogin }: { onLogin: (token: string) => void }) => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('https://localhost:7020/api/Users/login', {
+            const response = await axios.post(`${baseUrl}/api/Users/login`, {
                 email,
                 password,
             });
@@ -33,12 +35,21 @@ const Login = ({ onLogin }: { onLogin: (token: string) => void }) => {
 
         } catch (error: any) {
             console.error('Login error', error);
-            alert("מייל או סיסמה לא תקינים " + error.response?.data || "נסה שוב מאוחר יותר.");
+            // תנסה לשלוף את ההודעה מהשרת אם יש
+            const errorMsg =
+              error.response?.data || "נסה שוב מאוחר יותר.";
+            alert("שגיאה: " + errorMsg);
         }
+        
     };
 
     return (
         <>
+        <div className="login-container">
+      <div className="geometric-decoration square"></div>
+      <div className="geometric-decoration rectangle"></div>
+      <div className="geometric-decoration triangle"></div>
+      <div className="register-login-page">
           <button type="button" onClick={() => navigate("/CVs")}> 
         ⬅️
     </button>
@@ -55,6 +66,9 @@ const Login = ({ onLogin }: { onLogin: (token: string) => void }) => {
                 </div>
                     <button type="submit">התחבר</button>
             </form>
+            </div>
+            </div>
+            
         </>
     );
 };

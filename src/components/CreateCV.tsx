@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import ReadySentences from "./ReadySentences";
+import ReadySentences from "../data/ReadySentences";
+import WorkSentences from "../data/WorkSentences";
 
 const CreateCV = ({ onSubmit }: {
     onSubmit: (data: {
@@ -16,6 +17,7 @@ const CreateCV = ({ onSubmit }: {
         languages: { languageName: string; level: string }[];
     }) => void;
 }) => {
+    const baseUrl = process.env.REACT_APP_API_BASE_URL;
     const navigate = useNavigate();
     const location = useLocation();
     const selectedFileIndex = location.state?.selectedFileIndex;
@@ -31,10 +33,31 @@ const CreateCV = ({ onSubmit }: {
     const [languages, setLanguages] = useState<{ languageName: string; level: string }[]>([]);
     const [summary, setSummary] = useState('');
     const [showSentenceOptions, setShowSentenceOptions] = useState(false);
+    const [showWorkSentences, setShowWorkSentences] = useState(false);
+
     const handleAddSentence = (sentence: string) => {
         setSummary((prev) => (prev ? `${prev} ${sentence}` : sentence));
         setShowSentenceOptions(false);
     };
+
+const addSentenceDesc= (sentence: string) => {
+    setWorkExperiences((prev) => {
+        if (prev.length === 0) return prev; // אין מה לעדכן
+
+        const lastIndex = prev.length - 1;
+        const updatedLast = {
+            ...prev[lastIndex],
+            description: prev[lastIndex].description
+                ? `${prev[lastIndex].description} ${sentence}`
+                : sentence
+        };
+
+        const updated = [...prev];
+        updated[lastIndex] = updatedLast;
+        return updated;
+    });
+    setShowWorkSentences(false);
+};
 
     const toggleSkill = (skill: string) => {
         setSelectedSkills(prevSkills =>
@@ -44,33 +67,27 @@ const CreateCV = ({ onSubmit }: {
     const addEducation = () => {
         setEducations([...educations, { institution: "", degree: "" }]);
     };
-
     const handleEducationChange = (index: number, key: string, value: string) => {
         const newEducations = [...educations];
         newEducations[index] = { ...newEducations[index], [key]: value };
         setEducations(newEducations);
     };
-
     const addWorkExperience = () => {
         setWorkExperiences([...workExperiences, { company: "", position: "", startDate: "", endDate: "", description: "" }]);
     };
-
     const handleWorkExperienceChange = (index: number, key: string, value: string) => {
         const newWorkExperiences = [...workExperiences];
         newWorkExperiences[index] = { ...newWorkExperiences[index], [key]: value };
         setWorkExperiences(newWorkExperiences);
     };
-
     const addLanguage = () => {
         setLanguages([...languages, { languageName: "", level: "" }]);
     };
-
     const handleLanguageChange = (index: number, key: string, value: string) => {
         const newLanguages = [...languages];
         newLanguages[index] = { ...newLanguages[index], [key]: value };
         setLanguages(newLanguages);
     };
-
     const handleSubmit = (e: React.FormEvent) => {
         console.log("Form submitted");
         e.preventDefault();
@@ -120,6 +137,14 @@ const CreateCV = ({ onSubmit }: {
                         <input type="text" placeholder="שנת התחלה" value={exp.startDate || ''} onChange={(e) => handleWorkExperienceChange(index, 'startDate', e.target.value)} />
                         <input type="text" placeholder="שנת סיום" value={exp.endDate || ''} onChange={(e) => handleWorkExperienceChange(index, 'endDate', e.target.value)} />
                         <textarea placeholder="תיאור" value={exp.description || ''} onChange={(e) => handleWorkExperienceChange(index, 'description', e.target.value)} />
+                        <button
+                        type="button"
+                        onClick={() => setShowWorkSentences((prev) => !prev)}
+                        style={{ marginTop: "10px" }}
+                    >
+                        ✨ משפטים מוכנים עבורך
+                    </button>
+                    {showWorkSentences && <WorkSentences onSelect={addSentenceDesc} />}
                         <button type="button" onClick={() => setWorkExperiences(workExperiences.filter((_, i) => i !== index))}>🗑️</button>
                     </div>
                 ))}

@@ -1,22 +1,68 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AllTemplates = () => {
-    const [files, setFiles] = useState<{ url: string }[]>([]);
-    const [selectedFileIndex, setSelectedFileIndex] = useState<number | null>(null);
-    const [selectedFile, setSelectedFile] = useState<{ url: string } | null>(null);
+    const baseUrl = process.env.REACT_APP_API_BASE_URL;
+    // const [files, setFiles] = useState<{ url: string }[]>([]);
+    const [files, setFiles] = useState<{ id: number; name: string; templateUrl: string; inUse: boolean }[]>([]);
+
     const navigate = useNavigate();
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const [centerIndex, setCenterIndex] = useState<number | null>(null);
 
     useEffect(() => {
+        const handleScroll = () => {
+            if (!scrollRef.current) return;
+
+            const container = scrollRef.current;
+            const center = container.scrollLeft + container.offsetWidth / 2;
+
+            let closestIndex = 0;
+            let closestDistance = Infinity;
+
+            Array.from(container.children).forEach((child, i) => {
+                const rect = (child as HTMLElement).getBoundingClientRect();
+                const childCenter = rect.left + rect.width / 2;
+                const distance = Math.abs(childCenter - window.innerWidth / 2);
+
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestIndex = i;
+                }
+            });
+            setCenterIndex(closestIndex);
+        };
+
+        const container = scrollRef.current;
+        container?.addEventListener("scroll", handleScroll);
+        handleScroll(); // ראשוני
+
+        return () => container?.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    useEffect(() => {
+        // const fetchFiles = async () => {
+        //     try {
+        //         const token = localStorage.getItem("token");
+        //         const response = await axios.get<string[]>("https://localhost:7020/api/Template/files", {
+        //             headers: { Authorization: token ? `Bearer ${token}` : "" },
+        //         });
+        //         setFiles(Array.isArray(response.data) ? response.data.map(url => ({ url })) : []);
+        //     } catch (error) {
+        //         console.error("Error fetching files:", error);
+        //     }
+        // };
         const fetchFiles = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const response = await axios.get<string[]>("https://localhost:7020/api/Template/files", {
+                const response = await axios.get(`${baseUrl}/api/Template/files`, {
                     headers: { Authorization: token ? `Bearer ${token}` : "" },
                 });
-                console.log("Response data:", response.data);
-                setFiles(Array.isArray(response.data) ? response.data.map(url => ({ url })) : []);
+
+                if (Array.isArray(response.data)) {
+                    setFiles(response.data); // מקבל ישירות את רשימת התבניות
+                }
             } catch (error) {
                 console.error("Error fetching files:", error);
             }
@@ -24,117 +70,146 @@ const AllTemplates = () => {
         fetchFiles();
     }, []);
 
+    // const handleFileClick = async (index: number) => {
+    //     try {
+    //         const token = localStorage.getItem("token");
+    //         const { data } = await axios.get(`https://localhost:7020/api/Template/${index}`, {
+    //             headers: { Authorization: token ? `Bearer ${token}` : "" },
+    //         });
+    //         navigate(`/createCV`, { state: { selectedFileIndex: index, fileUrl: data } });
+    //     } catch (error) {
+    //         console.error("Error fetching selected file:", error);
+    //     }
+    // };
     const handleFileClick = async (index: number) => {
-        if (selectedFileIndex === index) {
-            return;
-        }
-        setSelectedFileIndex(index);
         try {
             const token = localStorage.getItem("token");
-            const { data } = await axios.get(`https://localhost:7020/api/Template/${index}`, {
+            const template = files[index];
+            const { data } = await axios.get(`${baseUrl}/api/Template/${template.id}`, {
                 headers: { Authorization: token ? `Bearer ${token}` : "" },
             });
-
-            setSelectedFile({ url: data });
+            navigate(`/createCV`, { state: { selectedFileIndex: index, fileUrl: data } });
         } catch (error) {
             console.error("Error fetching selected file:", error);
         }
     };
 
-    const handleNextClick = () => {
-        console.log("selectedFileIndex before navigation:", selectedFileIndex);
-        if (selectedFileIndex !== null) {
-            // ניווט לקומפוננטת CreateFileCV עם ה-state שכולל את ה-`selectedFileIndex`
-            navigate(`/createCV`, { state: { selectedFileIndex } });
-
+    const scroll = (direction: "left" | "right") => {
+        if (scrollRef.current) {
+            const scrollAmount = 200;
+            scrollRef.current.scrollBy({
+                left: direction === "left" ? -scrollAmount : scrollAmount,
+                behavior: "smooth",
+            });
         }
     };
-    return (
-        <div >
-            <button type="button" onClick={() => navigate("/CVs")}>
-                ⬅️
-            </button>
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "20px" }}>
-                {/* תצוגת תמונה בצד שמאל */}
-                <div style={{ flex: 2, paddingRight: "20px", height: "auto", maxWidth: "20%", overflow: "hidden" }}>
-                    {selectedFile ? (
-                        <>
-                            <h3>תצוגת תמונה</h3>
-                            <img
-                                src={selectedFile.url}
-                                alt="Template"
-                                style={{
-                                    maxWidth: "100%",
-                                    height: "auto",
-                                    borderRadius: "8px",
-                                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                                    display: "block",
-                                    margin: "0 auto",
-                                }}
-                            />
-                        </>
-                    ) : (
-                        <h3>בחר תבנית להצגת תמונה</h3>
-                    )}
-                </div>
 
-                {/* רשימת תמונות בצד ימין */}
-                <ul
+    return (
+        <div style={{ padding: "20px" }}>
+            <button onClick={() => navigate("/CVs")}>⬅️</button>
+            <h2 style={{ textAlign: "center", marginBottom: "20px" }}>בחר תבנית</h2>
+            <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+                {/* חץ שמאלה */}
+                <button
+                    onClick={() => scroll("left")}
                     style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(2, 1fr)",
-                        gap: "15px",
-                        listStyle: "none",
-                        padding: 0,
-                        flex: 1,
-                        textAlign: "center",
+                        position: "absolute",
+                        left: 0,
+                        zIndex: 1,
+                        fontSize: "24px",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
                     }}
                 >
-                    {files.map(({ url }, index) => (
-                        <li
+                    ◀
+                </button>
+
+                {/* גלריית תבניות בשורה אחת נגללת */}
+                <div
+                    ref={scrollRef}
+                    style={{
+                        overflowX: "auto",
+                        display: "flex",
+                        gap: "20px",
+                        padding: "10px 40px",
+                        scrollBehavior: "smooth",
+                        scrollbarWidth: "none",
+                    }}
+                >
+                    {/* {files.map(({ url }, index) => (
+                        <div
                             key={index}
+                            onClick={() => handleFileClick(index)}
                             style={{
                                 cursor: "pointer",
-                                border: selectedFileIndex === index ? "2px solid #4CAF50" : "none",
                                 borderRadius: "8px",
-                                padding: "10px",
+                                flex: "0 0 auto",
+                                transform: index === centerIndex ? "scale(1.15)" : "scale(1)",
+                                transition: "transform 0.3s",
+                                zIndex: index === centerIndex ? 2 : 1,
                             }}
-                            onClick={() => handleFileClick(index)}
                         >
                             <img
-                                src={
-                                    url.startsWith("http")
-                                      ? `${url}?v=${Date.now()}`
-                                      : `https://cvfilebuilder.s3.eu-north-1.amazonaws.com/exampleCV/${url.replace(".pdf", ".png")}?v=${Date.now()}`
-                                  }
+                               src={url} 
                                 alt="Template"
-                                width="100"
-                                height="100"
-                                style={{ objectFit: "contain", borderRadius: "8px" }}
+                                width="400"
+                                height="550"
+                                style={{
+                                    objectFit: "contain",
+                                    borderRadius: "8px",
+                                    boxShadow: index === centerIndex ? "0 4px 20px rgba(0,0,0,0.2)" : "none",
+                                    transition: "box-shadow 0.3s",
+                                }}
                             />
-                        </li>
-                    ))}
-                </ul>
-
-                {/* כפתור Next */}
-                {selectedFileIndex !== null && (
-                    <div style={{ marginTop: "20px" }}>
-                        <button
-                            onClick={handleNextClick}
+                        </div>
+                    ))} */}
+                    {files.map((template, index) => (
+                        <div
+                            key={template.id ?? index}
+                            onClick={() => handleFileClick(index)}
                             style={{
-                                padding: "10px 20px",
-                                backgroundColor: "#4CAF50",
-                                color: "#fff",
-                                border: "none",
-                                borderRadius: "8px",
                                 cursor: "pointer",
+                                borderRadius: "8px",
+                                flex: "0 0 auto",
+                                transform: index === centerIndex ? "scale(1.15)" : "scale(1)",
+                                transition: "transform 0.3s",
+                                zIndex: index === centerIndex ? 2 : 1,
+                                opacity: template.inUse ? 1 : 0.5, // לדוגמה: אפקט ויזואלי לתבנית שאינה בשימוש
                             }}
                         >
-                            Next
-                        </button>
-                    </div>
-                )}
+                            <img
+                                src={template.templateUrl}
+                                alt={template.name}
+                                width="400"
+                                height="550"
+                                style={{
+                                    objectFit: "contain",
+                                    borderRadius: "8px",
+                                    boxShadow: index === centerIndex ? "0 4px 20px rgba(0,0,0,0.2)" : "none",
+                                    transition: "box-shadow 0.3s",
+                                }}
+                            />
+                        </div>
+                    ))}
+
+                </div>
             </div>
+            {/* חץ ימינה */}
+            <button
+                onClick={() => scroll("right")}
+                style={{
+                    position: "absolute",
+                    right: 0,
+                    zIndex: 1,
+                    fontSize: "24px",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                }}
+            >
+                ▶
+            </button>
         </div>
     );
 };

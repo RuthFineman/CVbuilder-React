@@ -1,0 +1,464 @@
+/* === Variables === */
+:root {
+    --primary: #3a6ea5;
+    --primary-light: #6a93c3;
+    --primary-dark: #1e4976;
+    --accent: #ff6b6b;
+    --accent-light: #ff9e9e;
+    --text-dark: #2d3748;
+    --text-light: #f7fafc;
+    --background: #f8f9fa;
+    --card-bg: #ffffff;
+    --border: #e2e8f0;
+    --success: #48bb78;
+    --error: #e53e3e;
+    --warning: #ed8936;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  }
+  
+  /* === Global Styles === */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", "Roboto", sans-serif;
+  }
+  
+  body {
+    background-color: var(--background);
+    color: var(--text-dark);
+    direction: rtl;
+    background-image: linear-gradient(135deg, rgba(58, 110, 165, 0.05) 25%, transparent 25%),
+      linear-gradient(225deg, rgba(58, 110, 165, 0.05) 25%, transparent 25%),
+      linear-gradient(45deg, rgba(58, 110, 165, 0.05) 25%, transparent 25%),
+      linear-gradient(315deg, rgba(58, 110, 165, 0.05) 25%, transparent 25%);
+    background-position: 10px 0, 10px 0, 0 0, 0 0;
+    background-size: 20px 20px;
+    background-repeat: repeat;
+  }
+  
+  /* === CVs Container === */
+  .cvs-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    position: relative;
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+  
+  /* === Header Section === */
+  .cvs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+  
+  .cvs-title {
+    font-size: 1.8rem;
+    color: var(--primary-dark);
+    font-weight: 600;
+    position: relative;
+  }
+  
+  .cvs-title::after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: var(--accent);
+  }
+  
+  /* === Create CV Button === */
+  .create-cv-button {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .create-cv-button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.2) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transition: all 0.6s ease;
+  }
+  
+  .create-cv-button:hover {
+    background-color: var(--primary-dark);
+  }
+  
+  .create-cv-button:hover::before {
+    left: 100%;
+  }
+  
+  /* === Loading & Error States === */
+  .loading-container,
+  .error-container {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    padding: 2rem;
+    text-align: center;
+    margin: 2rem 0;
+  }
+  
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(58, 110, 165, 0.1);
+    border-radius: 50%;
+    border-top-color: var(--primary);
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .error-container {
+    color: var(--error);
+    border-left: 4px solid var(--error);
+  }
+  
+  /* === Files List === */
+  .files-section {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .files-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background-color: var(--primary);
+    opacity: 0.05;
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+  }
+  
+  .files-section h3 {
+    font-size: 1.4rem;
+    color: var(--primary-dark);
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .files-section h3::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--accent);
+  }
+  
+  .files-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .file-item {
+    background-color: var(--background);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border-left: 3px solid var(--primary);
+  }
+  
+  .file-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .file-path {
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    word-break: break-all;
+    font-weight: 500;
+  }
+  
+  .file-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  
+  .update-button,
+  .delete-button,
+  .view-button,
+  .close-button {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  
+  .update-button {
+    background-color: var(--primary-light);
+    color: white;
+  }
+  
+  .update-button:hover {
+    background-color: var(--primary);
+  }
+  
+  .delete-button {
+    background-color: var(--accent-light);
+    color: white;
+  }
+  
+  .delete-button:hover {
+    background-color: var(--accent);
+  }
+  
+  .view-button {
+    background-color: var(--success);
+    color: white;
+  }
+  
+  .view-button:hover {
+    background-color: #3da066;
+  }
+  
+  .close-button {
+    background-color: var(--text-dark);
+    color: white;
+  }
+  
+  .close-button:hover {
+    background-color: #1a202c;
+  }
+  
+  .no-files {
+    text-align: center;
+    padding: 2rem;
+    background-color: var(--background);
+    border-radius: 8px;
+    box-shadow: var(--shadow-inner);
+    color: #718096;
+    font-style: italic;
+  }
+  
+  /* === PDF Viewer === */
+  .pdf-viewer {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    padding: 1.5rem;
+    margin-top: 2rem;
+    position: relative;
+  }
+  
+  .pdf-viewer h3 {
+    font-size: 1.4rem;
+    color: var(--primary-dark);
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .pdf-viewer h3::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--accent);
+  }
+  
+  .pdf-frame {
+    width: 100%;
+    height: 70vh;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin: 1rem 0;
+  }
+  
+  /* === Responsive Styles === */
+  @media (max-width: 768px) {
+    .cvs-container {
+      padding: 1rem;
+      margin: 1rem;
+    }
+  
+    .cvs-header {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+  
+    .files-list {
+      grid-template-columns: 1fr;
+    }
+  
+    .pdf-frame {
+      height: 50vh;
+    }
+  }
+  
+  /* === Animation === */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* === Geometric Decorations === */
+  .geometric-decoration {
+    position: absolute;
+    z-index: -1;
+    opacity: 0.05;
+  }
+  
+  .square {
+    width: 80px;
+    height: 80px;
+    background-color: var(--primary);
+    transform: rotate(45deg);
+    top: 20%;
+    right: -40px;
+  }
+  
+  .rectangle {
+    width: 120px;
+    height: 60px;
+    background-color: var(--accent);
+    bottom: 15%;
+    left: -60px;
+  }
+  
+  .triangle {
+    width: 0;
+    height: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-bottom: 86px solid var(--primary-light);
+    top: 60%;
+    right: 10%;
+  }
+  .file-preview-frame {
+    width: 150px !important;     
+    height: 100px !important;   
+    border: none !important;     
+    box-shadow: none !important; 
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+/* //////////////// */
+.pdf-preview-container {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    margin-top: 1rem;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  
+  .pdf-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 1;
+  }
+  
+  .pdf-preview-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    transform: scale(1.2);
+    transform-origin: top center;
+    pointer-events: none; 
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .pdf-preview-container {
+      height: 150px;
+    }
+  }
+  
+  .small-preview-image {
+    width: 150px;
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    margin-top: 8px;
+    transition: transform 0.2s ease;
+  }
+  .small-preview-image:hover {
+    transform: scale(1.05);
+  }
+  

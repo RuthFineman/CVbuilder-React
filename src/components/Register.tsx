@@ -1,8 +1,10 @@
 import { useState } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+// import '../styles/Register.css'
 
 const Register = ({ onRegister }: { onRegister: (token: string) => void }) => {
+    const baseUrl = process.env.REACT_APP_API_BASE_URL;
     const navigate = useNavigate();
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
@@ -28,57 +30,63 @@ const Register = ({ onRegister }: { onRegister: (token: string) => void }) => {
         }
 
         try {
-            const response = await axios.post('https://localhost:7020/api/Users/register', {
+            const response = await axios.post(`${baseUrl}/api/Users/register`, {
                 fullName,
                 email,
                 password,
             });
-            const token = response.data.token; // קבלת הטוקן מהשרת
+            const token = response.data.token;
             localStorage.setItem("token", token);
             const userId = response.data.id;
 
             localStorage.setItem("userId", userId);
-            onRegister(token); // קריאה לפונקציה שהועברה כפרופס
-            navigate('/CVs'); // מעבר לקומפוננטת CVs
+            onRegister(token);
+            navigate('/CVs');
         } catch (error) {
             console.error("שגיאה בשליחה לשרת", error);
             alert("לא ניתן להשלים את ההרשמה, נסה שוב מאוחר יותר.");
         }
     };
-
     return (
         <>
-            <div>
-                <button type="button" onClick={() => navigate("/cvs")}>
-                    ⬅️
-                </button>
-                <h2>הרשמה</h2>
-                <form onSubmit={handleSubmit}>
-                    <div>
-                        <label>שם מלא:</label>
-                        <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
-                        {errors.fullName && <span style={{ color: "red" }}>{errors.fullName}</span>}
+            <div className="register-container">
+                <div className="geometric-decoration square"></div>
+                <div className="geometric-decoration rectangle"></div>
+                <div className="geometric-decoration triangle"></div>
+                <div className="register-card">
+                    <div className="register-header">
+                        <button className="back-button" type="button" onClick={() => navigate("/cvs")}>                   ⬅️
+                        </button>
+                        <h1 className="register-title">הרשמה</h1>
+                        <form className="register-form" onSubmit={handleSubmit} >
+                            <div className="form-group">
+                                <label htmlFor="fullName">שם מלא:</label>
+
+                                <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
+                                {errors.fullName && <div className="error-message">{errors.fullName}</div>}
+
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="email">דוא"ל:</label>
+                                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                                {errors.email && <div className="error-message">{errors.email}</div>}
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="password">סיסמה:</label>
+                                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                                {errors.password && <div className="error-message">{errors.password}</div>}
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="confirmPassword">אימות סיסמה:</label>
+                                <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+                                {errors.confirmPassword && <div className="error-message">{errors.confirmPassword}</div>}
+                            </div>
+                            <button type="submit" className="submit-button">הרשמה</button>
+                        </form>
                     </div>
-                    <div>
-                        <label>דוא"ל:</label>
-                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                        {errors.email && <span style={{ color: "red" }}>{errors.email}</span>}
-                    </div>
-                    <div>
-                        <label>סיסמה:</label>
-                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                        {errors.password && <span style={{ color: "red" }}>{errors.password}</span>}
-                    </div>
-                    <div>
-                        <label>אימות סיסמה:</label>
-                        <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
-                        {errors.confirmPassword && <span style={{ color: "red" }}>{errors.confirmPassword}</span>}
-                    </div>
-                    <button type="submit">הרשמה</button>
-                </form>
+                </div>
             </div>
         </>
     );
 }
-
 export default Register;
