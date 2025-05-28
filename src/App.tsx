@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext} from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,12 +11,11 @@ import DeleteFileCV from "./components/DeleteFileCV";
 import AllTemplates from "./components/AllTemplates";
 import HomePage from "./components/HomePage";
 import CreateCV from "./components/Create/CreateCV";
-import ResumeDisplayUpdate from "./components/ResumeDisplayUpdate";
 import ApiWithAuth from "./components/ApiWithAuth";
 import { AuthContext, AuthProvider } from "./contexts/AuthContext";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import Navbar from "./components/Navbar";
-import UpdateCV from "./components/UpdateCV";
+import UpdateCV from "./components/Update/UpdateCV";
 
 const App = () => {
   const { login } = useContext(AuthContext);
@@ -32,7 +31,6 @@ const App = () => {
           <Route path="/delete/:fileId" element={<DeleteFileCV />} />
           <Route path="/all-templates" element={<AllTemplates />} />
           <Route path="/create-cv" element={<CreateCV />} />
-          <Route path="/resume-display-update" element={<ResumeDisplayUpdate />} />
           <Route path="/ApiWithAuth" element={<ApiWithAuth />} />
           <Route path="/update-cv" element={<UpdateCV />} />
         </Routes>

@@ -63,7 +63,7 @@ const CreateCV =()=>{
         }
         html2pdf().set(options).from(resumeElement).save()
     }, [cvData.firstName, cvData.lastName])
-
+    
     if (!cssLoaded && templateUrl) {
         return (
             <div
@@ -81,7 +81,7 @@ const CreateCV =()=>{
         )
     }
     return (
-        <div className="cv-builder-container1">
+        <div className="cv-builder-container2">
             {showPDFUploader && resumeDataForUpload && (
                 <>
                     <p>מעלה קובץ...</p>
@@ -213,10 +213,3 @@ const CreateCV =()=>{
 }
 
 export default CreateCV
-
-
-// const CreateCV = ({
-    // onSubmit,
-// }: {
-    // onSubmit: (data: any) => void
-// }) => {

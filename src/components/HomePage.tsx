@@ -13,8 +13,6 @@ const HomePage = () => {
     const { isLoggedIn, logout } = useContext(AuthContext);
     const navigate = useNavigate();
     return (
-
-
         <div className="homepage-container">
             {/* <button className="sign-in-btn" onClick={() => setShowLoginModal(true)}>
           התחברות
@@ -27,15 +25,7 @@ const HomePage = () => {
                 >
                     {/* {isLoggedIn ? "התנתקות" : "התחצצברות"} */}
                 </button>
-                <div className="nav-links">
-                    {/* <span className="nav-link" onClick={() => navigate("/")}>בית</span> */}
-                    {/* <span className="nav-link" onClick={() => navigate("/about")}>אודות</span> */}
-                    {/* <span className="nav-link" onClick={() => navigate("/contact")}>צור קשר</span> */}
-                    {/* <span className="nav-link" onClick={() => navigate("/pricing")}>מחירים</span> */}
-                </div>
             </div>
-
-            {/* Animated Background Particles */}
             <div className="particles">
                 <div className="particle"></div>
                 <div className="particle"></div>
@@ -69,20 +59,15 @@ const HomePage = () => {
                 <div className="diamond"></div>
                 <div className="diamond"></div>
             </div>
-
             {/* Main Content */}
             <div className="main-content">
                 <h1 className="logo-text">CV BUILDER</h1>
 
                 <h2 className="hero-title">
-                    {/* קורות חיים מקצועיות / דיגיטליות */}
                     לוקח רק 5 שניות
                     <br />
-                    {/* בחר תבנית מתאימה */}
                     לעבור על הקורות חיים שלך
                     <br />
-                    {/* פתרון מודרני! */}
-                    {/* והורד את קורות החיים שלך תוך זמן קצר. */}
                     כתוב אותם היטב
                 </h2>
                 <p className="hero-description">

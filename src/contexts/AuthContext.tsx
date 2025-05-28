@@ -1,5 +1,4 @@
-// contexts/AuthContext.tsx
-import React, { createContext, useState, useEffect, ReactNode, useContext } from "react";
+import React, { createContext, useState, ReactNode } from "react";
 
 interface AuthContextType {
   isLoggedIn: boolean;
@@ -16,15 +15,7 @@ export const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    
-  // const [token, setToken] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(() => localStorage.getItem("token"));
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
 
   const login = (token: string) => {
     setToken(token);

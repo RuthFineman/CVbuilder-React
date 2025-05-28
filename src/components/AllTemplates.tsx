@@ -11,7 +11,6 @@ const AllTemplates = () => {
     const navigate = useNavigate()
     const scrollRef = useRef<HTMLDivElement>(null)
     const [centerIndex, setCenterIndex] = useState<number | null>(null)
-    // Scroll effect
     useEffect(() => {
         const handleScroll = () => {
             if (!scrollRef.current) return

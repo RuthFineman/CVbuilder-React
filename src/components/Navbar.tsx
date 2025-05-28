@@ -23,6 +23,12 @@ const Navbar = () => {
         <nav className={`navbar-container ${scrolled ? "scrolled" : ""}`}>
           <div className="navbar-bg-effects">
             <div className="glow-line"></div>
+            <div className="floating-particles">
+              <div className="particle"></div>
+              <div className="particle"></div>
+              <div className="particle"></div>
+              <div className="particle"></div>
+            </div>
           </div>
           <div className="navbar-content">
             {/* כפתורי ניווט בצד ימין */}
