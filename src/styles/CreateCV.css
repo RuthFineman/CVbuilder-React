@@ -1,0 +1,499 @@
+/* עיצוב כללי */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.cv-builder-container1 body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  direction: rtl;
+  background-color: #f5f5f5;
+}
+
+/* קונטיינר ראשי */
+.cv-builder-container1 .cv-builder-container {
+  display: flex;
+  min-height: 100vh;
+  gap: 20px;
+  padding: 110px;
+}
+
+/* חלק הטופס - 60% */
+.cv-builder-container1 .form-section {
+  flex: 0 0 50%;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+/* חלק התצוגה המקדימה - 40% */
+.cv-builder-container1 .preview-section {
+  flex: 0 0 50%;
+  position: sticky;
+  top: 20px;
+  height: calc(100vh - 40px);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 10px;
+}
+
+.cv-builder-container1 .preview-inner {
+  transform-origin: top right;
+  transition: transform 0.3s ease;
+  width: 100%;
+  height: 100%;
+  transform: scale(0.6);
+  overflow: hidden;
+}
+
+/* עיצוב הטופס */
+.cv-builder-container1 .create-cv-container {
+  width: 100%;
+}
+
+.cv-builder-container1 .back-button {
+  /* background: #6366f1; */
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.cv-builder-container1 .back-button:hover {
+  /* background: #4f46e5; */
+}
+
+.cv-builder-container1 .cv-form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* כותרות סקציות */
+.cv-builder-container1 .section-title {
+  color: #1f2937;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 10px;
+}
+
+/* סקציות הטופס */
+.cv-builder-container1 .form-section-item {
+  background: #f9fafb;
+  padding: 25px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+/* גריד פרטים אישיים */
+.cv-builder-container1 .personal-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.cv-builder-container1 .role-input {
+  grid-column: 1 / -1;
+}
+
+/* אינפוטים */
+.cv-builder-container1 .form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  direction: rtl;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.cv-builder-container1 .form-input:focus {
+  outline: none;
+  /* border-color: #6366f1; */
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.cv-builder-container1 .form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 13px;
+  direction: rtl;
+  min-height: 100px;
+  resize: vertical;
+  font-family: inherit;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.cv-builder-container1 .form-textarea:focus {
+  outline: none;
+  /* border-color: #6366f1; */
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* כפתורים */
+.cv-builder-container1 .ready-sentences-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-top: 10px;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.cv-builder-container1 .ready-sentences-btn:hover {
+  transform: translateY(-2px);
+  /* box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); */
+}
+
+.cv-builder-container1 .add-btn {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 15px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.cv-builder-container1 .add-btn:hover {
+  background: #059669;
+  transform: translateY(-1px);
+}
+
+.cv-builder-container1 .delete-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-bottom: 10px;
+  align-self: flex-start;
+  transition: background-color 0.3s;
+}
+
+.cv-builder-container1 .delete-btn:hover {
+  background: #dc2626;
+}
+
+.cv-builder-container1 .submit-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 30px;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.cv-builder-container1 .submit-btn:hover {
+  transform: translateY(-2px);
+  /* box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4); */
+}
+
+/* עיצוב פריטי ניסיון עבודה והשכלה */
+.cv-builder-container1 .experience-item,
+.education-item,
+.language-item {
+    list-style-type: none;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.cv-builder-container1 .experience-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.cv-builder-container1 .experience-dates {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.cv-builder-container1 .description-section {
+  grid-column: 1 / -1;
+}
+
+/* מיומנויות */
+.cv-builder-container1 .skills-selection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.cv-builder-container1 .skill-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.cv-builder-container1 .skill-option:hover {
+  /* border-color: #6366f1; */
+  background: #f0f9ff;
+}
+
+.cv-builder-container1 .skill-option input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  /* accent-color: #6366f1; */
+}
+
+.cv-builder-container1 .skill-option span {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* תיבת משפטים מוכנים */
+.cv-builder-container1 .sentences-container {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* עיצוב תצוגה מקדימה */
+.cv-builder-container1 .resume-container {
+  background: white;
+  padding: 100px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+  direction: rtl;
+  width: 210mm;
+  min-height: 297mm;
+  overflow: visible;
+}
+/* .cv-builder-container1 .resume-container {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+  direction: rtl;
+  width: 210mm;
+  min-height: 297mm;
+  overflow: visible;
+} */
+
+.cv-builder-container1 .header {
+  text-align: center;
+  margin-top: -55px;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  /* border-bottom: 3px solid #6366f1; */
+}
+
+.cv-builder-container1 .header h1 {
+  font-size: 30px;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.cv-builder-container1 .header h3 {
+  font-size: 16px;
+  /* color: #6b7280; */
+  font-weight: 400;
+}
+
+.cv-builder-container1 .summary {
+  /* background: #f0f9ff; */
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  /* border-left: 4px solid #6366f1;  */
+}
+
+.cv-builder-container1 .summary1 {
+  font-size: 14px;
+  /* color: #374151; */
+  line-height: 1.7;
+}
+
+.cv-builder-container1 .left-column {
+  margin-bottom: 25px;
+}
+
+.cv-builder-container1 .personal-details,
+.skills-section,
+.work-experiences,
+.education-section,
+.languages-section {
+  margin-bottom: 25px;
+}
+
+.cv-builder-container1 .personal-details h2,
+.skills-section h2,
+.work-experiences h2,
+.education-section h2,
+.languages-section h2 {
+  color: #1f2937;
+  font-size: 18px;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.cv-builder-container1 .contact-info p {
+  margin-bottom: 8px;
+  /* color: #4b5563; */
+}
+
+.cv-builder-container1 .skills-list {
+  list-style: none;
+  padding: 0;
+}
+
+.cv-builder-container1 .skill-item {
+  background: #f3f4f6;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  /* color: #374151; */
+}
+
+.cv-builder-container1 .work-experience {
+  background: #f9fafb;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  /* border-left: 3px solid #6366f1; */
+}
+
+.cv-builder-container1 .company-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #1f2937;
+  margin-bottom: 5px;
+}
+
+.cv-builder-container1 .work-dates {
+  color: #6b7280;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.cv-builder-container1 .work-description {
+  color: #374151;
+  line-height: 1.6;
+  font-size: 12px;
+}
+
+.cv-builder-container1 .education-item {
+  background: #f9fafb;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.cv-builder-container1 .education-degree-institution {
+  color: #374151;
+  font-size: 13px;
+}
+
+.cv-builder-container1 .language-item {
+  list-style: none;
+  padding: 0;
+}
+
+.cv-builder-container1 .language-item li {
+  background: #f3f4f6;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  color: #374151;
+  font-size: 12px;
+}
+
+/* רספונסיביות */
+@media (max-width: 1200px) {
+  .cv-builder-container {
+    flex-direction: column;
+  }
+
+  .form-section,
+  .preview-section {
+    flex: none;
+    width: 100%;
+  }
+
+  .preview-section {
+    position: static;
+    max-height: none;
+  }
+
+  .preview-inner {
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+
+  .personal-info-grid,
+  .experience-grid,
+  .experience-dates {
+    grid-template-columns: 1fr;
+  }
+
+  .skills-selection {
+    grid-template-columns: 1fr;
+  }
+
+  .cv-builder-container {
+    padding: 10px;
+  }
+
+  .form-section {
+    padding: 20px;
+  }
+
+  .resume-container {
+    padding: 20px;
+  }
+
+  .preview-inner {
+    transform: scale(1);
+  }
+}

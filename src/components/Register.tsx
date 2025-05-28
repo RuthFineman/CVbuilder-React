@@ -1,7 +1,8 @@
 import { useState } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-// import '../styles/Register.css'
+import '../styles/Register.css'
+import { motion } from "framer-motion";
 
 const Register = ({ onRegister }: { onRegister: (token: string) => void }) => {
     const baseUrl = process.env.REACT_APP_API_BASE_URL;
@@ -49,13 +50,19 @@ const Register = ({ onRegister }: { onRegister: (token: string) => void }) => {
     };
     return (
         <>
+           {/* <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -50 }}
+      transition={{ duration: 0.5 }}
+    > */}
             <div className="register-container">
                 <div className="geometric-decoration square"></div>
                 <div className="geometric-decoration rectangle"></div>
                 <div className="geometric-decoration triangle"></div>
                 <div className="register-card">
                     <div className="register-header">
-                        <button className="back-button" type="button" onClick={() => navigate("/cvs")}>                   ⬅️
+                        <button className="back-button" type="button" onClick={() => navigate("/cvs")}>                   
                         </button>
                         <h1 className="register-title">הרשמה</h1>
                         <form className="register-form" onSubmit={handleSubmit} >
@@ -86,6 +93,7 @@ const Register = ({ onRegister }: { onRegister: (token: string) => void }) => {
                     </div>
                 </div>
             </div>
+            {/* </motion.div> */}
         </>
     );
 }

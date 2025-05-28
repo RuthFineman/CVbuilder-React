@@ -1,0 +1,419 @@
+/* עיצוב מותאם לעמוד AllTemplates בלבד */
+.all-templates-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533483 75%, #7209b7 100%);
+    position: relative;
+    overflow: hidden;
+    padding: 100px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* אנימציה של חלקיקים ברקע */
+  .all-templates-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(2px 2px at 20px 30px, #00d4ff, transparent),
+      radial-gradient(2px 2px at 40px 70px, #ff6b9d, transparent),
+      radial-gradient(1px 1px at 90px 40px, #00d4ff, transparent),
+      radial-gradient(1px 1px at 130px 80px, #ff6b9d, transparent),
+      radial-gradient(2px 2px at 160px 30px, #00d4ff, transparent);
+    background-repeat: repeat;
+    background-size: 200px 100px;
+    animation: sparkle 90s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  @keyframes sparkle {
+    0% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    100% {
+      transform: translateY(-100px) rotate(360deg);
+    }
+  }
+  
+  /* אלמנטים גיאומטריים דקורטיביים */
+  .geometric-shapes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+  }
+  
+  .shape {
+    position: absolute;
+    border: 2px solid rgba(0, 212, 255, 0.3);
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .shape-1 {
+    width: 60px;
+    height: 60px;
+    top: 10%;
+    left: 5%;
+    transform: rotate(45deg);
+    animation-delay: 0s;
+  }
+  
+  .shape-2 {
+    width: 40px;
+    height: 40px;
+    top: 20%;
+    right: 10%;
+    border-radius: 50%;
+    animation-delay: 2s;
+  }
+  
+  .shape-3 {
+    width: 80px;
+    height: 80px;
+    bottom: 15%;
+    left: 8%;
+    transform: rotate(30deg);
+    animation-delay: 4s;
+  }
+  
+  .shape-4 {
+    width: 50px;
+    height: 50px;
+    bottom: 25%;
+    right: 15%;
+    border-radius: 50%;
+    animation-delay: 1s;
+  }
+  
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-20px) rotate(180deg);
+    }
+  }
+  
+  .back-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(255, 107, 157, 0.4);
+    background: linear-gradient(45deg, #ff8e9b, #ff6b9d);
+  }
+  
+  .back-button:active {
+    transform: translateY(-1px);
+  }
+  
+  /* כותרת מעוצבת */
+  .templates-title {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #00d4ff;
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+    position: relative;
+    z-index: 10;
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+  
+  @keyframes glow {
+    from {
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+    }
+    to {
+      text-shadow: 0 0 30px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.3);
+    }
+  }
+  
+  /* קונטיינר הגלריה */
+  .gallery-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+  }
+  
+  /* חיצים מעוצבים */
+  .scroll-arrow {
+    position: absolute;
+    z-index: 15;
+    background: linear-gradient(45deg, #00d4ff, #0099cc);
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+    transition: all 0.3s ease;
+    color: white;
+    font-size: 24px;
+  }
+  
+  .scroll-arrow:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 35px rgba(0, 212, 255, 0.5);
+    background: linear-gradient(45deg, #0099cc, #00d4ff);
+  }
+  
+  .scroll-arrow:active {
+    transform: scale(0.95);
+  }
+  
+  .scroll-arrow.left {
+    left: 10px;
+  }
+  
+  .scroll-arrow.right {
+    right: 10px;
+  }
+  
+  /* אייקונים מותאמים אישית לחיצים */
+  .arrow-icon {
+    width: 0;
+    height: 0;
+    border-style: solid;
+  }
+  
+  .arrow-left {
+    border-width: 8px 12px 8px 0;
+    border-color: transparent white transparent transparent;
+  }
+  
+  .arrow-right {
+    border-width: 8px 0 8px 12px;
+    border-color: transparent transparent transparent white;
+  }
+  
+  /* גלריית התבניות */
+  .templates-gallery {
+    overflow-x: auto;
+    display: flex;
+    gap: 30px;
+    padding: 30px 70px;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    position: relative;
+    z-index: 10;
+  }
+  
+  .templates-gallery::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* כרטיס תבנית */
+  .template-card {
+    cursor: pointer;
+    border-radius: 20px;
+    flex: 0 0 auto;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+  
+  .template-card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 20px 40px rgba(0, 212, 255, 0.3);
+    border-color: rgba(0, 212, 255, 0.5);
+  }
+  
+  .template-card.center {
+    /* transform: scale(1.15) !important; */
+    z-index: 12;
+    box-shadow: 0 25px 50px rgba(0, 212, 255, 0.4);
+    border-color: rgba(0, 212, 255, 0.8);
+  }
+  
+  .template-card.center:hover {
+    transform: scale(1) translateY(-5px) !important;
+  }
+  
+  /* תמונת התבנית */
+  .template-image {
+    object-fit: contain;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    filter: brightness(0.9);
+  }
+  
+  .template-card:hover .template-image {
+    filter: brightness(1.1);
+  }
+  
+  /* וידוא שהתמונה האמצעית תהיה גדולה יותר */
+  .template-card.center .template-image {
+    transform: scale(1.1) !important;
+    filter: brightness(1.05);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+  }
+  
+  /* אפקט זוהר עדין לתבנית במרכז */
+  .template-card.center::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, rgba(0, 212, 255, 0.3), rgba(255, 107, 157, 0.2), rgba(0, 212, 255, 0.3));
+    border-radius: 22px;
+    z-index: -1;
+    animation: gentle-glow 4s ease-in-out infinite;
+  }
+  
+  @keyframes gentle-glow {
+    0%,
+    100% {
+      opacity: 0.3;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.6;
+      transform: scale(1.02);
+    }
+  }
+  
+  /* זוהר עדין נוסף */
+  .template-card.center::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+    border-radius: 20px;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+  
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      transform: translate(-50%, -50%) scale(0.8);
+      opacity: 0.2;
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.1);
+      opacity: 0.4;
+    }
+  }
+  
+  /* אפקט לתבנית שאינה בשימוש */
+  .template-card.disabled {
+    opacity: 0.4;
+    filter: grayscale(0.7);
+  }
+  
+  .template-card.disabled:hover {
+    opacity: 0.6;
+    filter: grayscale(0.5);
+  }
+  
+  /* אנימציות כניסה */
+  .template-card {
+    animation: slideInUp 0.6s ease-out forwards;
+  }
+  
+  .template-card:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .template-card:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .template-card:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  .template-card:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+  .template-card:nth-child(5) {
+    animation-delay: 0.5s;
+  }
+  
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* רספונסיביות */
+  @media (max-width: 768px) {
+    .templates-title {
+      font-size: 2rem;
+    }
+  
+    .templates-gallery {
+      padding: 20px 60px;
+      gap: 20px;
+    }
+  
+    .scroll-arrow {
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+    }
+  
+    .template-card {
+      padding: 10px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .templates-gallery {
+      padding: 20px 50px;
+    }
+  
+    .scroll-arrow {
+      width: 45px;
+      height: 45px;
+    }
+  
+    .scroll-arrow.left {
+      left: 5px;
+    }
+  
+    .scroll-arrow.right {
+      right: 5px;
+    }
+  }
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+    gap: 40px;
+    color: var(--text);
+  }
+  
+  .loading-spinner {
+    width: 100px;
+    height: 100px;
+    border: 5px solid rgba(0, 212, 255, 0.2);
+    border-top: 5px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1.2s linear infinite;
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.3);
+  }
+  

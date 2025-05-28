@@ -1,0 +1,188 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet');
+
+.modern-navbar .navbar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: transparent;
+  backdrop-filter: none;
+  box-shadow: none;
+  transition: all 0.3s ease;
+  padding: 25px 40px;
+  font-family: "Exo 2", sans-serif;
+  background: rgba(0, 0, 0, 0.2); /* במקום transparent */
+  backdrop-filter: blur(1px); /* אם את רוצה אפקט זכוכית */
+}
+
+.modern-navbar .navbar-container.scrolled {
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+}
+
+.modern-navbar .navbar-bg-effects {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.modern-navbar .floating-particle:nth-child(2) {
+  top: 40%;
+  left: 70%;
+  animation-delay: 2s;
+}
+
+.modern-navbar .floating-particle:nth-child(3) {
+  top: 60%;
+  left: 20%;
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.modern-navbar .glow-line {
+  position: absolute;
+  bottom: 0;
+  left: 5%;
+  width: 90%;
+  height: 2px;
+  background: linear-gradient(10deg, transparent, rgb(255, 255, 255), transparent);
+  opacity: 0.3;
+  filter: blur(0.1px);
+  /* animation: glowline 30s infinite ease-in-out; */
+}
+
+@keyframes glowline {
+  0% {
+    transform: scaleX(0);
+  }
+  50% {
+    transform: scaleX(1);
+  }
+  100% {
+    transform: scaleX(0);
+  }
+}
+
+.modern-navbar .navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+}
+
+/* סקציה ימנית - כפתורי ניווט */
+.modern-navbar .right-section {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex: 1;
+  justify-content: flex-start;
+}
+
+/* לוגו במרכז */
+.modern-navbar .logo-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* סקציה שמאלית - כפתור התנתקות */
+.modern-navbar .left-section {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.modern-navbar .logo-text {
+  font-size: 2rem;
+  color: white;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.modern-navbar .nav-item .nav-link {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.3s ease;
+}
+
+.modern-navbar .nav-link:hover {
+  color: #00eaff;
+}
+
+.modern-navbar .action-buttons {
+  display: flex;
+  gap: 16px;
+}
+
+.modern-navbar .nav-button {
+  position: relative;
+  padding: 10px 24px;
+  background: transparent;
+  color: #ffffff;
+  font-family: "Rubik", "Segoe UI", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none; /* ללא מסגרת */
+  cursor: pointer;
+  overflow: hidden;
+  z-index: 0;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  border-radius: 8px; /* עיגול קל ופשוט */
+}
+
+.modern-navbar .nav-button:hover {
+  color: #00eaff;
+  /* background-color: rgba(92, 95, 95, 0.15);  */
+}
+
+.modern-navbar .logout-btn {
+  color: #ff4d4d;
+}
+
+.modern-navbar .logout-btn:hover {
+  background: #ff4d4d;
+  color: white;
+}
+
+/* רספונסיביות */
+@media (max-width: 768px) {
+  .modern-navbar .navbar-content {
+    flex-direction: row;
+  }
+
+  .modern-navbar .left-section,
+  .modern-navbar .right-section {
+    flex: none;
+  }
+
+  .modern-navbar .logo-section {
+    flex: 1;
+  }
+}
