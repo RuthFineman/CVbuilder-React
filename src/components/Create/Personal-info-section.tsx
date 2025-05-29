@@ -6,10 +6,11 @@ interface PersonalInfoSectionProps {
   role: string
   email: string
   phone: string
+  summary: string
   onUpdate: (field: string, value: string) => void
 }
 
-const PersonalInfoSection = memo(({ firstName, lastName, role, email, phone, onUpdate }: PersonalInfoSectionProps) => {
+const PersonalInfoSection = memo(({ firstName, lastName, role, email, phone,summary,onUpdate }: PersonalInfoSectionProps) => {
   return (
     <div className="form-section-item">
       <h2 className="section-title">פרטים אישיים</h2>
@@ -48,6 +49,13 @@ const PersonalInfoSection = memo(({ firstName, lastName, role, email, phone, onU
           value={phone}
           onChange={(e) => onUpdate("phone", e.target.value)}
           className="form-input"
+        />
+          <textarea
+          placeholder="תקציר מקצועי"
+          value={summary}
+          onChange={(e) => onUpdate("summary", e.target.value)}
+          className="form-textarea"
+          rows={4}
         />
       </div>
     </div>

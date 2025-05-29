@@ -3,6 +3,8 @@ import { useState } from "react"
 
 export interface CVData {
   id: string,
+  // fileName: string
+  template: string
   firstName: string
   lastName: string
   role: string
@@ -13,7 +15,7 @@ export interface CVData {
   educations: Education[]
   skills: string[]
   languages: Language[]
-  template:string,
+
 }
 
 export interface WorkExperience {
@@ -37,6 +39,8 @@ export interface Language {
 export const useCVData = () => {
   const [cvData, setCVData] = useState<CVData>({
     id: "",
+    // fileName: "",
+    template: "",
     firstName: "",
     lastName: "",
     role: "",
@@ -47,7 +51,6 @@ export const useCVData = () => {
     educations: [],
     skills: [],
     languages: [],
-    template:"",
   })
 
   const updateField = (field: keyof CVData, value: any) => {

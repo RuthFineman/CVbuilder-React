@@ -15,7 +15,7 @@ import ApiWithAuth from "./components/ApiWithAuth";
 import { AuthContext, AuthProvider } from "./contexts/AuthContext";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import Navbar from "./components/Navbar";
-import UpdateCV from "./components/Update/UpdateCV";
+import UpdateCV from "./components/UpdateCV";
 
 const App = () => {
   const { login } = useContext(AuthContext);

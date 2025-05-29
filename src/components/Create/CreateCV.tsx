@@ -98,6 +98,7 @@ const CreateCV =()=>{
                                 role={cvData.role}
                                 email={cvData.email}
                                 phone={cvData.phone}
+                                summary={cvData.summary} 
                                 onUpdate={handlePersonalInfoUpdate}
                             />
 
