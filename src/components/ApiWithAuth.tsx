@@ -80,7 +80,6 @@ const CoverLetterGenerator: React.FC = () => {
 
     try {
       const prompt = generatePrompt(formData)
-      console.log("token", token)
 
       const response = await fetch("https://localhost:7020/api/Chat", {
         method: "POST",

@@ -60,7 +60,7 @@ const CVs = () => {
       }
     }
     checkAndLoad()
-  }, [])
+  },  [checkIfBlocked, fetchUserFiles])
 
   const handleCreateNewCV = () => {
     if (isBlocked) {

@@ -11,31 +11,6 @@ const AllTemplates = () => {
     const navigate = useNavigate()
     const scrollRef = useRef<HTMLDivElement>(null)
     const [centerIndex, setCenterIndex] = useState<number | null>(null)
-    
-    useEffect(() => {
-        const handleScroll = () => {
-            if (!scrollRef.current) return
-            const container = scrollRef.current
-            const center = container.scrollLeft + container.offsetWidth / 2
-            let closestIndex = 0
-            let closestDistance = Number.POSITIVE_INFINITY
-            Array.from(container.children).forEach((child, i) => {
-                const rect = (child as HTMLElement).getBoundingClientRect()
-                const childCenter = rect.left + rect.width / 2
-                const distance = Math.abs(childCenter - window.innerWidth / 2)
-
-                if (distance < closestDistance) {
-                    closestDistance = distance
-                    closestIndex = i
-                }
-            })
-            setCenterIndex(closestIndex)
-        }
-        const container = scrollRef.current
-        container?.addEventListener("scroll", handleScroll)
-        handleScroll()
-        return () => container?.removeEventListener("scroll", handleScroll)
-    }, [])
 
     useEffect(() => {
         const fetchFiles = async () => {
@@ -74,7 +49,7 @@ const AllTemplates = () => {
 
     const scroll = (direction: "left" | "right") => {
         if (scrollRef.current) {
-            const scrollAmount = 300
+            const scrollAmount = 350
             scrollRef.current.scrollBy({
                 left: direction === "left" ? -scrollAmount : scrollAmount,
                 behavior: "smooth",

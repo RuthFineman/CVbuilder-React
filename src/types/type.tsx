@@ -61,6 +61,7 @@ export interface CVFile {
   export interface CVData {
     id: string,
     template: string
+    fileName: string
     firstName: string
     lastName: string
     role: string

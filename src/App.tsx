@@ -16,12 +16,10 @@ import { AuthContext, AuthProvider } from "./contexts/AuthContext";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import Navbar from "./components/Navbar";
 import UpdateCV from "./components/UpdateCV/UpdateCV";
-import { useCVData } from "./hooks/use-cv-data";
 import CoverLetterGenerator from "./components/ApiWithAuth";
 
 const App = () => {
   const { login } = useContext(AuthContext);
-  const { cvData } = useCVData()
 
   return (
     <AuthProvider>

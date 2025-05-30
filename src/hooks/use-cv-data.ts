@@ -4,6 +4,7 @@ import { CVData, Education, Language, WorkExperience } from "../types/type"
 export const useCVData = () => {
   const [cvData, setCVData] = useState<CVData>({
     id: "",
+    fileName: "",
     template: "",
     firstName: "",
     lastName: "",

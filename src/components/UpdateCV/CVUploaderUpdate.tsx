@@ -2,24 +2,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import html2canvas from "html2canvas";
 import { useNavigate } from "react-router-dom";
+import { CVData } from "../../types/type";
 
-const PDFUploaderUpdate = ({ data }: {
-  data: {
-    id: string,
-    fileName: string;
-    template: string,
-    firstName: string;
-    lastName: string;
-    role: string;
-    email: string;
-    phone: string;
-    summary: string;
-    workExperiences: { company: string; position: string; startDate: string; endDate: string; description: string }[];
-    educations: { institution: string; degree: string }[];
-    skills: string[];
-    languages: { languageName: string; level: string }[];
-  }
-}) => {
+const PDFUploaderUpdate = ({ data }: { data: CVData }) => {
+ 
   const baseUrl = process.env.REACT_APP_API_BASE_URL;
   const navigate = useNavigate();
   const [isUpdating, setIsUpdating] = useState(false);
@@ -38,7 +24,6 @@ const PDFUploaderUpdate = ({ data }: {
     });
   }
   const uploadCVData = async (file: File) => {
-    console.log("uploadToS3 called");
 
     if (!file || file.size === 0) {
       console.error("No file selected or file is empty.");
@@ -71,8 +56,6 @@ const PDFUploaderUpdate = ({ data }: {
         }
       });
 
-      console.log("Database update successful", updateResponse.data);
-
       if (updateResponse.status === 200) {
         setIsUpdating(false);
         navigate("/cvs");
@@ -99,8 +82,6 @@ const PDFUploaderUpdate = ({ data }: {
     }}
 
     const createAndUploadImage = async () => {
-      console.log("createAndUploadImage called");
-
       const element = document.getElementById("resume");
       if (!element) {
         console.error("The 'resume' element not found.");

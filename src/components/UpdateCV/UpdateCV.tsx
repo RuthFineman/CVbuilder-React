@@ -4,9 +4,8 @@ import { useLocation, useNavigate } from "react-router-dom"
 import axios from "axios"
 import html2pdf from "html2pdf.js"
 import "../../styles/UpdateCV.css"
-import PDFUploaderUpdate from "./PDFUploaderUpdate"
+import PDFUploaderUpdate from "./CVUploaderUpdate"
 import { useTemplateLoaderUpdate } from "../../hooks/use-template-loader-update"
-import { skillOptions } from "../../data/skill-options"
 import { CVData, CVFile, Education, Language, WorkExperience } from "../../types/type"
 import WorkExperienceSection from "../Sections/WorkExperienceSection"
 import CVPreview from "./CVPreviewUpdate"
@@ -22,6 +21,7 @@ const UpdateCV: React.FC = () => {
 
   const [cvData, setCvData] = useState<CVData>({
     id: "",
+    fileName: "",
     firstName: "",
     lastName: "",
     role: "",
@@ -35,8 +35,8 @@ const UpdateCV: React.FC = () => {
     template: "",
   })
 
-  const [loading, setLoading] = useState(true)
   const baseUrl = process.env.REACT_APP_API_BASE_URL
+  const [loading, setLoading] = useState(true)
   const [isUpdating, setIsUpdating] = useState(false)
   const [showUploader, setShowUploader] = useState(false)
 
@@ -60,7 +60,6 @@ const UpdateCV: React.FC = () => {
           return
         }
 
-        console.log("מבצע קריאה לשרת עבור קובץ:", fileData.id)
         const response = await axios.get(`${baseUrl}/file-cv/fileCV/${fileData.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -68,12 +67,11 @@ const UpdateCV: React.FC = () => {
           },
         })
 
-        console.log("תגובה מהשרת:", response.data)
         const data = response.data
-
         if (data) {
           setCvData({
             id: data.id || "",
+            fileName: data.fileName || "",
             firstName: data.firstName || "",
             lastName: data.lastName || "",
             role: data.role || "",

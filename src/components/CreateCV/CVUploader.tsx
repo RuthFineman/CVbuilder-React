@@ -1,25 +1,12 @@
 import html2canvas from "html2canvas";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import axios from "axios";
+import { CVData } from "../../types/type";
 
-const CVUploader = ({ data }: {
-    data: {
-        firstName: string;
-        lastName: string;
-        templateUrl:string;
-        role: string;
-        email: string;
-        phone: string;
-        summary: string;
-        workExperiences: any[];
-        educations: { institution: string; degree: string }[];
-        skills: string[];
-        languages: { languageName: string; level: string }[];
-    }
-}) => {
+const CVUploader = ({ data }: { data: CVData }) => {
+
     const baseUrl = process.env.REACT_APP_API_BASE_URL;
     const uploadCVData = async (file: File) => {
-        console.log("uploadToS3 called");
         if (!file || file.size === 0) {
             console.error("No file selected or file is empty.");
             return;
@@ -29,7 +16,7 @@ const CVUploader = ({ data }: {
         formData.append("file", file);
         formData.append("userId", id);
         formData.append("fileName", file.name);
-        formData.append("Template", data.templateUrl);
+        formData.append("Template", data.template);
         formData.append("firstName", data.firstName);
         formData.append("lastName", data.lastName);
         formData.append("role", data.role);
@@ -48,7 +35,6 @@ const CVUploader = ({ data }: {
                     "Authorization": `Bearer ${token}`
                 }
             });
-            console.log("File uploaded successfully", response.data);
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 if (error.response?.status === 401 || error.response?.status === 403) {
