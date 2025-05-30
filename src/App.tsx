@@ -10,17 +10,20 @@ import CVs from "./components/CVs";
 import DeleteFileCV from "./components/DeleteFileCV";
 import AllTemplates from "./components/AllTemplates";
 import HomePage from "./components/HomePage";
-import CreateCV from "./components/Create/CreateCV";
+import CreateCV from "./components/CreateCV/CreateCV";
 import ApiWithAuth from "./components/ApiWithAuth";
 import { AuthContext, AuthProvider } from "./contexts/AuthContext";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import Navbar from "./components/Navbar";
-import UpdateCV from "./components/UpdateCV";
+import UpdateCV from "./components/UpdateCV/UpdateCV";
+import { useCVData } from "./hooks/use-cv-data";
+import CoverLetterGenerator from "./components/ApiWithAuth";
 
 const App = () => {
   const { login } = useContext(AuthContext);
+  const { cvData } = useCVData()
+
   return (
-    // <AnimatePresence mode="wait">
     <AuthProvider>
       <Router>
         <Navbar />
@@ -33,10 +36,11 @@ const App = () => {
           <Route path="/create-cv" element={<CreateCV />} />
           <Route path="/ApiWithAuth" element={<ApiWithAuth />} />
           <Route path="/update-cv" element={<UpdateCV />} />
+          <Route path="/api" element={<CoverLetterGenerator />} />
+          
         </Routes>
       </Router>
     </AuthProvider>
-    // </AnimatePresence>
   );
 };
 

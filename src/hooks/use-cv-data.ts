@@ -1,45 +1,9 @@
-
 import { useState } from "react"
-
-export interface CVData {
-  id: string,
-  // fileName: string
-  template: string
-  firstName: string
-  lastName: string
-  role: string
-  email: string
-  phone: string
-  summary: string
-  workExperiences: WorkExperience[]
-  educations: Education[]
-  skills: string[]
-  languages: Language[]
-
-}
-
-export interface WorkExperience {
-  company: string
-  position: string
-  startDate: string
-  endDate: string
-  description: string
-}
-
-export interface Education {
-  institution: string
-  degree: string
-}
-
-export interface Language {
-  languageName: string
-  level: string
-}
+import { CVData, Education, Language, WorkExperience } from "../types/type"
 
 export const useCVData = () => {
   const [cvData, setCVData] = useState<CVData>({
     id: "",
-    // fileName: "",
     template: "",
     firstName: "",
     lastName: "",

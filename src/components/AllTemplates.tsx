@@ -11,6 +11,7 @@ const AllTemplates = () => {
     const navigate = useNavigate()
     const scrollRef = useRef<HTMLDivElement>(null)
     const [centerIndex, setCenterIndex] = useState<number | null>(null)
+    
     useEffect(() => {
         const handleScroll = () => {
             if (!scrollRef.current) return
@@ -36,7 +37,6 @@ const AllTemplates = () => {
         return () => container?.removeEventListener("scroll", handleScroll)
     }, [])
 
-    // Fetch templates
     useEffect(() => {
         const fetchFiles = async () => {
             try {
@@ -74,7 +74,7 @@ const AllTemplates = () => {
 
     const scroll = (direction: "left" | "right") => {
         if (scrollRef.current) {
-            const scrollAmount = 200
+            const scrollAmount = 300
             scrollRef.current.scrollBy({
                 left: direction === "left" ? -scrollAmount : scrollAmount,
                 behavior: "smooth",

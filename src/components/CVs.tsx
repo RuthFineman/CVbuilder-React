@@ -2,19 +2,15 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import "../styles/CVs.css"
+import { CVFile } from "../types/type"
 
 const CVs = () => {
   const baseUrl = process.env.REACT_APP_API_BASE_URL
   const navigate = useNavigate()
-  const [files, setFiles] = useState<any[]>([])
+  const [files, setFiles] = useState<CVFile[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-
-  const handleLogout = () => {
-    localStorage.removeItem("token")
-    localStorage.removeItem("userId")
-    navigate("/")
-  }
+  const [isBlocked, setIsBlocked] = useState<boolean | null>(null)
 
   const checkIfBlocked = async () => {
     const userId = localStorage.getItem("userId")
@@ -29,7 +25,6 @@ const CVs = () => {
       return true
     }
   }
-
   const fetchUserFiles = async () => {
     const token = localStorage.getItem("token")
     const userId = localStorage.getItem("userId")
@@ -54,13 +49,20 @@ const CVs = () => {
       setLoading(false)
     }
   }
-
   useEffect(() => {
-    fetchUserFiles()
+    const checkAndLoad = async () => {
+      const blocked = await checkIfBlocked()
+      setIsBlocked(blocked)
+      if (!blocked) {
+        await fetchUserFiles()
+      } else {
+        setLoading(false)
+      }
+    }
+    checkAndLoad()
   }, [])
 
-  const handleCreateNewCV = async () => {
-    const isBlocked = await checkIfBlocked()
+  const handleCreateNewCV = () => {
     if (isBlocked) {
       alert("הגישה נחסמה. אינך יכול ליצור קבצים מכיוון שאתה חסום על ידי המערכת.")
       return
@@ -72,16 +74,11 @@ const CVs = () => {
     navigate("/all-templates")
   }
 
-  const handleUpdateCV = async (file: any) => {
-    const isBlocked = await checkIfBlocked()
+  const handleUpdateCV = (file: any) => {
     if (isBlocked) {
       alert("הגישה נחסמה. אינך יכול לעדכן קבצים מכיוון שאתה חסום על ידי המערכת.")
       return
     }
-
-    console.log("מנווט לעדכון קובץ:", file)
-
-    // העברת רק הנתונים הנדרשים (ללא פונקציות)
     navigate("/update-cv", {
       state: {
         id: file.id,
@@ -124,8 +121,7 @@ const CVs = () => {
                     </button>
                     <button
                       className="delete-button"
-                      onClick={async () => {
-                        const isBlocked = await checkIfBlocked()
+                      onClick={() => {
                         if (isBlocked) {
                           alert("הגישה נחסמה. אינך יכול למחוק קבצים מכיוון שאתה חסום על ידי המערכת.")
                           return

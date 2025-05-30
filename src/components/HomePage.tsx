@@ -1,29 +1,25 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import "../styles/HomePage.css"; 
+import "../styles/HomePage.css";
 import LoginModal from "./LoginModal";
 
 const HomePage = () => {
     const [showLoginModal, setShowLoginModal] = useState(false)
-    const handleLogin = (token: string) => {
-        console.log("Logged in with token:", token)
-        navigate("/cvs")
-    }
     const { isLoggedIn, logout } = useContext(AuthContext);
     const navigate = useNavigate();
+    
+    const handleLogin = () => {
+        navigate("/cvs")
+    }
+
     return (
         <div className="homepage-container">
-            {/* <button className="sign-in-btn" onClick={() => setShowLoginModal(true)}>
-          התחברות
-        </button> */}
-            {/* Navigation Header */}
             <div className="nav-header">
                 <button
                     className="sign-in-btn"
                     onClick={() => isLoggedIn ? logout() : navigate("/login")}
                 >
-                    {/* {isLoggedIn ? "התנתקות" : "התחצצברות"} */}
                 </button>
             </div>
             <div className="particles">
@@ -59,7 +55,6 @@ const HomePage = () => {
                 <div className="diamond"></div>
                 <div className="diamond"></div>
             </div>
-            {/* Main Content */}
             <div className="main-content">
                 <h1 className="logo-text">CV BUILDER</h1>
 
@@ -68,7 +63,7 @@ const HomePage = () => {
                     <br />
                     לעבור על הקורות חיים שלך.
                     <br />
-                   כתוב אותם היטב.
+                    כתוב אותם היטב.
                 </h2>
                 <p className="hero-description">
                     צור קורות חיים מרשימות עם הטכנולוגיה החדישה ביותר.

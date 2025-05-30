@@ -3,20 +3,24 @@
   margin: 0;
   padding: 0;
 }
- body {
+
+body {
   height: 100%;
   margin: 0;
   padding: 0;
   background-color: #0a0f1c;
 }
+
 /* קונטיינר ראשי */
 .cv-builder-container2 .cv-builder-container {
   display: flex;
   min-height: 100vh;
   gap: 20px;
-  padding: 110px;
-  background-color: #0a0f1c; /* כחול כהה */
+  padding: 130px;
+  background-color: #0a0f1c;
+  /* כחול כהה */
 }
+
 /* חלק הטופס - 60% */
 .cv-builder-container2 .form-section {
   flex: 0 0 50%;
@@ -27,6 +31,7 @@
   overflow-y: auto;
   max-height: 100vh;
 }
+
 .cv-builder-container2 .preview-section {
   flex: 0 0 50%;
   position: sticky;
@@ -35,29 +40,39 @@
   overflow: hidden;
   display: flex;
   align-items: flex-start;
-  justify-content: center; /* שונה מ-flex-start ל-center */
+  justify-content: center;
+  /* שונה מ-flex-start ל-center */
   padding: 10px;
 }
+
 .cv-builder-container2 .preview-inner {
-  transform-origin: top center; /* שונה מ-top right ל-top center */
+  transform-origin: top center;
+  /* שונה מ-top right ל-top center */
   transition: transform 0.3s ease;
   width: 100%;
   height: 100%;
-  transform: scale(0.95); /* שונה מ-0.8 ל-0.95 */
-  overflow: auto; /* שונה מ-hidden ל-auto */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  transform: scale(0.95);
+  /* שונה מ-0.8 ל-0.95 */
+  overflow: auto;
+  /* שונה מ-hidden ל-auto */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
   display: flex;
   justify-content: center;
   align-items: flex-start;
 }
+
 .cv-builder-container2 .preview-inner::-webkit-scrollbar {
   display: none;
 }
+
 /* עיצוב הטופס */
 .cv-builder-container2 .create-cv-container {
   width: 100%;
 }
+
 .cv-builder-container2 .back-button {
   background: #6366f1;
   color: white;
@@ -93,7 +108,7 @@
 /* סקציות הטופס */
 .cv-builder-container2 .form-section-item {
   background: #f9fafb;
-  padding: 25px;
+  padding: 30px;
   border-radius: 12px;
   border: 1px solid #e5e7eb;
 }
@@ -181,21 +196,25 @@
   transform: translateY(-1px);
 }
 
-.cv-builder-container2 .delete-btn {
+.cv-builder-container2 .delete-btn-red {
   background: #ef4444;
   color: white;
   border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
+  padding: 10px 14px; 
+  border-radius: 8px; 
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px; 
+  font-weight: 600; 
   margin-bottom: 10px;
   align-self: flex-start;
-  transition: background-color 0.3s;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4); 
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
 }
 
-.cv-builder-container2 .delete-btn:hover {
-  background: #dc2626;
+.cv-builder-container2 .delete-btn-red:hover {
+  background: #a01818; 
+  box-shadow: 0 4px 12px rgba(160, 24, 24, 0.6); 
+  transform: translateY(-2px); 
 }
 
 .cv-builder-container2 .submit-btn {
@@ -220,7 +239,7 @@
 .cv-builder-container2 .experience-item,
 .education-item,
 .language-item {
-    list-style-type: none;
+  list-style-type: none;
   background: white;
   padding: 20px;
   border-radius: 10px;
@@ -294,7 +313,7 @@
 
 /* עיצוב תצוגה מקדימה */
 .cv-builder-container2 .resume-container {
-   background: white;
+  background: white;
   padding: 100px;
   border-radius: 12px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
@@ -303,8 +322,9 @@
   direction: rtl;
   width: 210mm;
   min-height: 297mm;
-  overflow: visible; 
+  overflow: visible;
 }
+
 .cv-builder-container2 .header {
   text-align: center;
   margin-top: -55px;
@@ -330,7 +350,7 @@
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 25px;
-  border-left: 4px solid #6366f1; 
+  border-left: 4px solid #6366f1;
 }
 
 .cv-builder-container2 .summary1 {
@@ -484,4 +504,22 @@
   .preview-inner {
     transform: scale(1);
   }
+}
+
+.button-downloadPDF {
+  margin-top: 20px;
+  padding: 10px;
+  background: #008080;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.templateUr-lloaded {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 18px;
+  direction: rtl;
 }

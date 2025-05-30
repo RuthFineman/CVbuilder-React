@@ -86,7 +86,6 @@ const Register = ({ onRegister }: { onRegister: (token: string) => void }) => {
                     </div>
                 </div>
             </div>
-            {/* </motion.div> */}
         </>
     );
 }

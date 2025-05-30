@@ -1,6 +1,6 @@
 import debounce from "lodash.debounce";
 import { useEffect, useState } from "react";
-
+import '../styles/ReadySentences.css';
 const sentences: Record<string, string[]> = {
   "מתכנת": [
     "פיתח והטמיע מערכת לניהול נתונים בזמן אמת, לייעול תהליך הזנת הנתונים ומתן תמיכת לקוחות יעילה יותר.",
@@ -77,6 +77,8 @@ const WorkSentences = ({ onSelect }: { onSelect: (sentence: string) => void; }) 
   const [matched, setMatched] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredSentences, setFilteredSentences] = useState<string[]>([]);
+
+  
   const handleSearch = debounce((term: string) => {
     const matchedKeys = Object.keys(sentences).filter((key) =>
       key.startsWith(term)
@@ -93,40 +95,29 @@ const WorkSentences = ({ onSelect }: { onSelect: (sentence: string) => void; }) 
   }, [searchTerm]);
 
   return (
-    <div style={{ marginTop: "10px", border: "1px solid gray", padding: "10px" }}>
+    <div className="ready-sentences" >
       <input
+        className="sentence-input"
         type="text"
         placeholder="הכנס תפקיד (למשל: מתכנת, מורה...)"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
       />
-<ul style={{ listStyle: "none", padding: 0 }}>
-  {filteredSentences.map((sentence, index) => (
-    <li
-      key={index}
-      onClick={() => onSelect(sentence)}
-      style={{
-        padding: "8px",
-        background: "#f1f1f1",
-        marginBottom: "5px",
-        cursor: "pointer",
-        borderRadius: "5px"
-      }}
-    >
-      {sentence}
-    </li>
-  ))}
-</ul>
+      <ul className="sentence-list">
+        {filteredSentences.map((sentence, index) => (
+          <li
+            key={index}
+            onClick={() => onSelect(sentence)}
+            className="sentence-item"
+          >
+            {sentence}
+          </li>
+        ))}
+      </ul>
       {matched.map((sentence, index) => (
         <div
           key={index}
           onClick={() => onSelect(sentence)}
-          style={{
-            cursor: "pointer",
-            padding: "5px",
-            borderBottom: "1px solid lightgray"
-          }}
         >
           {sentence}
         </div>

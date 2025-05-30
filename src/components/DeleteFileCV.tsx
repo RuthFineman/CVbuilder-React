@@ -18,12 +18,10 @@ const DeleteFileCV = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-
             alert("✅ הקובץ נמחק בהצלחה");
             navigate("/cvs");
         } catch (error) {
-            console.error("❌ שגיאה במחיקת הקובץ", error);
-            alert("אירעה שגיאה בעת מחיקת הקובץ. נסי שוב.");
+            alert("אירעה שגיאה בעת מחיקת הקובץ. נסה שוב.");
         } finally {
             setLoading(false);
         }
@@ -32,7 +30,6 @@ const DeleteFileCV = () => {
     return (
         <div className="delete-modal-overlay">
             <div className="delete-modal">
-                {/* Animated Background Particles */}
                 <div className="particles-bg">
                     <div className="particle"></div>
                     <div className="particle"></div>
@@ -41,7 +38,6 @@ const DeleteFileCV = () => {
                     <div className="cyan-particle"></div>
                 </div>
 
-                {/* Delete Icon */}
                 <div className="delete-icon">
                     <svg viewBox="0 0 24 24" fill="currentColor">
                         <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
@@ -61,7 +57,7 @@ const DeleteFileCV = () => {
                         {loading ? (
                             <>
                                 מוחק
-                                <span className="loading-spinner"></span>
+                                <span className="loading-spinner-delete"></span>
                             </>
                         ) : (
                             "מחק קובץ"

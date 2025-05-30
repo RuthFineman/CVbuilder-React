@@ -253,14 +253,6 @@
   .template-card:hover .template-image {
     filter: brightness(1.1);
   }
-  
-  /* וידוא שהתמונה האמצעית תהיה גדולה יותר */
-  .template-card.center .template-image {
-    transform: scale(1.1) !important;
-    filter: brightness(1.05);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-  }
-  
   /* אפקט זוהר עדין לתבנית במרכז */
   .template-card.center::before {
     content: "";

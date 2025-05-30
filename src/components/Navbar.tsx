@@ -16,7 +16,6 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
-
   return (
     <div className="modern-navbar">
       <div className="navbar-wrapper">
@@ -31,7 +30,6 @@ const Navbar = () => {
             </div>
           </div>
           <div className="navbar-content">
-            {/* כפתורי ניווט בצד ימין */}
             <div className="right-section">
               <button className="nav-button home-btn" onClick={() => navigate("/")}>
                 בית
@@ -47,11 +45,7 @@ const Navbar = () => {
                 </button>
               )}
             </div>
-
-            {/* לוגו במרכז */}
             <div className="logo-section" onClick={() => navigate("/")}></div>
-
-            {/* כפתור התנתקות בצד שמאל */}
             <div className="left-section">
               {isLoggedIn && (
                 <button
