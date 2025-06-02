@@ -21,6 +21,7 @@ const AllTemplates = () => {
                 const response = await axios.get(`${baseUrl}/api/Template/files`, {
                     headers: { Authorization: token ? `Bearer ${token}` : "" },
                 })
+                console.log("FILES:", response.data)
                 if (Array.isArray(response.data)) {
                     setFiles(response.data)
                 }

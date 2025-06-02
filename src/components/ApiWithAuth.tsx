@@ -1,6 +1,7 @@
 import type React from "react"
 import { useState } from "react"
 import "../styles/ApiWithAuth.css"
+import { env } from "process"
 
 interface CoverLetterForm {
   candidateName: string
@@ -28,7 +29,7 @@ const CoverLetterGenerator: React.FC = () => {
   const [generatedLetter, setGeneratedLetter] = useState("")
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState("")
-
+  const baseUrl = process.env.REACT_APP_API_BASE_URL
   const handleInputChange = (field: keyof CoverLetterForm, value: string) => {
     setFormData((prev) => ({
       ...prev,
@@ -81,7 +82,7 @@ const CoverLetterGenerator: React.FC = () => {
     try {
       const prompt = generatePrompt(formData)
 
-      const response = await fetch("https://localhost:7020/api/Chat", {
+      const response = await fetch(`{baseUrl}/api/Chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

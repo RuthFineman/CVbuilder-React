@@ -58,7 +58,7 @@
   bottom: 0;
   left: 5%;
   width: 90%;
-  height: 2px;
+  height: 3px;
   background: linear-gradient(10deg, transparent, rgb(255, 255, 255), transparent);
   opacity: 0.3;
   filter: blur(0.1px);
