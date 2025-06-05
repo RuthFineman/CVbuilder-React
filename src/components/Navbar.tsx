@@ -34,16 +34,23 @@ const Navbar = () => {
               <button className="nav-button home-btn" onClick={() => navigate("/")}>
                 בית
               </button>
-              {location.pathname === "/create-cv" && (
-                <button className="nav-button" onClick={() => navigate("/cvs")}>
-                  הקבצים שלי
-                </button>
-              )}
-              {location.pathname === "/update-cv" && (
-                <button className="nav-button" onClick={() => navigate("/cvs")}>
-                  הקבצים שלי
-                </button>
-              )}
+              <button className="nav-button" onClick={() => {
+                if (!isLoggedIn) {
+                  alert("עליך להתחבר כדי לגשת לעמוד זה"); navigate("/"); return;
+                }
+                navigate("/cvs");
+              }}>
+                הקבצים שלי
+              </button>
+              <button className="nav-button" onClick={() => {
+                if (!isLoggedIn) {
+                  alert("עליך להתחבר כדי לגשת לעמוד זה"); navigate("/"); return;
+                }
+                navigate("/cover-letter-bot");
+              }}
+              >
+                צור מכתב מקדים
+              </button>
             </div>
             <div className="logo-section" onClick={() => navigate("/")}></div>
             <div className="left-section">
@@ -59,7 +66,6 @@ const Navbar = () => {
                 </button>
               )}
             </div>
-
             <div className="mobile-toggle">
               <div className="toggle-line"></div>
               <div className="toggle-line"></div>

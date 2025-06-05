@@ -26,14 +26,8 @@ const CVs = () => {
     }
   }
   const fetchUserFiles = async () => {
-    const token = localStorage.getItem("token")
-    const userId = localStorage.getItem("userId")
-    if (!token || !userId) {
-      setError("לא נמצא אסימון התחברות או userId")
-      setLoading(false)
-      navigate("/")
-      return
-    }
+     const token = localStorage.getItem("token")
+
     try {
       const response = await axios.get(`${baseUrl}/file-cv/user-files`, {
         headers: {

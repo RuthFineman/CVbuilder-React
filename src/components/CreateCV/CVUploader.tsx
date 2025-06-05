@@ -16,7 +16,7 @@ const CVUploader = ({ data }: { data: CVData }) => {
         formData.append("file", file);
         formData.append("userId", id);
         formData.append("fileName", file.name);
-        formData.append("Template", data.template);
+        formData.append("Template", data.fileUrl);
         formData.append("firstName", data.firstName);
         formData.append("lastName", data.lastName);
         formData.append("role", data.role);

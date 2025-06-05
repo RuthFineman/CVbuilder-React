@@ -1,11 +1,12 @@
 import type React from "react"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useContext } from "react"
 import axios from "axios"
 import "../styles/LoginModal.css"
 import { LoginModalProps } from "../types/type"
+import { AuthContext } from "../contexts/AuthContext"
 
 
-const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => {
+const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose}) => {
   const baseUrl = process.env.REACT_APP_API_BASE_URL
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -13,7 +14,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => 
   const [showSuccess, setShowSuccess] = useState(false)
   const modalRef = useRef<HTMLDivElement>(null)
   const particlesRef = useRef<HTMLDivElement>(null)
-
+  const { login } = useContext(AuthContext);
   useEffect(() => {
     if (!isOpen) {
       setEmail("")
@@ -88,9 +89,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLogin }) => 
       localStorage.setItem("userId", userId)
 
       setShowSuccess(true)
-
       setTimeout(() => {
-        onLogin(token)
+        login(token);
         onClose()
       }, 2000)
     } catch (error: any) {

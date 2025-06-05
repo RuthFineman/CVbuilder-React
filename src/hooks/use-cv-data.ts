@@ -5,6 +5,7 @@ export const useCVData = () => {
   const [cvData, setCVData] = useState<CVData>({
     id: "",
     fileName: "",
+    fileUrl: "",
     template: "",
     firstName: "",
     lastName: "",

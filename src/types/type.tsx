@@ -1,3 +1,12 @@
+export interface CoverLetterForm {
+  candidateName: string
+  companyName: string
+  jobTitle: string
+  experience: string
+  skills: string
+  motivation: string
+  contactInfo: string
+}
 export interface AuthContextType {
   isLoggedIn: boolean;
   token: string | null;
@@ -60,8 +69,9 @@ export interface CVFile {
   
   export interface CVData {
     id: string,
-    template: string
     fileName: string
+    fileUrl: string
+    template:string
     firstName: string
     lastName: string
     role: string
@@ -72,7 +82,6 @@ export interface CVFile {
     educations: Education[]
     skills: string[]
     languages: Language[]
-  
   }
   
   export interface WorkExperience {

@@ -5,7 +5,6 @@ import axios from "axios"
 import html2pdf from "html2pdf.js"
 import "../../styles/UpdateCV.css"
 import PDFUploaderUpdate from "./CVUploaderUpdate"
-import { useTemplateLoaderUpdate } from "../../hooks/use-template-loader-update"
 import { CVData, CVFile, Education, Language, WorkExperience } from "../../types/type"
 import WorkExperienceSection from "../Sections/WorkExperienceSection"
 import CVPreview from "./CVPreviewUpdate"
@@ -13,15 +12,15 @@ import PersonalInfoSection from "../Sections/PersonalInfoSection"
 import LanguageSection from "../Sections/LanguageSection"
 import EducationSection from "../Sections/EducationSection"
 import SkillsSection from "../Sections/SkillsSection"
+import { useTemplateLoaderUpdate } from "../../hooks/use-template-loader-update"
 
 const UpdateCV: React.FC = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const fileData = location.state as CVFile | null
 
   const [cvData, setCvData] = useState<CVData>({
     id: "",
     fileName: "",
+    fileUrl: "",
+    template: "",
     firstName: "",
     lastName: "",
     role: "",
@@ -32,14 +31,14 @@ const UpdateCV: React.FC = () => {
     educations: [{ institution: "", degree: "" }],
     languages: [{ languageName: "", level: "" }],
     skills: [],
-    template: "",
   })
-
+  const navigate = useNavigate()
+  const location = useLocation()
+  const fileData = location.state as CVFile | null
   const baseUrl = process.env.REACT_APP_API_BASE_URL
   const [loading, setLoading] = useState(true)
   const [isUpdating, setIsUpdating] = useState(false)
   const [showUploader, setShowUploader] = useState(false)
-
   const { cssLoaded } = useTemplateLoaderUpdate(cvData.template)
 
   useEffect(() => {
@@ -72,6 +71,8 @@ const UpdateCV: React.FC = () => {
           setCvData({
             id: data.id || "",
             fileName: data.fileName || "",
+            fileUrl: data.fileUrl || "",
+            template: data.template || "",
             firstName: data.firstName || "",
             lastName: data.lastName || "",
             role: data.role || "",
@@ -91,7 +92,7 @@ const UpdateCV: React.FC = () => {
                 ? data.languages
                 : [{ languageName: "", level: "" }],
             skills: Array.isArray(data.skills) ? data.skills : [],
-            template: data.template || "",
+
           })
         }
       } catch (err) {
@@ -221,8 +222,8 @@ const UpdateCV: React.FC = () => {
       </div>
     )
   }
-
-  if (cvData.template && !cssLoaded) {
+  //שינתי כאן משהוווווווווווווו
+  if (cvData.fileUrl && !cssLoaded) {
     return (
       <div
         style={{
@@ -279,9 +280,11 @@ const UpdateCV: React.FC = () => {
         <PDFUploaderUpdate
           data={{
             id: cvData.id,
+            fileName: `קורות_חיים_${cvData.firstName}_${cvData.lastName}`,
+            fileUrl: cvData.fileUrl,
+            template: cvData.template,
             firstName: cvData.firstName,
             lastName: cvData.lastName,
-            fileName: `קורות_חיים_${cvData.firstName}_${cvData.lastName}`,
             role: cvData.role,
             email: cvData.email,
             phone: cvData.phone,
@@ -290,9 +293,7 @@ const UpdateCV: React.FC = () => {
             educations: cvData.educations,
             skills: cvData.skills,
             languages: cvData.languages,
-            template: cvData.template,
           }}
-
         />
       )}
     </div>

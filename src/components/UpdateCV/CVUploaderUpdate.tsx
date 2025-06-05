@@ -35,6 +35,7 @@ const PDFUploaderUpdate = ({ data }: { data: CVData }) => {
     formData.append("file", file);
     formData.append("userId", id);
     formData.append("fileName", data.fileName);
+    formData.append("fileUrl", data.fileUrl);
     formData.append("template", data.template);
     formData.append("firstName", data.firstName);
     formData.append("lastName", data.lastName);

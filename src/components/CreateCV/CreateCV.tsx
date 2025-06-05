@@ -5,7 +5,6 @@ import { useLocation, useNavigate } from "react-router-dom"
 import html2pdf from "html2pdf.js"
 import { useTemplateLoader } from "../../hooks/use-template-loader"
 import { useCVData } from "../../hooks/use-cv-data"
-import PDFUploader from "./CVUploader"
 import { CVData } from "../../types/type"
 import LanguageSection from "../Sections/LanguageSection"
 import SkillsSection from "../Sections/SkillsSection"
@@ -13,13 +12,14 @@ import EducationSection from "../Sections/EducationSection"
 import PersonalInfoSection from "../Sections/PersonalInfoSection"
 import WorkExperienceSection from "../Sections/WorkExperienceSection"
 import CVPreview from "../UpdateCV/CVPreviewUpdate"
+import CVUploader from "./CVUploader"
 
 const CreateCV = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const selectedFileIndex = location.state?.selectedFileIndex;
-    const { templateUrl, cssLoaded } = useTemplateLoader(selectedFileIndex)
-    const [resumeDataForUpload, setResumeDataForUpload] = useState<(CVData & { templateUrl: string }) | null>(null)
+    const { cvData: { fileUrl }, cssLoaded } = useTemplateLoader(selectedFileIndex)
+    const [resumeDataForUpload, setResumeDataForUpload] = useState<(CVData & { fileUrl: string }) | null>(null)
     const [showPDFUploader, setShowPDFUploader] = useState(false);
     const { cvData, updateField, addWorkExperience, updateWorkExperience, removeWorkExperience, addEducation, updateEducation, removeEducation, addLanguage, updateLanguage, removeLanguage, toggleSkill, } = useCVData()
     const [isLoading, setIsLoading] = useState(false)
@@ -29,7 +29,7 @@ const CreateCV = () => {
         },
         [updateField],
     )
-
+   
     const handleSubmit = useCallback(
         (e: React.FormEvent) => {
             e.preventDefault()
@@ -43,7 +43,7 @@ const CreateCV = () => {
                 alert("אנא מלא/י פרטים אישיים")
                 return
             }
-            const resumeData = { ...cvData, templateUrl }
+            const resumeData = { ...cvData, fileUrl }
             setResumeDataForUpload(resumeData)
             setShowPDFUploader(true)
             setIsLoading(true)
@@ -52,7 +52,7 @@ const CreateCV = () => {
                 setIsLoading(false)
             }, 1000)
         },
-        [cvData, templateUrl, navigate, selectedFileIndex], 
+        [cvData, fileUrl, navigate, selectedFileIndex],
     )
     const downloadPDF = useCallback(() => {
         const resumeElement = document.getElementById("resume")
@@ -68,7 +68,7 @@ const CreateCV = () => {
         html2pdf().set(options).from(resumeElement).save()
     }, [cvData.firstName, cvData.lastName])
 
-    if (!cssLoaded && templateUrl) {
+    if (!cssLoaded && fileUrl) {
         return (
             <div className="templateUr-lloaded" > טוען תבנית...</div>
         )
@@ -78,7 +78,7 @@ const CreateCV = () => {
             {showPDFUploader && resumeDataForUpload && (
                 <>
                     <p>מעלה קובץ...</p>
-                    <PDFUploader data={resumeDataForUpload} />
+                    <CVUploader data={resumeDataForUpload} />
                 </>
             )}
             <div className="cv-builder-container">

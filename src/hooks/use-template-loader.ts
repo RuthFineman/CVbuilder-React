@@ -1,21 +1,21 @@
 import { useState, useLayoutEffect } from "react"
 
 export const useTemplateLoader = (selectedFileIndex: number | undefined) => {
-  const [templateUrl, setTemplateUrl] = useState("")
+  const [fileUrl, setFileUrl] = useState("")
   const [cssLoaded, setCssLoaded] = useState(false)
 
   useLayoutEffect(() => {
     if (selectedFileIndex !== undefined) {
       const cssUrl = `https://cvfilebuilder.s3.eu-north-1.amazonaws.com/css-styles/${selectedFileIndex}.css`
-      setTemplateUrl(cssUrl)
+      setFileUrl(cssUrl)
     }
   }, [selectedFileIndex])
 
   useLayoutEffect(() => {
-    if (templateUrl) {
+    if (fileUrl) {
       const link = document.createElement("link")
       link.rel = "stylesheet"
-      link.href = templateUrl
+      link.href = fileUrl
       link.onload = () => setCssLoaded(true)
       document.head.appendChild(link)
 
@@ -25,7 +25,7 @@ export const useTemplateLoader = (selectedFileIndex: number | undefined) => {
         }
       }
     }
-  }, [templateUrl])
+  }, [fileUrl])
 
-  return { templateUrl, cssLoaded }
+  return {  cvData: { fileUrl }, cssLoaded }
 }

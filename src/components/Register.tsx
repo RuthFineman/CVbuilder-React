@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Register.css'
+import { AuthContext } from "../contexts/AuthContext";
 
-const Register = ({ onRegister }: { onRegister: (token: string) => void }) => {
+const Register = () => {
     const baseUrl = process.env.REACT_APP_API_BASE_URL;
     const navigate = useNavigate();
     const [fullName, setFullName] = useState('');
@@ -11,7 +12,7 @@ const Register = ({ onRegister }: { onRegister: (token: string) => void }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
+    const { login } = useContext(AuthContext);
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setErrors({});
@@ -40,7 +41,7 @@ const Register = ({ onRegister }: { onRegister: (token: string) => void }) => {
             const userId = response.data.id;
 
             localStorage.setItem("userId", userId);
-            onRegister(token);
+            login(token);
             navigate('/CVs');
         } catch (error) {
             console.error("שגיאה בשליחה לשרת", error);
